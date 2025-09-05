@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Home page -->
+  <url>
+    <loc>https://innerpece.com/</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>1.00</priority>
+  </url>
+
+  <!--Send enquiry page  -->
+  <url>
+    <loc>https://innerpece.com/sendenquiry</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- About page -->
+  <url>
+    <loc>https://innerpece.com/aboutus</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- Contact page -->
+  <url>
+    <loc>https://innerpece.com/contactus</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.80</priority>
+  </url>
+
+  <!-- user profile page -->
+  <url>
+    <loc>https://innerpece.com/profile</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+   <!-- user wishlist page -->
+  <url>
+    <loc>https://innerpece.com/wishlist</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+
+   <!-- user enquiries page -->
+  <url>
+    <loc>https://innerpece.com/enquiries</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+  <!-- Terms of service page-->
+  <url>
+    <loc>https://innerpece.com/termsofservice</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+   <!-- Privacy policy page -->
+  <url>
+    <loc>https://innerpece.com/privacypolicy</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+<!-- Faq page -->
+  <url>
+    <loc>https://innerpece.com/faq</loc>
+    <lastmod>2025-01-27</lastmod>
+    <priority>0.50</priority>
+  </url>
+
+</urlset>
