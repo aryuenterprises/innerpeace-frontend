@@ -8,9 +8,9 @@ function GroupImage() {
   
     {/* Bottom Gradient */}
     <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white to-transparent z-10"></div>
-  </div>
+  </div>  
   
-  
+
   );
 }
 
