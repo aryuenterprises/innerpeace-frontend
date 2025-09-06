@@ -51,7 +51,7 @@ function Login() {
         <Header />
         <LoginHero />
         <LoginForm />
-        <Footer />
+        <Footer className='pb-10'/>
       </Suspense>
     </div>
   );

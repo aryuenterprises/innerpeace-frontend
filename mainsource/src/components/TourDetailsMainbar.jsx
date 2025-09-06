@@ -35,6 +35,8 @@ import { FaChild } from "react-icons/fa6";
 import { FaBirthdayCake } from "react-icons/fa";
 import { GiLovers } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
+import { IoLocationSharp } from "react-icons/io5";
+
 
 function Mainbar({
   highlightsRef,
@@ -63,6 +65,9 @@ function Mainbar({
 
   const slicedPathName = window.location.pathname.split("/")[1];
   const slicedUserId = window.location.href.split("#")[1];
+  const slicedStayId = window.location.href.split("#")[2];
+  // console.log(slicedUserId);
+  // console.log(slicedStayId);
 
   useEffect(() => {
     const loggedUserDetails = localStorage.getItem("loginDetails")
@@ -103,12 +108,8 @@ function Mainbar({
 
         const payload2 = {
           program_id: slicedUserId,
+          // stay_id: slicedStayId && slicedStayId,
         };
-
-        // const response = await axios.post(
-        //   "https://backoffice.innerpece.com/api/v1/get-program-details",
-        //   payload
-        // );
 
         const response = slicedUserId
           ? await axios.post(
@@ -124,7 +125,6 @@ function Mainbar({
         setSelectedPackage(response.data.data.price_title[0]);
         setPriceSelected(response.data.data.price_amount[0]);
         setHomeImage(response.data.data.gallery_img);
-        console.log(response.data.data);
 
         const cleanedText = response.data.data.important_info
           .split("·") // Split by bullet point
@@ -208,7 +208,6 @@ function Mainbar({
 
           setApiData(response.data.data);
           setLoading(false);
-
 
           const metaOgTitle = document.querySelector(
             "meta[property='og:title']"
@@ -552,6 +551,53 @@ function Mainbar({
     };
   }, [loginCliked]);
 
+  const onClickStayName = async (id) => {
+    navigate(`/staysdetails/${id}`, {
+      state: { id },
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  };
+
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1, // Show one image at a time inside the card
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 640 },
+      items: 1,
+    },
+    mobile: {
+      breakpoint: { max: 640, min: 0 },
+      items: 1,
+    },
+  };
+
+  const CustomDot = ({ onClick, ...rest }) => {
+    const { active } = rest;
+    return (
+      <li
+        onClick={(e) => {
+          e.stopPropagation(); // Stop bubbling to card
+          onClick?.(); // Trigger dot click
+        }}
+        className="inline-block mx-1"
+      >
+        <button
+          className={`transition-all duration-500 h-2 rounded-full ${
+            active ? "bg-white w-10" : "bg-white/50 w-3"
+          }`}
+        />
+      </li>
+    );
+  };
+
+  
+
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
       {apiData.gallery_img && (
@@ -662,10 +708,9 @@ function Mainbar({
                   >
                     {/* <p className="text-[#0D3756] font-normal">{item.description}</p> */}
                     <div
-                    // className="list-disc pl-6 space-y-2"
-                    // className="[&>ul]:list-disc [&>ul]:pl-6 [&>ul]:space-y-2"
-                    className="itinerary-content"
-
+                      // className="list-disc pl-6 space-y-2"
+                      // className="[&>ul]:list-disc [&>ul]:pl-6 [&>ul]:space-y-2"
+                      className="itinerary-content"
                       dangerouslySetInnerHTML={{
                         __html: item.description ?? "",
                       }}
@@ -915,6 +960,7 @@ function Mainbar({
             </div>
           </div>
         )}
+
       {apiData.program_exclusion &&
         apiData.program_exclusion !== "<p><br></p>" && (
           <div className="mt-8 md:mt-10   ">
@@ -992,6 +1038,80 @@ function Mainbar({
                 </React.Fragment>
               ));
             })()}
+          </div>
+        </div>
+      )}
+
+      {apiData.stay_details_list && (
+        <div className="mt-8 md:mt-10   ">
+          <div className="flex gap-2 mt-8 items-center">
+            <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
+            <p className="font-semibold text-xl md:text-2xl  text-[#11142D]">
+              Stay
+            </p>
+          </div>
+
+          {/* <div
+            onClick={() => onClickStayName(apiData.stay_details_list.id)}
+            className="mt-3 md:mt-5 md:leading-7"
+          >
+            <p className="text-xl font-medium cursor-pointer">{apiData.stay_details_list.stay_title}</p>
+          </div> */}
+
+          <div
+            onClick={() => onClickStayName(apiData.stay_details_list.id)}
+            // onClick={() => handleCardClick(item.id)}
+            className="flex-shrink-0 w-full lg:w-[30vw] cursor-pointer mt-3 md:mt-5 flex flex-col gap-1 font-jakarta border rounded-2xl border-gray-300"
+          >
+            <div>
+              <Carousel
+                responsive={responsive}
+                autoPlay
+                infinite
+                swipeable
+                draggable
+                showDots
+                arrows={false}
+                className="rounded-t-2xl overflow-hidden"
+                customDot={<CustomDot />}
+              >
+                {apiData.stay_images.length > 0 ? (
+                  apiData.stay_images.map((item1, index) => (
+                    <div key={index} className="w-full h-full">
+                      <img
+                        src={
+                          item1
+                            ? `https://backoffice.innerpece.com/${item1}`
+                            : defaultimage
+                        }
+                        alt=""
+                        className="h-64 md:h-72 object-cover w-full"
+                      />
+                    </div>
+                  ))
+                ) : (
+                  <div>
+                    <img
+                      src={defaultimage}
+                      alt=""
+                      className="h-64 md:h-72 object-cover w-full"
+                    />
+                  </div>
+                )}
+              </Carousel>
+            </div>
+
+            <div className="flex flex-col px-3 gap-x-5 justify-between flex-wrap p-3 font-PlusJakartaSansMedium font-semibold">
+              <p>{apiData.stay_details_list.stay_title}</p>
+              
+              <div className="flex items-center gap-2 mt-2">
+
+              
+              <IoLocationSharp className="text-sky-800"/>
+              <p className="font-normal text-sky-800">{apiData.stay_details_list.tag_line}</p>
+              </div>
+        
+            </div>
           </div>
         </div>
       )}

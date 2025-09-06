@@ -1,1 +1,0 @@
-import{r as t,j as e}from"./index-DT4VApSY.js";function s(){return t.useEffect(()=>{document.title="Page not found - Innerpece"},[]),e.jsx("div",{className:"flex items-center justify-center h-screen w-screen",children:e.jsx("p",{className:"text-3xl lg:text-4xl xl:text-6xl",children:"Page Not Found"})})}export{s as default};

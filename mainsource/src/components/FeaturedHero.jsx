@@ -148,14 +148,16 @@ function Hero({
         </div>
 
         {apiData.google_map && (
-        <div
-          onClick={handleLocationShareScroll}
-          className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
-        >
-          <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
-          <p className="text-sm md:text-base  font-semibold">Location Share</p>
-        </div>
-         )} 
+          <div
+            onClick={handleLocationShareScroll}
+            className="flex flex-grow cursor-pointer   py-1 gap-2 md:gap-3 items-center  md:justify-center"
+          >
+            <img src={vector3} alt="" className="object-contain h-6 md:h-8" />
+            <p className="text-sm md:text-base  font-semibold">
+              Location Share
+            </p>
+          </div>
+        )}
 
         {apiData.review_count > 0 && (
           <div

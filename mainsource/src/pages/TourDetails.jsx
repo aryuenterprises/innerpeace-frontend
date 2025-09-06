@@ -281,8 +281,6 @@ function TourDetails() {
     }
   };
 
- 
-
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [loginCheckboxChecked, setLoginCheckBoxChecked] = useState("");
@@ -401,9 +399,6 @@ function TourDetails() {
             </div> */}
 
             {/* Slide-Up Panel */}
-     
-
-      
 
             {loginCliked && (
               <div className="fixed inset-0 z-40 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">

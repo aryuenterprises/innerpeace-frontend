@@ -627,7 +627,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
           {apiData?.price_amount?.length > 0 && (
             <div className="flex flex-col w-full">
               <div className="flex items-center text-center justify-center">
-                <div className="flex gap-2 flex-wrap">
+                <div className="flex flex-col gap-2 flex-wrap">
                   {apiData.price_title.map(
                     (item, index) =>
                       item && (

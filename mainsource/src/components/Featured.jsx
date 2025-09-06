@@ -20,6 +20,9 @@ function Featured() {
   const location = useLocation();
   const navigate = useNavigate();
   const { id, title } = location.state || {};
+
+  console.log(id);
+
   const [apiData, setApiData] = useState([]);
   const [
     combinedGalleryImagesAndStayImages,
@@ -62,7 +65,8 @@ function Featured() {
         { headers }
       );
 
-      setIsWishlisted(!isWishlisted);
+      console.log(response);
+      setIsWishlisted((prev) => !prev);
 
       const fetchProgramData = async () => {
         try {
@@ -91,8 +95,6 @@ function Featured() {
                 payload1
               );
 
-          console.log(response);
-
           setApiData(response.data.data);
           setUserName(response.data.data.name);
 
@@ -108,6 +110,8 @@ function Featured() {
       console.error("An error occurred while updating wishlist:", error);
     }
   };
+
+  console.log("isWishlisted", isWishlisted);
 
   const slicedPathName = window.location.pathname.split("/")[1];
   const slicedUserId = window.location.href.split("#")[1];
@@ -258,8 +262,8 @@ function Featured() {
             </div>
           )} */}
 
-          <div className="flex flex-row  flex-wrap md:flex-col gap-5 ">
-            <div className="flex flex-wrap items-center gap-2 md:gap-5">
+          <div className="flex w-full sm:w-fit flex-row  flex-wrap md:flex-col gap-5 ">
+            <div className="flex flex-wrap justify-between sm:justify-start w-full sm:w-fit items-center gap-2 md:gap-5">
               <FacebookShareButton
                 url={currentUrl}
                 quote={metaDescription}
@@ -267,7 +271,7 @@ function Featured() {
               >
                 <div className="flex items-center cursor-pointer border-2 hover:bg-[#0965FE]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
                   <FacebookIcon size={22} round={true} />
-                  <p>Share</p>
+                  <p className="text-xs md:text-base">Share</p>
                 </div>
               </FacebookShareButton>
 
@@ -278,7 +282,7 @@ function Featured() {
               >
                 <div className="flex items-center cursor-pointer border-2 hover:bg-[#0077B5]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
                   <LinkedinIcon size={22} round={true} />
-                  <p>Share</p>
+                  <p className="text-xs md:text-base">Share</p>
                 </div>
               </LinkedinShareButton>
 
@@ -289,21 +293,21 @@ function Featured() {
               >
                 <div className="flex items-center cursor-pointer border-2 hover:bg-[#25D366]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
                   <WhatsappIcon size={22} round={true} />
-                  <p>Share</p>
+                  <p className="text-xs md:text-base">Share</p>
                 </div>
               </WhatsappShareButton>
 
               {/* wishlist */}
               <div
-                className="flex items-center cursor-pointer border-2 hover:bg-red-500  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200  rounded-full p-2 gap-2 px-3"
+                className="flex items-center cursor-pointer border-2 hover:bg-red-500  hover:border-white border-gray-700 text-gray-700 text-2xl sm:text-base hover:text-white transition-all ease-in duration-200  rounded-full p-2 gap-2 "
                 onClick={() => handleWishlistClick(id)}
               >
                 {isWishlisted ? (
-                  <IoHeartSharp className="text-red-300" />
+                  <IoHeartSharp className="text-red-300 " />
                 ) : (
                   <IoHeartOutline />
                 )}
-                <p>WishList</p>
+                <p className="hidden md:block">WishList</p>
               </div>
             </div>
           </div>

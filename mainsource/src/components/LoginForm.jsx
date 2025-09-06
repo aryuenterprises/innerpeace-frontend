@@ -4,8 +4,7 @@ import axios from "axios";
 import Swal from "sweetalert2";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useLocation } from "react-router-dom";
-import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -100,6 +99,76 @@ function Login() {
     const token = response.credential;
     const userDetails = jwtDecode(token);
     setUser(userDetails); // Store user details in state
+  };
+
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Get user info from Google API
+        const res = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+
+        console.log("User Info:", res.data);
+
+        postGoogleUserData({ ...res.data });
+
+        // res.data will have: name, email, picture, etc.
+      } catch (err) {
+        console.error("Failed to fetch user info", err);
+      }
+    },
+    onError: () => console.log("Login Failed"),
+  });
+
+  const postGoogleUserData = async (res) => {
+    // console.log(res);
+    // console.log(res.picture);
+
+    try {
+      let response = await axios.post(
+        `https://backoffice.innerpece.com/api/v1/auth/google/callback`,
+        { ...res }
+      );
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Login Success",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
+      let loginid = response.data.token;
+      let loginDetails = response.data.user_details;
+
+      loginDetails = { ...loginDetails, googlePicture: res.picture };
+
+      localStorage.setItem("loginid", loginid);
+      localStorage.setItem("loginDetails", JSON.stringify(loginDetails));
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+
+      console.log(err?.response?.data?.error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Login Failed",
+        // text:err.response.data.error,
+        text: err.response?.data?.error || "Something went wrong!",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
   };
 
   return (
@@ -210,8 +279,18 @@ function Login() {
                 )}
               </button>
 
-              <button oncli className="bg-gray-400 rounded-lg  px-5 py-3">
-                Continue with google
+              <button
+                onClick={() => login()}
+                className="flex items-center justify-center gap-3 px-6 py-3 bg-white shadow-md rounded-lg border hover:bg-gray-50 transition"
+              >
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Google Logo"
+                  className="w-5 h-5"
+                />
+                <span className="text-gray-700 font-medium">
+                  Continue with Google
+                </span>
               </button>
 
               <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
@@ -227,7 +306,7 @@ function Login() {
           </div>
         </div>
       </div>
-      -
+
       {/* <GoogleOAuthProvider clientId="921328741345-3pthhre9l7vskb4i0046u4gh87jk7ktj.apps.googleusercontent.com">
         <div className="flex flex-col items-center justify-center h-screen">
           {user ? (

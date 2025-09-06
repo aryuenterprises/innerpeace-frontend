@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { PiListHeartFill } from "react-icons/pi";
@@ -10,13 +8,12 @@ import Swal from "sweetalert2";
 import axios from "axios";
 import default_user_image from "../assets/default_user_image_2.jpg";
 
-
-
 const MyProfile_Sidebar = () => {
   const navigate = useNavigate();
   const [userLogedIn, setUserLogedIn] = useState(false);
   const [userId, setUserId] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedGoogleImage, setSelectedGoogleImage] = useState(null);
   const [imageFile, setImageFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false); // New uploading state
@@ -39,10 +36,14 @@ const MyProfile_Sidebar = () => {
     }
 
     if (loggedUserDetails) {
-      const { profile_image: loggedUser_image, id: loggedUser_id } =
-        loggedUserDetails;
+      const {
+        profile_image: loggedUser_image,
+        id: loggedUser_id,
+        googlePicture: google_profile_image,
+      } = loggedUserDetails;
       setSelectedImage(loggedUser_image);
       setUserId(loggedUser_id);
+      setSelectedGoogleImage(google_profile_image);
     }
 
     setTimeout(() => {
@@ -62,6 +63,7 @@ const MyProfile_Sidebar = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         localStorage.removeItem("loginDetails");
+        localStorage.removeItem("loginid");
         navigate("/login");
       }
     });
@@ -107,6 +109,7 @@ const MyProfile_Sidebar = () => {
             loggedUserDetails;
           setSelectedImage(loggedUser_image);
           setUserId(loggedUser_id);
+          setSelectedGoogleImage("");
         }
       } catch (err) {
         console.log(err);
@@ -126,8 +129,11 @@ const MyProfile_Sidebar = () => {
 
       <div className="h-56 flex flex-col items-center w-full rounded-lg relative">
         <img
+          
           src={
-            selectedImage
+            selectedGoogleImage
+              ? `https://lh3.googleusercontent.com/a/ACg8ocIhVNzZboB6D8GmE2nCJd5aOAuk6Q5x3pluBLxq45TnCZUoPA=s96-c`
+              : selectedImage
               ? `https://backoffice.innerpece.com/${selectedImage}`
               : default_user_image
           }
@@ -151,9 +157,7 @@ const MyProfile_Sidebar = () => {
           className="opacity-0"
         />
         {uploading && (
-          <p className="text-sm text-blue-600 font-medium mt-2">
-            Uploading...
-          </p>
+          <p className="text-sm text-blue-600 font-medium mt-2">Uploading...</p>
         )}
       </div>
 

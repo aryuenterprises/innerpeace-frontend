@@ -325,7 +325,6 @@ const StaysDetails = () => {
         },
       });
     } catch (err) {
-
       console.log(err);
       Swal.fire({
         position: "center",
@@ -637,7 +636,6 @@ const StaysDetails = () => {
   return (
     <div>
       <Header />
-
 
       <div
         onClick={() => setBookNowClicked(!bookNowClicked)}
