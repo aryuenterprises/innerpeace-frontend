@@ -19,8 +19,8 @@ function Hero() {
   const [loading, setLoading] = useState(true); // Add a loading state
   const [selectedDate, setSelectedDate] = useState("");
   const navigate = useNavigate();
-
   const [currentIndex, setCurrentIndex] = useState(0);
+
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prevIndex) =>
@@ -115,19 +115,17 @@ function Hero() {
             style={{ textShadow: "3px 3px 3px rgba(0, 0, 0, 0.8)" }}
             className="text-white uppercase font-semibold text-center text-xl sm:text-2xl md:text-3xl font-jost lg:text-4xl xl:text-5xl leading-8"
           >
-          
-           The first offbeat travel platform In India
-           
+            The first offbeat travel platform In India
           </p>
         </div>
 
         {/* Bottom Stats */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-8  absolute w-full z-10 bottom-8 font-jost text-white items-center justify-between px-5 md:px-14 lg:px-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-5 md:gap-8  absolute w-full z-10 bottom-8 font-jost text-white items-center justify-between px-5 md:px-10">
           {/* Google Rating */}
           <div className="flex gap-2 md:gap-3  items-center justify-center  ">
-            <p className="font-semibold text-lg md:text-3xl">5.0</p>
+            <p className="font-semibold text-lg lg:text-2xl xl:text-3xl">5.0</p>
             <div className="flex flex-col gap-1">
-              <p className="font-medium md:font-semibold text-sm md:text-xl">
+              <p className="font-medium lg:font-semibold text-sm md:text-base lg:text-xl">
                 Google Rating
               </p>
               <div className="flex">
@@ -144,7 +142,7 @@ function Hero() {
           <div className="flex gap-2 md:gap-3  items-center justify-center">
             <img src={group} alt="" className="h-6 w-6 md:h-8 md:w-8" />
             <div className="flex flex-col gap-1">
-              <p className="font-medium md:font-semibold text-sm md:text-xl">
+              <p className="font-medium lg:font-semibold text-sm md:text-base lg:text-xl">
                 Trusted by
               </p>
               <p className="text-xs md:text-sm">10k+ Travellers</p>
@@ -155,7 +153,7 @@ function Hero() {
           <div className="flex gap-2 md:gap-3  items-center justify-center">
             <img src={map_white} alt="" className="h-6 w-6 md:h-8 md:w-8" />
             <div className="flex flex-col gap-1">
-              <p className="font-medium md:font-semibold text-sm md:text-xl">
+              <p className="font-medium lg:font-semibold text-sm md:text-base lg:text-xl">
                 Customized Trips
               </p>
               <p className="text-xs md:text-sm">200+ Iteneraries</p>
@@ -166,11 +164,19 @@ function Hero() {
           <div className="flex gap-2 md:gap-3  items-center justify-center">
             <img src={call_icon} alt="" className="h-6 w-6 md:h-8 md:w-8" />
             <div className="flex flex-col gap-1">
-              <p className="font-medium md:font-semibold text-sm md:text-xl">
+              <p className="font-medium lg:font-semibold text-sm md:text-base lg:text-xl">
                 24/7 Support
               </p>
               <p className="text-xs md:text-sm">Tamil, Hindi & English</p>
             </div>
+          </div>
+
+          <div className=" gap-2 md:gap-3 hidden md:flex items-center justify-center">
+            <img
+              src={`https://backoffice.innerpece.com/uploads/settings/official_logo/1724229229_1.PNG`}
+              alt=""
+              className="bg-cover w-44 h-16 "
+            />
           </div>
         </div>
       </div>
