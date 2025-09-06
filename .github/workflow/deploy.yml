@@ -1,0 +1,29 @@
+name: 🚀 innerpece Frontend Reactjs Deploy to Hostinger via FTP
+
+on:
+  push:
+    branches:
+      - main  # or your deployment branch
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout Code
+        uses: actions/checkout@v3
+
+      - name: 🗂️ Upload innerpece Frontend Files via FTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: '31.97.225.238'
+          username: 'u925800196.innerpece.com'
+          password: 'innerpeceB@ckend28'
+          port: 21
+          server-dir: '/public_html/innerpece-main/'
+          protocol: ftp
+          dangerous-clean-slate: false
+          local-dir: ./
+
+
+          
