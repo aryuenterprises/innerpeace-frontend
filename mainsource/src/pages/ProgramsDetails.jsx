@@ -61,7 +61,6 @@ function Programs() {
 
         setLoading(false);
         setApiData(response.data.data);
-      console.log(response?.data?.theme_details[0]?.name);
         setHeroName(response?.data?.theme_details[0]?.name);
 
       } catch (err) {

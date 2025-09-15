@@ -15,13 +15,12 @@ import {
 } from "react-share";
 import { FaImage } from "react-icons/fa";
 import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
+import DOMPurify from "dompurify";
 
 function Featured() {
   const location = useLocation();
   const navigate = useNavigate();
   const { id, title } = location.state || {};
-
-  console.log(id);
 
   const [apiData, setApiData] = useState([]);
   const [
@@ -110,8 +109,6 @@ function Featured() {
       console.error("An error occurred while updating wishlist:", error);
     }
   };
-
-  console.log("isWishlisted", isWishlisted);
 
   const slicedPathName = window.location.pathname.split("/")[1];
   const slicedUserId = window.location.href.split("#")[1];
@@ -221,6 +218,47 @@ function Featured() {
     };
   }, [seeAllImageModalOpen]);
 
+  // const sanitizedHTML = DOMPurify.sanitize(apiData.current_location);
+  // console.log(sanitizedHTML);
+
+  // const cleanHTML = (htmlString) => {
+  //   const sanitizedHTML = DOMPurify.sanitize(htmlString);
+
+  //   const cleaned = sanitizedHTML
+  //     .replace(/<span[^>]*>|<\/span>/gi, "")
+  //     .replace(/<o:p>|<\/o:p>/gi, "")
+  //     .replace(/style="[^"]*"/gi, "")
+  //     .replace(/&nbsp;/gi, " ")
+  //     .replace(/<p[^>]*>/gi, "")
+  //     .replace(/<\/p>/gi, "")
+  //     .replace(/·\s*/g, "<li>") // convert bullets to list items
+  //     .trim();
+
+  //   return cleaned;
+  // };
+
+  // console.log(cleanHTML(apiData.current_location))
+
+  function cleanApiHtml(str = "") {
+    if (!str) return "";
+
+    try {
+      // Step 1: remove excessive backslashes
+      let unescaped = str.replace(/\\+/g, "");
+
+      // Step 2: decode HTML entities (&lt; &gt; &quot;)
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(unescaped, "text/html");
+      return doc.documentElement.textContent || "";
+    } catch (err) {
+      console.error("Failed to clean API HTML:", err);
+      return str;
+    }
+  }
+
+  const rawData = apiData?.current_location || "";
+  const cleaned = cleanApiHtml(rawData);
+
   return (
     <div className="mt-20 md:mt-28  mx-3 md:mx-10   xl:mx-20 ">
       <div className="flex flex-wrap flex-col items-start justify-between gap-2">
@@ -245,11 +283,10 @@ function Featured() {
             <div className="flex items-center  gap-1">
               <img src={locationimg} alt="" className="object-contain" />
               {/* <p className="text-gray-600">{apiData.current_location}</p> */}
-
               <p
                 className="text-gray-600"
                 dangerouslySetInnerHTML={{
-                  __html: apiData.current_location,
+                  __html: cleaned,
                 }}
               />
             </div>

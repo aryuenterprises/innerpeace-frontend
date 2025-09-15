@@ -105,7 +105,7 @@ function Mainbar({
           program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
-
+     
         const payload2 = {
           program_id: slicedUserId,
           // stay_id: slicedStayId && slicedStayId,

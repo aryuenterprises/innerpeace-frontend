@@ -14,24 +14,7 @@ import Marquee from "react-fast-marquee";
 import ParallaxImage from "./parallexImage";
 
 const Perfecttraveltype = () => {
-  const responsive = {
-    superLargeDesktop: {
-      breakpoint: { max: 4000, min: 1280 },
-      items: 3,
-    },
-    desktop: {
-      breakpoint: { max: 1280, min: 1024 },
-      items: 3,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 768 },
-      items: 2,
-    },
-    mobile: {
-      breakpoint: { max: 768, min: 0 },
-      items: 1,
-    },
-  };
+ 
 
   const items = [
     { image: traveltype5, name: "Trips for your peace" },

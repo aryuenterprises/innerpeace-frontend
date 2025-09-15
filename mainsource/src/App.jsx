@@ -23,6 +23,7 @@ import { HelmetProvider } from "react-helmet-async";
 import Destinations from "./pages/Destinations";
 import StaysDetails from "./pages/StaysDetails";
 import FilteredList from "./pages/FilteredList";
+import CreateEvent from "./pages/CreateEvent";
 
 
 
@@ -39,6 +40,7 @@ function App() {
       >
         <Routes>
           <Route path="/" element={<Home />} />
+          {/* <Route path="/createEvent" element={< CreateEvent/>} /> */}
           <Route path="/sendenquiry" element={<SendEnquiry />} />
           <Route path="/aboutus" element={<AboutUs />} />
           <Route path="/contactus" element={<ContactUs />} />

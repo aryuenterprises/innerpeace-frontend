@@ -10,6 +10,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Marquee from "react-fast-marquee";
+import ParallaxImage from "./parallexImage";
 
 function Programs() {
   const [programsData, setProgramsData] = useState([]);
@@ -203,7 +204,7 @@ function Programs() {
                         className="relative h-[362px] cursor-pointer group w-full rounded-2xl overflow-hidden flex items-center justify-center flex-grow"
                       >
                         <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                        <img
+                        {/* <img
                           src={
                             item.theme_pic
                               ? `https://backoffice.innerpece.com/${item.theme_pic}`
@@ -211,7 +212,13 @@ function Programs() {
                           }
                           alt={item.themes_name}
                           className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
-                        />
+                        /> */}
+                        <ParallaxImage  src={
+                            item.theme_pic
+                              ? `https://backoffice.innerpece.com/${item.theme_pic}`
+                              : defaultimg
+                          }  className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"  alt="travel type"/>
+
                         <p className="absolute font-rancho  text-3xl lg:text-4xl  text-white text-center bottom-5">
                           {item.themes_name}
                         </p>

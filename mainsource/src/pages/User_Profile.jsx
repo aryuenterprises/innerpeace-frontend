@@ -7,6 +7,7 @@ let MyProfile_Sidebar = lazy(() => import("../components/MyProfile_Sidebar"));
 import axios from "axios";
 let Footer = lazy(() => import("../components/Footer"));
 import whatsapp from "../assets/whatsapp.svg";
+import Swal from "sweetalert2";
 
 const User_Profile = () => {
   const navigate = useNavigate();
@@ -134,6 +135,14 @@ const User_Profile = () => {
         `https://backoffice.innerpece.com/api/v1/update-profile/${userId}`,
         payload
       );
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Profile updated successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
       localStorage.setItem("loginDetails", JSON.stringify(response.data.user));
 

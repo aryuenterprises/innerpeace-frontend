@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 
-const ParallaxImage = ({ src, alt }) => {
+const ParallaxImage = ({ src, alt ,className}) => {
   const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -12,7 +12,7 @@ const ParallaxImage = ({ src, alt }) => {
   const y = useTransform(scrollYProgress, [0, 1], [-30, 30]);
 
   return (
-    <div ref={ref} className="absolute w-full h-full overflow-hidden">
+    <div ref={ref} className={`absolute w-full h-full overflow-hidden ${className}`}>
       <motion.img
         src={src}
         alt={alt}

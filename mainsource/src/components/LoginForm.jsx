@@ -114,7 +114,6 @@ function Login() {
           }
         );
 
-        console.log("User Info:", res.data);
 
         postGoogleUserData({ ...res.data });
 
@@ -127,8 +126,7 @@ function Login() {
   });
 
   const postGoogleUserData = async (res) => {
-    // console.log(res);
-    // console.log(res.picture);
+ 
 
     try {
       let response = await axios.post(
