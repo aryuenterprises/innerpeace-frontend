@@ -80,7 +80,7 @@ function Header() {
   };
 
   return (
-    <div className="flex justify-between items-center px-2  xl:px-5 py-0   sm:py-2   bg-black text-white ">
+    <div className="flex justify-between items-center px-2  xl:px-5 py-0   sm:py-2   bg-black/85 text-white ">
       <div onClick={() => navigate("/")} className="cursor-pointer">
         <img
           src={innerpece_logo2}
@@ -173,6 +173,15 @@ function Header() {
               </div>
             </div>
           </li>
+{/* 
+          <li className="md:pe-5 lg:pe-8 xl:pe-10 font-semibold  ">
+            <Link
+              to="/eventsHistory"
+              className="cursor-pointer hover:text-gray-500"
+            >
+             Events
+            </Link>
+          </li> */}
 
           <li className="md:pe-5 lg:pe-8 xl:pe-10 font-semibold  ">
             <Link

@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import defaultimg from "../assets/defaultimg.png";
+import defaultimg from "../../assets/defaultimg.png";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-function Destinations() {
+function HomePopularPrograms() {
   let navigate = useNavigate();
   const [destinationData, setDestinationsData] = useState([]);
   const [loading, setLoading] = useState(true); // Add a loading state
@@ -203,4 +203,4 @@ function Destinations() {
   );
 }
 
-export default Destinations;
+export default HomePopularPrograms;

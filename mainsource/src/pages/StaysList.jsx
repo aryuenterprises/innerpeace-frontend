@@ -16,6 +16,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import defaultimg from "../assets/defaultimg.png";
+import TopHeader from "../components/TopHeader";
 
 const StaysList = () => {
   const responsive = {
@@ -271,6 +272,8 @@ const StaysList = () => {
           </div>
         }
       >
+                {/* <TopHeader/> */}
+
         <Header />
 
         {/* Hero Section */}

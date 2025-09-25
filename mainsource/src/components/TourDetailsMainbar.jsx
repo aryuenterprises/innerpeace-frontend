@@ -36,6 +36,7 @@ import { FaBirthdayCake } from "react-icons/fa";
 import { GiLovers } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
+import { useGoogleLogin } from "@react-oauth/google";
 
 
 function Mainbar({
@@ -105,7 +106,7 @@ function Mainbar({
           program_id: id ? id : slicedPathName,
           user_id: userDetails?.id || null,
         };
-     
+
         const payload2 = {
           program_id: slicedUserId,
           // stay_id: slicedStayId && slicedStayId,
@@ -596,7 +597,72 @@ function Mainbar({
     );
   };
 
+
   
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Get user info from Google API
+        const res = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+
+        postGoogleUserData({ ...res.data });
+
+        // res.data will have: name, email, picture, etc.
+      } catch (err) {
+        console.error("Failed to fetch user info", err);
+      }
+    },
+    onError: () => console.log("Login Failed"),
+  });
+
+  const postGoogleUserData = async (res) => {
+    try {
+      let response = await axios.post(
+        `https://backoffice.innerpece.com/api/v1/auth/google/callback`,
+        { ...res }
+      );
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Login Success",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
+      let loginid = response.data.token;
+      let loginDetails = response.data.user_details;
+
+      loginDetails = { ...loginDetails, googlePicture: res.picture };
+
+      localStorage.setItem("loginid", loginid);
+      localStorage.setItem("loginDetails", JSON.stringify(loginDetails));
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+
+      console.log(err?.response?.data?.error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Login Failed",
+        // text:err.response.data.error,
+        text: err.response?.data?.error || "Something went wrong!",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
+  };  
 
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
@@ -925,7 +991,7 @@ function Mainbar({
           </div>
 
           <div>
-            <div className="mt-3 md:mt-5 md:leading-7  ">
+            <div className="mt-3 md:mt-5 md:leading-7 list-disc list-inside ">
               {/* <p>{cleanBulletText(apiData.important_info)}</p> */}
 
               <p
@@ -949,7 +1015,7 @@ function Mainbar({
               </p>
             </div>
 
-            <div className="mt-3 md:mt-5 md:leading-7  ">
+            <div className="mt-3 md:mt-5 md:leading-7 list-disc list-inside ">
               {/* <p>{cleanBulletText(apiData.program_inclusion)}</p> */}
               <p
                 className=""
@@ -971,7 +1037,7 @@ function Mainbar({
               </p>
             </div>
 
-            <div className="mt-3 md:mt-5 md:leading-7  ">
+            <div className="mt-3 md:mt-5 md:leading-7 list-disc list-inside ">
               {/* <p>{cleanBulletText(apiData.program_exclusion)}</p> */}
               <p
                 className=""
@@ -1103,14 +1169,13 @@ function Mainbar({
 
             <div className="flex flex-col px-3 gap-x-5 justify-between flex-wrap p-3 font-PlusJakartaSansMedium font-semibold">
               <p>{apiData.stay_details_list.stay_title}</p>
-              
-              <div className="flex items-center gap-2 mt-2">
 
-              
-              <IoLocationSharp className="text-sky-800"/>
-              <p className="font-normal text-sky-800">{apiData.stay_details_list.tag_line}</p>
+              <div className="flex items-center gap-2 mt-2">
+                <IoLocationSharp className="text-sky-800" />
+                <p className="font-normal text-sky-800">
+                  {apiData.stay_details_list.tag_line}
+                </p>
               </div>
-        
             </div>
           </div>
         </div>
@@ -2020,7 +2085,7 @@ function Mainbar({
       </div>
 
       {loginCliked && (
-        <div className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
+        <div className="fixed inset-0 z-50 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
           <div className="flex items-center justify-center  bg-white">
             <div className="w-screen   md:w-[70vw] py-3  lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
               <button
@@ -2116,6 +2181,20 @@ function Mainbar({
                       } transition-all duration-300  p-3 mt-2 rounded-md text-white`}
                     >
                       Log In
+                    </button>
+
+                    <button
+                      onClick={() => login()}
+                      className="flex items-center justify-center gap-3 px-6 py-3 bg-white shadow-md rounded-lg border hover:bg-gray-50 transition"
+                    >
+                      <img
+                        src="https://developers.google.com/identity/images/g-logo.png"
+                        alt="Google Logo"
+                        className="w-5 h-5"
+                      />
+                      <span className="text-gray-700 font-medium">
+                        Continue with Google
+                      </span>
                     </button>
 
                     <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">

@@ -3,9 +3,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
-import defaultimg from "../assets/defaultimg.png";
+import defaultimg from "../../assets/defaultimg.png";
 
-const Blogs = () => {
+const HomeBlogs = () => {
   let [apiData, setApiDate] = useState([]);
   const [loading, setLoading] = useState(true); // Add a loading state
 
@@ -242,4 +242,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default HomeBlogs;

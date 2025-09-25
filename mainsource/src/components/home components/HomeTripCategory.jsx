@@ -5,14 +5,13 @@ import { EffectCards } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/effect-cards";
 import { Swiper, SwiperSlide } from "swiper/react";
-import defaultimg from "../assets/defaultimg.png";
+import defaultimg from "../../assets/defaultimg.png";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import Marquee from "react-fast-marquee";
-import ParallaxImage from "./parallexImage";
+import ParallaxImage from "../parallexImage";
 
-function Programs() {
+function HomeTripCategory() {
   const [programsData, setProgramsData] = useState([]);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -192,7 +191,7 @@ function Programs() {
                     customLeftArrow={<CustomLeftArrow />}
                     customRightArrow={<CustomRightArrow />}
                     containerClass="carousel-container"
-                    itemClass="px-3"
+                    itemClass="px-2"
                     
                   >
                     {programsData.map((item, index) => (
@@ -300,4 +299,4 @@ function Programs() {
   );
 }
 
-export default Programs;
+export default HomeTripCategory;

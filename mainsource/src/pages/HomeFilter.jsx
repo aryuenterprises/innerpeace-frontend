@@ -19,6 +19,7 @@ import { IoBedSharp } from "react-icons/io5";
 import { FaArrowRight } from "react-icons/fa6";
 
 import defaultimage from "../assets/defaultimg.png";
+import TopHeader from "../components/TopHeader";
 
 function DestinationsDetails() {
   useEffect(() => {
@@ -241,6 +242,8 @@ function DestinationsDetails() {
 
   return (
     <div>
+              <TopHeader/>
+
       <Header />
 
       {/* Hero Section */}

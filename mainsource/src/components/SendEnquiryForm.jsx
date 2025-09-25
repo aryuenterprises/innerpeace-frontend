@@ -29,6 +29,9 @@ import { FaChildReaching } from "react-icons/fa6";
 import { FaChild } from "react-icons/fa6";
 import { FaBirthdayCake } from "react-icons/fa";
 import { GiLovers } from "react-icons/gi";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { IoCalendarNumberSharp } from "react-icons/io5";
 
 const SendEnquiryForm = () => {
   const [name, setName] = useState("");
@@ -176,15 +179,15 @@ const SendEnquiryForm = () => {
     <div className="flex items-center justify-center mt-8 md:mt-16">
       <div className="w-[95vw] sm:w-[90vw] md:w-[95vw] lg:w-[80vw]  shadow-2xl  shadow-black/30 rounded-md">
         <div className="flex justify-start gap-2 md:gap-4  h-full w-full px-2 md:px-4 py-4">
-          <div className=' bg-[url("././assets/sendenquiry_formimage2.jpg")] max-md:hidden  w-1/5  md:w-1/4 flex-shrink bg-cover  bg-center bg-no-repeat'></div>
+          <div className=' bg-[url("././assets/sendenquiry_formimage2.jpg")] max-md:hidden  w-1/2 flex-shrink bg-cover  bg-center bg-no-repeat rounded-3xl'></div>
 
           <div className="w-full">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="flex flex-col gap-4">
                 {/* name and email */}
-                <div className="flex gap-4 w-full flex-col sm:flex-row">
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
                   {/* Name Input */}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <IoIosContact />
@@ -206,7 +209,7 @@ const SendEnquiryForm = () => {
                   </div>
 
                   {/* Email Input */}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <AiOutlineMail />
@@ -229,9 +232,9 @@ const SendEnquiryForm = () => {
                 </div>
 
                 {/* phone no and location */}
-                <div className="flex gap-4 w-full flex-col sm:flex-row">
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
                   {/* Phone Input */}
-                  <div className="flex flex-col sm:w-1/2 ">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <MdOutlinePhone />
@@ -253,7 +256,7 @@ const SendEnquiryForm = () => {
                   </div>
 
                   {/* your residence location */}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <FaLocationDot />
@@ -279,9 +282,9 @@ const SendEnquiryForm = () => {
                 </div>
 
                 {/* DOB and engagement date */}
-                <div className="flex gap-4 w-full flex-col sm:flex-row">
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
                   {/* DOB Input */}
-                  <div className="flex flex-col sm:w-1/2 ">
+                  {/* <div className="flex flex-col sm:w-1/2 ">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <FaBirthdayCake />
@@ -299,34 +302,68 @@ const SendEnquiryForm = () => {
                         onChange={(e) => setDob(e.target.value)}
                       />
                     </div>
-                    {/* {errors.phone && (
-                      <p className="text-red-500 text-xs">{errors.phone[0]}</p>
-                    )} */}
+                   
+                  </div> */}
+
+                  {/* <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2 ">
+                    <div className="flex items-center border rounded-md">
+                      <span className="p-2">
+                        <FaBirthdayCake />
+                      </span>
+                      <DatePicker
+                        selected={dob}
+                        onChange={(date) => setDob(date)}
+                        placeholderText="Select DOB"
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 "
+                        icon={true}
+                      />
+                      <IoCalendarNumberSharp className="me-3" />
+                    </div>
+                  </div> */}
+
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
+                    <div className="relative flex items-center border rounded-md w-full">
+                      {/* Left Icon */}
+                      <span className="p-2">
+                        <FaBirthdayCake />
+                      </span>
+
+                      {/* Datepicker Input */}
+                      <DatePicker
+                        selected={dob}
+                        onChange={(date) => setDob(date)}
+                        placeholderText="Select DOB"
+                        className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                      />
+
+                      {/* Right Icon */}
+                      <span className="absolute right-2 text-gray-500 pointer-events-none">
+                        <IoCalendarNumberSharp />
+                      </span>
+                    </div>
                   </div>
 
                   {/* engagement date */}
-                  <div className="flex flex-col sm:w-1/2">
-                    <div className="flex items-center border rounded-md">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
+                    <div className="relative flex items-center border rounded-md w-full">
+                      {/* Left Icon */}
                       <span className="p-2">
-                        <GiLovers />
+                        <FaBirthdayCake />
                       </span>
-                      <input
-                        type="text"
-                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                        placeholder="Select Engagement Date"
-                        id="engagement date"
-                        name="engagement date"
-                        onFocus={(e) => (e.target.type = "date")}
-                        onBlur={(e) => (e.target.type = "text")}
-                        value={engagementDate}
-                        onChange={(e) => setEngagementDate(e.target.value)}
+
+                      {/* Datepicker Input */}
+                      <DatePicker
+                        selected={engagementDate}
+                        onChange={(e) => setEngagementDate(e)}
+                        placeholderText="Select Engagement Date"
+                        className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
                       />
+
+                      {/* Right Icon */}
+                      <span className="absolute right-2 text-gray-500 pointer-events-none">
+                        <IoCalendarNumberSharp />
+                      </span>
                     </div>
-                    {/* {errors.location && (
-                      <p className="text-red-500 text-xs">
-                        {errors.location[0]}
-                      </p>
-                    )} */}
                   </div>
                 </div>
 
@@ -348,9 +385,9 @@ const SendEnquiryForm = () => {
                 )}
 
                 {/* how many days & travel destination */}
-                <div className="flex gap-4 w-full flex-col sm:flex-row">
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
                   {/*how many days*/}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col  sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <FaCalendarDays />
@@ -370,7 +407,7 @@ const SendEnquiryForm = () => {
                   </div>
 
                   {/*travel destination*/}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <LiaPlaceOfWorshipSolid />
@@ -392,9 +429,9 @@ const SendEnquiryForm = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 flex-col sm:flex-row w-full">
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
                   {/*Budget Per Head */}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col  sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <RiMoneyRupeeCircleFill />
@@ -419,7 +456,7 @@ const SendEnquiryForm = () => {
                   </div>
 
                   {/*total count*/}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <FaPeopleLine />
@@ -443,8 +480,8 @@ const SendEnquiryForm = () => {
 
                 {/*male &  count*/}
                 <div className="flex flex-col">
-                  <div className="flex gap-4 flex-col sm:flex-row w-full">
-                    <div className="flex flex-col sm:w-1/3">
+                  <div className="flex gap-4  w-full flex-col sm:flex-row md:flex-col lg:flex-row">
+                    <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/3">
                       <div className="flex items-center border rounded-md">
                         <span className="p-2">
                           <FaMale />
@@ -465,7 +502,7 @@ const SendEnquiryForm = () => {
                       )}
                     </div>
 
-                    <div className="flex flex-col sm:w-1/3">
+                    <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/3">
                       <div className="flex items-center border rounded-md">
                         <span className="p-2">
                           <FaFemale />
@@ -487,7 +524,7 @@ const SendEnquiryForm = () => {
                     </div>
 
                     {/*Child count*/}
-                    <div className="flex flex-col sm:w-1/3">
+                    <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/3">
                       <div className="flex items-center border rounded-md">
                         <span className="p-2">
                           <FaChildReaching />
@@ -516,7 +553,7 @@ const SendEnquiryForm = () => {
                     {Array(Number(childCount))
                       .fill(null)
                       .map((item, index) => (
-                        <div className="grid grid-row-1 md:grid-row-3  ">
+                        <div className="grid grid-row-1 md:grid-row-3 flex-grow  ">
                           <div className="flex items-center w-full border rounded-md">
                             <span className="p-2">
                               <FaChild />
@@ -542,10 +579,10 @@ const SendEnquiryForm = () => {
                   <p className="text-red-500 text-xs">{errors.child_age[0]}</p>
                 )}
 
-                <div className="flex gap-4 flex-col sm:flex-row w-full">
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
                   {/*travel date*/}
-                  <div className="flex flex-col sm:w-1/2">
-                    <div className="flex items-center border rounded-md">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
+                    {/* <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <MdOutlineCalendarMonth />
                       </span>
@@ -559,6 +596,26 @@ const SendEnquiryForm = () => {
                         onBlur={(e) => (e.target.type = "text")}
                         onChange={(e) => setTravelDate(e.target.value)}
                       />
+                    </div> */}
+
+                    <div className="relative flex items-center border rounded-md w-full">
+                      {/* Left Icon */}
+                      <span className="p-2">
+                        <FaBirthdayCake />
+                      </span>
+
+                      {/* Datepicker Input */}
+                      <DatePicker
+                        selected={travelDate}
+                        onChange={(date) => setTravelDate(date)}
+                        placeholderText="Select travel date"
+                        className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                      />
+
+                      {/* Right Icon */}
+                      <span className="absolute right-2 text-gray-500 pointer-events-none">
+                        <IoCalendarNumberSharp />
+                      </span>
                     </div>
                     {errors.travel_date && (
                       <p className="text-red-500 text-xs">
@@ -567,7 +624,7 @@ const SendEnquiryForm = () => {
                     )}
                   </div>
                   {/*how many rooms you need*/}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <FaHouse />
@@ -589,9 +646,9 @@ const SendEnquiryForm = () => {
                   </div>
                 </div>
 
-                <div className="flex gap-4 flex-col sm:flex-row w-full">
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
                   {/*Cab Need*/}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2 border-r">
                         <FaCar />
@@ -629,7 +686,7 @@ const SendEnquiryForm = () => {
                   </div>
 
                   {/* Comments Input */}
-                  <div className="flex flex-col sm:w-1/2">
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="flex items-center border rounded-md">
                       <span className="p-2">
                         <BiMessageRoundedDots />

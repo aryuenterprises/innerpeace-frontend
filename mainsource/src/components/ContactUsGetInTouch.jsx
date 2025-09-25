@@ -223,7 +223,7 @@ function GetInTouch() {
               onClick={onClickSendMessage}
               className={`${
                 !captchaValue || loading ? "bg-gray-400" : "bg-sky-800"
-              } transition-all duration-300 px-5 w-36 py-2 md:px-7 outline-none md:py-3 lg:px-8 lg:py-4 xl:px-10  rounded-full text-white`}
+              } transition-all duration-300 px-5 w-fit py-2 md:px-7 outline-none md:py-3 lg:px-8 lg:py-4 xl:px-10  rounded-full text-white`}
             >
               {loading ? (
                 <>
@@ -232,7 +232,7 @@ function GetInTouch() {
                   </div>
                 </>
               ) : (
-                "Sign Up"
+                "Send Message"
               )}
             </button>
           </div>

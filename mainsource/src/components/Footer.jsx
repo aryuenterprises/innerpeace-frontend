@@ -44,6 +44,7 @@ function Footer({className}) {
   function onClickSitemap() {
     window.location.href = "/sitemap.xml"; // This will redirect to the sitemap
   }
+  
 
   return (
     <div className="mt-8 md:mt-20 font-raleway">

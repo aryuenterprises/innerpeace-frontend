@@ -6,6 +6,7 @@ let SignupForm=lazy(()=>import("../components/SignupForm"))
 let Footer=lazy(()=>import("../components/Footer"))
 import { useEffect, useState } from "react";
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 
 
@@ -50,6 +51,7 @@ function SignUp() {
           </div>
         }
       >
+        {/* <TopHeader/> */}
         <Header />
         <SignupHero />
         <SignupForm />

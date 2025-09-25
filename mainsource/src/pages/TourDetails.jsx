@@ -34,6 +34,8 @@ import { GiLovers } from "react-icons/gi";
 import { IoClose } from "react-icons/io5";
 import ReCAPTCHA from "react-google-recaptcha";
 import Swal from "sweetalert2";
+import TopHeader from "../components/TopHeader";
+import { useGoogleLogin } from "@react-oauth/google";
 
 function TourDetails() {
   useEffect(() => {
@@ -377,6 +379,71 @@ function TourDetails() {
     };
   }, [bookNowClicked, loginCliked]);
 
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Get user info from Google API
+        const res = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
+
+        postGoogleUserData({ ...res.data });
+
+        // res.data will have: name, email, picture, etc.
+      } catch (err) {
+        console.error("Failed to fetch user info", err);
+      }
+    },
+    onError: () => console.log("Login Failed"),
+  });
+
+  const postGoogleUserData = async (res) => {
+    try {
+      let response = await axios.post(
+        `https://backoffice.innerpece.com/api/v1/auth/google/callback`,
+        { ...res }
+      );
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Login Success",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
+      let loginid = response.data.token;
+      let loginDetails = response.data.user_details;
+
+      loginDetails = { ...loginDetails, googlePicture: res.picture };
+
+      localStorage.setItem("loginid", loginid);
+      localStorage.setItem("loginDetails", JSON.stringify(loginDetails));
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+
+      console.log(err?.response?.data?.error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Login Failed",
+        // text:err.response.data.error,
+        text: err.response?.data?.error || "Something went wrong!",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
+  };
+
   return (
     <div className="bg-[#FEFEFE]">
       <Suspense
@@ -511,6 +578,20 @@ function TourDetails() {
                             )}
                           </button>
 
+                          <button
+                            onClick={() => login()}
+                            className="flex items-center justify-center gap-3 px-6 py-3 bg-white shadow-md rounded-lg border hover:bg-gray-50 transition"
+                          >
+                            <img
+                              src="https://developers.google.com/identity/images/g-logo.png"
+                              alt="Google Logo"
+                              className="w-5 h-5"
+                            />
+                            <span className="text-gray-700 font-medium">
+                              Continue with Google
+                            </span>
+                          </button>
+
                           <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">
                             <p>Don't you have an account?</p>
                             <button
@@ -527,6 +608,8 @@ function TourDetails() {
                 </div>
               </div>
             )}
+
+            {/* <TopHeader /> */}
 
             <Header />
             <Featuredhero

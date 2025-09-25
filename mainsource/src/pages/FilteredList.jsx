@@ -17,6 +17,7 @@ import customerservice from "../assets/customerservice.svg";
 import approve from "../assets/approve.svg";
 import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
+import TopHeader from "../components/TopHeader";
 
 const FilteredList = () => {
   let location = useLocation();
@@ -131,6 +132,8 @@ const FilteredList = () => {
 
   return (
     <div>
+              {/* <TopHeader/> */}
+
       <Header />
 
       <div

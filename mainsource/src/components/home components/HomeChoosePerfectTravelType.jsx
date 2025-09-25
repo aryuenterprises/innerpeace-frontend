@@ -1,19 +1,14 @@
 import React from "react";
-import dummy1 from "../assets/dummy1.png";
-import dummy2 from "../assets/dummy2.png";
-import dummy3 from "../assets/dummy3.png";
-import dummy4 from "../assets/dummy4.jpeg";
-import traveltype1 from "../assets/traveltype1.png";
-import traveltype2 from "../assets/traveltype2.png";
-import traveltype3 from "../assets/traveltype3.jpg";
-import traveltype4 from "../assets/traveltype4.png";
-import traveltype5 from "../assets/traveltype5.jpg";
-import Carousel from "react-multi-carousel";
+import dummy2 from "../../assets/dummy2.png";
+import dummy3 from "../../assets/dummy3.png";
+import traveltype1 from "../../assets/traveltype1.png";
+import traveltype3 from "../../assets/traveltype3.jpg";
+import traveltype4 from "../../assets/traveltype4.png";
+import traveltype5 from "../../assets/traveltype5.jpg";
 import "react-multi-carousel/lib/styles.css";
 import Marquee from "react-fast-marquee";
-import ParallaxImage from "./parallexImage";
 
-const Perfecttraveltype = () => {
+const HomeChoosePerfectTravelType = () => {
  
 
   const items = [
@@ -105,13 +100,13 @@ const Perfecttraveltype = () => {
               key={index}
               className="relative h-44 sm:h-44 w-[300px] rounded-xl overflow-hidden mx-2 flex-shrink-0"
             >
-              {/* <img
+              <img
                 src={item.image}
                 alt="travel type"
                 className="absolute w-full h-full object-cover"
-              /> */}
+              />
 
-<ParallaxImage  src={item.image}  alt="travel type"/>
+{/* <ParallaxImage  src={item.image}  alt="travel type"/> */}
 
               <div className="absolute w-full h-full z-10 bg-gradient-to-b from-black to-transparent"></div>
               <div className="absolute top-2 w-full z-10 font-jost tracking-[0.2em] uppercase text-sm text-white text-center p-2 [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">
@@ -128,4 +123,4 @@ const Perfecttraveltype = () => {
   );
 };
 
-export default Perfecttraveltype;
+export default HomeChoosePerfectTravelType;

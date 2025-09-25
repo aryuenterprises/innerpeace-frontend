@@ -1,91 +1,12 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { IoCompassSharp } from "react-icons/io5";
-import axios from "axios";
-import Carousel from "react-multi-carousel";
-import "react-multi-carousel/lib/styles.css";
-import { useNavigate } from "react-router-dom";
-import { FaRegCalendarAlt } from "react-icons/fa";
-import common_rooms_zostel from "../assets/mountain.webp";
+import React, { useEffect, useState } from "react";
+import common_rooms_zostel from "../../assets/mountain.webp";
 import { IoStarSharp } from "react-icons/io5";
-import call_icon from "../assets/call-white.svg";
-import map_white from "../assets/map-white.svg";
-import group from "../assets/Group.svg";
-import india1 from "../assets/india1.png";
-import india2 from "../assets/india2.png";
+import call_icon from "../../assets/call-white.svg";
+import map_white from "../../assets/map-white.svg";
+import group from "../../assets/Group.svg";
+import ParallaxImage2 from "../ParallexImage2";
 
 function Hero() {
-  const [homeImage, setHomeImage] = useState([]);
-  const [cityName, setCityName] = useState("");
-  const [loading, setLoading] = useState(true); // Add a loading state
-  const [selectedDate, setSelectedDate] = useState("");
-  const navigate = useNavigate();
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) =>
-        prevIndex === homeImage.length - 1 ? 0 : prevIndex + 1
-      );
-    }, 4000); // Change image every 5 seconds
-
-    return () => clearInterval(interval);
-  }, [homeImage.length]);
-
-  const handleInputChange = (event) => {
-    setCityName(event.target.value);
-  };
-
-  const handleDateChange = (event) => {
-    setSelectedDate(event.target.value); // Update date state on change
-  };
-
-  const handleSearch = () => {
-    if (cityName.trim()) {
-      const formattedCityName = cityName
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-") // Replace special characters with hyphens
-        .replace(/-+/g, "-") // Replace multiple hyphens with a single one
-        .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
-
-      navigate(`/home-filter/${formattedCityName}`, {
-        state: { city_name: cityName, date: selectedDate },
-      });
-    }
-  };
-
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 1,
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 464 },
-      items: 1,
-    },
-    mobile: {
-      breakpoint: { max: 464, min: 0 },
-      items: 1,
-    },
-  };
-
-  useEffect(() => {
-    async function getApiData() {
-      await axios
-
-        .get(`https://backoffice.innerpece.com/api/v1/get-combined-data`)
-        .then((response) => {
-          setHomeImage(response.data.data.sliders);
-          setLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-          setLoading(false);
-        });
-    }
-
-    getApiData();
-  }, []);
-
   const [offsetY, setOffsetY] = useState(0);
 
   const handleScroll = () => setOffsetY(window.scrollY);
@@ -96,18 +17,31 @@ function Hero() {
   }, []);
 
   return (
-    <div className="hero-container relative overflow-hidden">
-      <div className="relative w-full h-[75vh] md:h-[93vh] overflow-hidden">
+    <div className="hero-container relative overflow-hidden h-full">
+      <div className="relative w-full h-[75vh] md:h-[100vh] ">
         {/* Parallax Image */}
-        <img
+        {/* <img
           src={common_rooms_zostel}
           alt=""
           className="absolute inset-0 w-full h-full object-cover overflow-hidden"
-          style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+          // style={{ transform: `translateY(${offsetY * 0.3}px)` }}
+        /> */}
+
+        {/* <ParallaxImage
+          src={common_rooms_zostel}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover overflow-hidden   flex-grow transform transition-transform duration-500 group-hover:scale-125   bg-center "
+        /> */}
+
+        <ParallaxImage2
+          src={common_rooms_zostel}
+          alt=""
+          // className="inset-0 w-full h-full object-cover"
+          className="absolute inset-0 w-full h-full object-cover overflow-hidden   flex-grow transform transition-transform duration-500 group-hover:scale-125   bg-center "
         />
 
         {/* Gradient Overlay */}
-        <div className="absolute w-full h-full z-10 bg-gradient-to-b from-transparent to-black"></div>
+        <div className="absolute w-full h-full z-10 bg-gradient-to-b from-transparent to-black/60"></div>
 
         {/* Center Text */}
         <div className="absolute inset-0 flex items-center z-10 justify-center px-5 md:px-20">
@@ -171,7 +105,12 @@ function Hero() {
             </div>
           </div>
 
-          <div className=" gap-2 md:gap-3 hidden md:flex items-center justify-center">
+          {/* incubated at */}
+          <div className=" gap-2 md:gap-3 hidden md:flex items-center flex-col justify-center">
+            <p className="font-medium lg:font-semibold text-sm md:text-base lg:text-xl">
+              Incubated at
+            </p>
+
             <img
               src={`https://backoffice.innerpece.com/uploads/settings/official_logo/1724229229_1.PNG`}
               alt=""

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Footer from "../components/Footer";
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 const User_Enquiries = () => {
   const [userLogedIn, setUserLogedIn] = useState("");
@@ -122,6 +123,9 @@ const User_Enquiries = () => {
           className="h-10 w-10  transition-all duration-500"
         />
       </div>
+
+
+      {/* <TopHeader/> */}
 
       <Header />
 

@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useEffect } from "react";
+import TopHeader from "../components/TopHeader";
 
 const Header = lazy(() => import("../components/Header"));
 const DestinationsHero = lazy(() => import("../components/DestinationsHero"));
@@ -19,6 +20,8 @@ function Destinations() {
           </div>
         }
       >
+                {/* <TopHeader/> */}
+
         <Header />
         <DestinationsHero />
         <DestinationsSearch />

@@ -24,6 +24,7 @@ export default {
           "0%": { backgroundPosition: "-200% 0" },
           "100%": { backgroundPosition: "200% 0" },
         },
+        
       },
       animation: {
         fadeIn: "fadeIn 1s ease-in-out forwards",

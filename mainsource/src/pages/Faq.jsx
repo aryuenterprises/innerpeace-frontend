@@ -6,6 +6,7 @@ import { lazy, Suspense } from "react";
 let Footer = lazy(() => import("../components/Footer"));
 let Header = lazy(() => import("../components/Header"));
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 function Faq() {
   const [openIndex, setOpenIndex] = useState(0);
@@ -64,6 +65,8 @@ function Faq() {
           </div>
         }
       >
+                {/* <TopHeader/> */}
+
         <Header />
 
         <div className="p-5 md:px-20 lg:px-30 xl:px-40 gap-16  mt-8 md:mt-14">

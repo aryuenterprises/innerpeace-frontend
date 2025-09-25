@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import defaultimg from "../assets/defaultimg.png";
+import defaultimg from "../../assets/defaultimg.png";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 
-const StaysTamilnadu = () => {
+const HomePopularStays = () => {
   let navigate = useNavigate();
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false); // Add a loading state
@@ -15,14 +15,8 @@ const StaysTamilnadu = () => {
     const fetchProgramData = async () => {
       try {
         const response = await axios.get(
-          "https://backoffice.innerpece.com/api/v1/get-stays",
-          {
-            params: {
-              destination: "Himachal Pradesh",
-            },
-          }
+          "https://backoffice.innerpece.com/api/v1/get-stay-destination"
         );
-
         setApiData(response.data.data);
         setLoading(false);
       } catch (err) {
@@ -43,8 +37,8 @@ const StaysTamilnadu = () => {
       .replace(/-+/g, "-")
       .replace(/^-+|-+$/g, "");
 
-    navigate(`/staysdetails/${id}`, {
-      state: { id },
+    navigate(`/stayslist/${id}/${formattedThemeName}`, {
+      state: { stay_title },
     });
 
     window.scrollTo({
@@ -127,19 +121,34 @@ const StaysTamilnadu = () => {
         setSkeletonArraylength(2); // tablet
       }
     };
+    // Initial check
     handleResize();
+    // Event listener
     window.addEventListener("resize", handleResize);
     // Cleanup
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const onClickViewAll = () => {
+    navigate("/stayslist", {
+      state: {
+        city_name: "tamil nadu",
+      },
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  };
 
   return (
     <>
       {loading ? (
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
           <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
-            <span className="font-jost font-medium">Popular Stays in </span>
-            <span className="font-jost font-bold">Himachal Pradesh</span>
+            <span className="font-jost font-medium">Popular </span>
+            <span className="font-jost font-bold">Stays</span>
           </p>
 
           <div className="flex items-center flex-1 mt-8 md:mt-10   flex-grow flex-wrap justify-start ">
@@ -162,13 +171,13 @@ const StaysTamilnadu = () => {
         <>
           {apiData && apiData.length > 0 && (
             <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-              <p className="text-2xl md:text-3xl leading-tight  lg:text-4xl  leading-loose text-[#141414]">
-                <span className="font-jost font-medium">Popular Stays in </span>
-                <span className="font-jost font-bold">Himachal Pradesh</span>
+              <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
+                <span className="font-jost font-medium">Popular </span>
+                <span className="font-jost font-bold">Stays</span>
               </p>
 
               <div className="mt-8 md:mt-10">
-                <Carousel
+                {/* <Carousel
                   responsive={responsive}
                   infinite={true}
                   autoPlay={false}
@@ -182,65 +191,68 @@ const StaysTamilnadu = () => {
                   customRightArrow={<CustomRightArrow />}
                 >
                   {apiData.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col flex-grow flex-1  h-[380px]  "
-                    >
+                    <div className="flex flex-col flex-grow flex-1 gap-3 h-[320px] w-[320px]  ">
                       <div
-                        onClick={() =>
-                          handleCardClick(item.id, item.stay_title)
-                        }
-                        className="relative  flex-grow  cursor-pointer group  rounded-t-2xl  overflow-hidden "
+                        key={index}
+                        onClick={() => handleCardClick(item.id, item.city_name)}
+                        // className="relative  flex-grow  cursor-pointer group  rounded-tl-[20%] rounded-tr-md rounded-bl-md rounded-br-[20%]  overflow-hidden "
+                          className="relative  flex-grow  cursor-pointer group  h-[320px] w-[320px] rounded-[150%] overflow-hidden "
                       >
-                        <div className="absolute  -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                        <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
                         <img
                           src={
-                            item.images[0]
-                              ? `https://backoffice.innerpece.com/${item.images[0]}`
+                            item.city_image
+                              ? `https://backoffice.innerpece.com/${item.city_image}`
                               : defaultimg
                           }
-                          alt={item.stay_title}
-                          className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
+                          alt={item.city_name}
+                          className="h-[320px] w-[320px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
                         />
-                        {/* <p className="absolute font-jost font-medium  w-full  ps-5 text-3xl  text-white  bottom-5"></p>
-                        <p className="absolute font-jost font-medium  w-full  ps-5 text-3xl  text-white  bottom-2">
-                          {item.stay_title}
-                        </p> */}
-
-                        <div className="absolute font-mulish font-medium  w-full  ps-5 text-2xl  text-white  bottom-2">
-                          <p className="font-semibold">
-                            {" "}
-                            {item?.stay_title
-                              .split(" ")
-                              .slice(0, -1)
-                              .join(" ")
-                              .slice(0, 16)}
-                            ....
-                          </p>
-                          <p className="font-jost text-[18px] font-medium">
-                            {" "}
-                            {item.stay_title.split(" ").slice(-1)[0]}
-                          </p>
-                        </div>
+                       
                       </div>
+                      <p className=" font-jost font-medium text-wrap  w-full text-center text-xl  text-black  bottom-5">
+                          {item.city_name}
+                        </p>
+                    </div>
+                  ))}
+                </Carousel> */}
 
-                      {/* <p className="font-jost font-medium  w-full text-center text-3xl  text-black  bottom-5">
-                         {item.stay_title}
-                       </p> */}
-                      <div className="border border-[#CCCCCC] border-t-0 p-3 mb-1 rounded-2xl rounded-t-none ">
-                        {item.tag_line && <p>{item.tag_line}</p>}
-                        <div className="flex gap-5">
-                          {item.actual_price && (
-                            <del className=" text-xl text-[#7C7C7C]">
-                              ₹ {Number(item.actual_price).toLocaleString()}
-                            </del>
-                          )}
-                          <p className="font-bold text-xl">
-                            {/* ₹{item.discount_price} */}₹{" "}
-                            {Number(item.discount_price).toLocaleString()}
-                          </p>
-                        </div>
+                <Carousel
+                  responsive={responsive}
+                  infinite={true}
+                  autoPlay={true}
+                  swipeable={true}
+                  draggable={true}
+                  showDots={false}
+                  keyBoardControl={true}
+                  containerClass="carousel-container"
+                  itemClass=""
+                  customLeftArrow={<CustomLeftArrow />}
+                  customRightArrow={<CustomRightArrow />}
+                >
+                  {apiData.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col  items-center gap-3 "
+                    >
+                      <div
+                        onClick={() => handleCardClick(item.id, item.city_name)}
+                        className="relative cursor-pointer group h-[260px] shadow-xl shadow-black/20 w-[260px] rounded-full overflow-hidden  "
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-black z-10"></div>
+                        <img
+                          src={
+                            item.city_image
+                              ? `https://backoffice.innerpece.com/${item.city_image}`
+                              : defaultimg
+                          }
+                          alt={item.city_name}
+                          className="h-full w-full object-cover transform transition-transform duration-500 group-hover:scale-110"
+                        />
                       </div>
+                      <p className="font-jost font-medium text-center text-xl text-black">
+                        {item.city_name}
+                      </p>
                     </div>
                   ))}
                 </Carousel>
@@ -253,4 +265,4 @@ const StaysTamilnadu = () => {
   );
 };
 
-export default StaysTamilnadu;
+export default HomePopularStays;

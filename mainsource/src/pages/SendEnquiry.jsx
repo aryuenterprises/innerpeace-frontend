@@ -1,13 +1,12 @@
 import React from "react";
-import { useEffect,useState } from "react";
-import { lazy,Suspense } from "react";
-let Footer=lazy(()=>import("../components/Footer"))
-let Header=lazy(()=>import("../components/Header"))
-let SendEnquiryHero=lazy(()=>import("../components/SendEnquiryHero"))
-let SendEnquiryForm=lazy(()=>import("../components/SendEnquiryForm"))
+import { useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
+let Footer = lazy(() => import("../components/Footer"));
+let Header = lazy(() => import("../components/Header"));
+let SendEnquiryHero = lazy(() => import("../components/SendEnquiryHero"));
+let SendEnquiryForm = lazy(() => import("../components/SendEnquiryForm"));
 import whatsapp from "../assets/whatsapp.svg";
-
-
+import TopHeader from "../components/TopHeader";
 
 const SendEnquiry = () => {
   // const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -37,7 +36,10 @@ const SendEnquiry = () => {
         <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
           <p>Whatsapp Enquiry</p>
         </div>
-        <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
+        <img
+          src={whatsapp}
+          className="h-10 w-10  transition-all duration-500"
+        />
       </div>
 
       <Suspense
@@ -47,6 +49,7 @@ const SendEnquiry = () => {
           </div>
         }
       >
+        {/* <TopHeader /> */}
         <Header />
         <SendEnquiryHero />
         <SendEnquiryForm />

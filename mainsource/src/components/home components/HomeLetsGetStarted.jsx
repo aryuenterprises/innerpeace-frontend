@@ -1,9 +1,9 @@
 import React from "react";
 import { GiMountainCave } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
-import sea from "../assets/sea.mp4";
+import sea from "../../assets/sea.mp4";
 
-function LetsGetStarted() {
+function HomeLetsGetStarted() {
   let navigate = useNavigate();
 
   function onclickBtn() {
@@ -65,4 +65,4 @@ function LetsGetStarted() {
   );
 }
 
-export default LetsGetStarted;
+export default HomeLetsGetStarted;

@@ -6,6 +6,7 @@ let TermsOfServices_Content=lazy(()=>import("../components/TermsOfServices_Conte
 let Footer=lazy(()=>import("../components/Footer"))
 import { useEffect, useState } from "react";
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 
 
@@ -49,6 +50,8 @@ function TermsOfService() {
           </div>
         }
       >
+                {/* <TopHeader/> */}
+
         <Header />
         <TermsOfServices_Hero />
         <TermsOfServices_Content />

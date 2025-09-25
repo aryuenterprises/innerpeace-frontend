@@ -11,6 +11,7 @@ import defaultimage from "../assets/defaultimg.png"; /* Sidebar */
 import axios from "axios";
 let Footer = lazy(() => import("../components/Footer"));
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 const User_Wishlist = () => {
   const [userLogedIn, setUserLogedIn] = useState("");
@@ -133,6 +134,9 @@ const User_Wishlist = () => {
           </div>
         }
       >
+
+{/* <TopHeader/> */}
+
         <Header />
         <div className="flex flex-col md:flex-row pt-10 pb-4 px-5 md:px-10 gap-5">
           {/* Sidebar */}

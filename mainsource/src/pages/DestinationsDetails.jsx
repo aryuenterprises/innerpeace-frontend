@@ -12,9 +12,9 @@ import customerservice from "../assets/customerservice.svg";
 import approve from "../assets/approve.svg";
 import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
+import TopHeader from "../components/TopHeader";
 
 function DestinationsDetails() {
-
   useEffect(() => {
     document.title = "Destination Details - Innerpece";
   }, []); // Empty dependency array ensures it runs once on mount
@@ -53,7 +53,6 @@ function DestinationsDetails() {
   );
   const upperCasedLocationName = mappedSlicedLocationName.join(" ");
 
-
   useEffect(() => {
     const fetchProgramData = async () => {
       try {
@@ -66,8 +65,6 @@ function DestinationsDetails() {
 
         setApiData(response.data.data);
         setLoading(false);
-
-        
 
         const firstProgram = response.data.data[0];
         const metaOgTitle = document.querySelector("meta[property='og:title']");
@@ -330,6 +327,7 @@ function DestinationsDetails() {
           </div>
         }
       >
+        {/* <TopHeader /> */}
         <Header />
 
         {/* Hero Section */}
@@ -505,19 +503,18 @@ function DestinationsDetails() {
                         </p>
 
                         {item.current_location &&
-                            item.current_location !== "<p><br></p>" && (
-                              <div className="flex items-center gap-2">
-                                <FaLocationDot className="text-sky-800" />
-                            
+                          item.current_location !== "<p><br></p>" && (
+                            <div className="flex items-center gap-2">
+                              <FaLocationDot className="text-sky-800" />
 
-                                <p
-                                  className="text-sm sm:text-base"
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.current_location,
-                                  }}
-                                />
-                              </div>
-                            )}
+                              <p
+                                className="text-sm sm:text-base"
+                                dangerouslySetInnerHTML={{
+                                  __html: item.current_location,
+                                }}
+                              />
+                            </div>
+                          )}
 
                         {/* <p className="flex-wrap text-[#11142D] font-mulish md:text-lg">
                           {item.title.includes("-")
@@ -587,7 +584,7 @@ function DestinationsDetails() {
                                     key={index}
                                     className="flex flex-col gap-1 justify-center items-center w-20 flex-wrap"
                                   >
-                                    <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
+                                    <span className="border-2 p-2 w-8 h-8 md:w-11 md:h-11 border-gray-300 rounded-full">
                                       <img
                                         src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
                                         alt=""
@@ -610,11 +607,18 @@ function DestinationsDetails() {
                                   key={index}
                                   className="flex flex-col gap-1 justify-center w-20 items-center flex-wrap"
                                 >
-                                  <span className=" bg-sky-700 p-2 w-9 h-9  rounded-full">
-                                    <p className="text-white text-xs mx-auto">
+                                  {/* <span className=" bg-sky-700 p-2 w-11 h-11 flex items-center justify-center rounded-full">
+                                    <p className="text-white text-xs mx-auto h-full">
+                                      +{item.amenities.length - 3}
+                                    </p>
+                                  </span> */}
+
+                                  <span className="bg-sky-700 p-2 w-8 h-8 md:w-11 md:h-11 flex items-center justify-center rounded-full">
+                                    <p className="text-white text-xs">
                                       +{item.amenities.length - 3}
                                     </p>
                                   </span>
+
                                   <p className="text-sky-700 flex-wrap text-xs w-fit">
                                     More
                                   </p>
@@ -693,7 +697,6 @@ function DestinationsDetails() {
 
             {/* Main Section > Sidebar */}
             <div className="mt-10 lg:mt-20  sticky top-5 h-fit flex-grow flex flex-col md:flex-row xl:flex-col gap-4   xl:basis-[24%] ">
-          
               <div className="flex w-full md:w-1/2 xl:w-auto flex-col gap-3 items-center flex-grow  py-5 px-5 shadow-md shadow-black/10 rounded-xl">
                 <p className="font-bold md:font-bold text-xl font-mulish">
                   Any Questions ?
@@ -735,10 +738,10 @@ function DestinationsDetails() {
               </div>
 
               <div className="shadow-md w-full md:w-1/2 xl:w-auto mt-5  bg-white py-4 flex-grow flex flex-col items-center  shadow-black/10 rounded-xl">
-              <div className="flex gap-4  w-full lg:justify-center ms-3 text-lg">
-                <p className="text-sky-800">|</p>
-                <p className="font-semibold">Book With Confidence</p>
-              </div>
+                <div className="flex gap-4  w-full lg:justify-center ms-3 text-lg">
+                  <p className="text-sky-800">|</p>
+                  <p className="font-semibold">Book With Confidence</p>
+                </div>
 
                 <div className="flex flex-wrap  items-start  justify-between lg:flex-col  px-5 pt-5   gap-y-4 gap-2">
                   <div className="flex gap-4 items-center">

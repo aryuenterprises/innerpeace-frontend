@@ -6,6 +6,7 @@ let LoginForm = lazy(() => import("../components/LoginForm"));
 let Footer = lazy(() => import("../components/Footer"));
 import { useEffect, useState } from "react";
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 function Login() {
   // const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -48,6 +49,8 @@ function Login() {
           </div>
         }
       >
+                {/* <TopHeader/> */}
+
         <Header />
         <LoginHero />
         <LoginForm />

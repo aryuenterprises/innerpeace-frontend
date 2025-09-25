@@ -4,7 +4,7 @@ const Home = lazy(() => import("./pages/Home"));
 const AboutUs = lazy(() => import("./pages/AboutUs"));
 const ContactUs = lazy(() => import("./pages/ContactUs"));
 const ProgramsDetails = lazy(() => import("./pages/ProgramsDetails"));
-const StaysList=lazy(()=>import('./pages/StaysList'))
+const StaysList = lazy(() => import("./pages/StaysList"));
 const Login = lazy(() => import("./pages/Login"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const TourDetails = lazy(() => import("./pages/TourDetails"));
@@ -24,8 +24,8 @@ import Destinations from "./pages/Destinations";
 import StaysDetails from "./pages/StaysDetails";
 import FilteredList from "./pages/FilteredList";
 import CreateEvent from "./pages/CreateEvent";
-
-
+import EventsHistory from "./pages/EventsHistory";
+import ManageEvent from "./pages/ManageEvent";
 
 function App() {
   return (
@@ -34,46 +34,45 @@ function App() {
         <Suspense
           fallback={
             <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
-            <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-          </div>
-        }
-      >
-        <Routes>
-          <Route path="/" element={<Home />} />
-          {/* <Route path="/createEvent" element={< CreateEvent/>} /> */}
-          <Route path="/sendenquiry" element={<SendEnquiry />} />
-          <Route path="/aboutus" element={<AboutUs />} />
-          <Route path="/contactus" element={<ContactUs />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/:id/:title" element={<TourDetails />} />
-          <Route path="/home-filter/:city_name" element={<HomeFilter />} />
-          <Route
-            path="/tripcategories/:theme_id/:theme_name"
-            element={<ProgramsDetails />}
-          />
-          <Route
-            path="/populardestinations/:city_id/:city_name"
-            element={<DestinationsDetails />}
-          />
+              <div className="w-16 h-16 border-4 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+            </div>
+          }
+        >
+          <Routes>
+            <Route path="/" element={<Home />} />
+            {/* <Route path="/createEvent" element={<CreateEvent />} /> */}
+            {/* <Route path="/eventsHistory" element={<EventsHistory />} /> */}
+            {/* <Route path="/manageEvent" element={<ManageEvent />} /> */}
+            <Route path="/sendenquiry" element={<SendEnquiry />} />
+            <Route path="/aboutus" element={<AboutUs />} />
+            <Route path="/contactus" element={<ContactUs />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/:id/:title" element={<TourDetails />} />
+            <Route path="/home-filter/:city_name" element={<HomeFilter />} />
             <Route
-            path="/stayslist/:id/:cityname"
-            element={<StaysList />}
-          />
-          <Route path="/destinations" element={<Destinations/>} />
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
-          <Route path="/termsofservice" element={<TermsOfService />} />
-          <Route path="/sitemap" element={<Sitemap />} />
-          <Route path="*" element={<PageNotFound />} />
-          <Route path="/profile" element={<User_Profile />} />
-          <Route path="/wishlist" element={<User_Wishlist />} />
-          <Route path="/enquiries" element={<User_Enquiries />} />
-          <Route path="/faq" element={<Faq />} />
-          <Route path="/staysdetails/:id" element={<StaysDetails />} />
-          <Route path="/filteredList/:id" element={<FilteredList />} />
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+              path="/tripcategories/:theme_id/:theme_name"
+              element={<ProgramsDetails />}
+            />
+            <Route
+              path="/populardestinations/:city_id/:city_name"
+              element={<DestinationsDetails />}
+            />
+            <Route path="/stayslist/:id/:cityname" element={<StaysList />} />
+            <Route path="/destinations" element={<Destinations />} />
+            <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+            <Route path="/termsofservice" element={<TermsOfService />} />
+            <Route path="/sitemap" element={<Sitemap />} />
+            <Route path="*" element={<PageNotFound />} />
+            <Route path="/profile" element={<User_Profile />} />
+            <Route path="/wishlist" element={<User_Wishlist />} />
+            <Route path="/enquiries" element={<User_Enquiries />} />
+            <Route path="/faq" element={<Faq />} />
+            <Route path="/staysdetails/:id" element={<StaysDetails />} />
+            <Route path="/filteredList/:id" element={<FilteredList />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
     </HelmetProvider>
   );
 }

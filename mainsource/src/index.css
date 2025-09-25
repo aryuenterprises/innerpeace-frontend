@@ -279,3 +279,135 @@ html {
 .itinerary-content li {
   margin-bottom: 0.5rem;
 }
+
+
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s ease-out forwards;
+}
+
+
+.react-datepicker-wrapper{
+  flex-grow: 1;
+}
+
+
+
+@keyframes gradientShift {
+  0% {
+    --c1: #cce7ff; /* pale sky */
+    --c2: #99ccff; /* pastel */
+    --c3: #b3d9ff; /* soft light */
+  }
+  50% {
+    --c1: #e6f3ff; /* icy */
+    --c2: #80bfff; /* cool aqua */
+    --c3: #cce7ff; /* pale sky */
+  }
+  100% {
+    --c1: #cce7ff;
+    --c2: #99ccff;
+    --c3: #b3d9ff;
+  }
+}
+
+.animate-gradient {
+  background: linear-gradient(to right, var(--c1), var(--c2), var(--c3));
+  background-size: 200% 200%;
+  animation: gradientShift 25s ease-in-out infinite;
+  transition: background 8s ease-in-out;
+}
+
+
+
+
+
+
+
+
+.contactSubmit{
+  position: relative;
+  padding: 5px 10px;
+  width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.2rem;
+  border-radius: 15px;
+  border: 2px solid #0072E8;
+  background: none;
+  color: #0072E8;
+  cursor: pointer;
+  outline: none;
+  transition: 200ms;
+}
+i {
+  position: absolute;
+  color: transparent;
+  transition: 200ms;
+}
+.contactSubmit:focus {
+  color: transparent;
+  outline: none;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  padding: 25px 25px;
+  border-left: 2px solid #0072E8;
+  animation: spin 2s 500ms forwards;
+}
+.contactSubmit:focus i {
+  animation: check 300ms 2250ms forwards;
+}
+@keyframes spin {
+  80% {
+    border: 2px solid transparent;
+    border-left: 2px solid #0072E8;
+  }
+  100% {
+    transform: rotate(720deg);
+    border: 2px solid #0072E8;
+  }
+}
+@keyframes check {
+  to {
+    color: #0072E8;
+  }
+}
+/* scroll style */
+@keyframes wheel {
+  to {
+    opacity: 0;
+    top: 60px;
+  }
+}
+.animate-wheel {
+  animation: wheel 2s infinite;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

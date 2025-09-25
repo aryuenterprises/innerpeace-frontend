@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
-import { IoHeartOutline } from "react-icons/io5";
+import { IoCalendarNumberSharp, IoHeartOutline } from "react-icons/io5";
 import {
   FacebookShareButton,
   LinkedinShareButton,
@@ -49,6 +49,11 @@ import { FaChevronLeft, FaChevronRight, FaTimes } from "react-icons/fa";
 import defaultimage from "../assets/defaultimg.png";
 import default_user_image2 from "../assets/default_user_image_2.jpg";
 import star from "../assets/star.png";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useGoogleLogin } from "@react-oauth/google";
+
+import TopHeader from "../components/TopHeader";
 
 const StaysDetails = () => {
   const navigate = useNavigate();
@@ -618,23 +623,75 @@ const StaysDetails = () => {
     indexOfLastReview
   );
 
-  // useEffect(() => {
-  //   const handleKeyDown = (e) => {
-  //     if (e.key === "ArrowLeft") {
-  //       goPrev();
-  //     } else if (e.key === "ArrowRight") {
-  //       goNext();
-  //     }
-  //   };
-  //   window.addEventListener("keydown", handleKeyDown);
+  const login = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      try {
+        // Get user info from Google API
+        const res = await axios.get(
+          "https://www.googleapis.com/oauth2/v3/userinfo",
+          {
+            headers: {
+              Authorization: `Bearer ${tokenResponse.access_token}`,
+            },
+          }
+        );
 
-  //   return () => {
-  //     window.removeEventListener("keydown", handleKeyDown);
-  //   };
-  // }, []);
+        postGoogleUserData({ ...res.data });
+
+        // res.data will have: name, email, picture, etc.
+      } catch (err) {
+        console.error("Failed to fetch user info", err);
+      }
+    },
+    onError: () => console.log("Login Failed"),
+  });
+
+  const postGoogleUserData = async (res) => {
+    try {
+      let response = await axios.post(
+        `https://backoffice.innerpece.com/api/v1/auth/google/callback`,
+        { ...res }
+      );
+
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Login Success",
+        showConfirmButton: false,
+        timer: 2000,
+      });
+
+      let loginid = response.data.token;
+      let loginDetails = response.data.user_details;
+
+      loginDetails = { ...loginDetails, googlePicture: res.picture };
+
+      localStorage.setItem("loginid", loginid);
+      localStorage.setItem("loginDetails", JSON.stringify(loginDetails));
+
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    } catch (err) {
+      console.log(err);
+
+      console.log(err?.response?.data?.error);
+      Swal.fire({
+        position: "center",
+        icon: "error",
+        title: "Login Failed",
+        // text:err.response.data.error,
+        text: err.response?.data?.error || "Something went wrong!",
+        showConfirmButton: false,
+        timer: 2500,
+      });
+    }
+  };
 
   return (
     <div>
+      {/* <TopHeader/> */}
+
       <Header />
 
       <div
@@ -1478,7 +1535,7 @@ const StaysDetails = () => {
 
                         {/* DOB Input */}
                         <div className="flex flex-col sm:w-1/2 ">
-                          <div className="flex items-center border rounded-md">
+                          {/* <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <FaBirthdayCake />
                             </span>
@@ -1494,6 +1551,26 @@ const StaysDetails = () => {
                               onBlur={(e) => (e.target.type = "text")}
                               onChange={(e) => setDob(e.target.value)}
                             />
+                          </div> */}
+
+                          <div className="relative flex items-center border rounded-md w-full">
+                            {/* Left Icon */}
+                            <span className="p-2">
+                              <FaBirthdayCake />
+                            </span>
+
+                            {/* Datepicker Input */}
+                            <DatePicker
+                              selected={dob}
+                              onChange={(date) => setDob(date)}
+                              placeholderText="Select DOB"
+                              className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                            />
+
+                            {/* Right Icon */}
+                            <span className="absolute right-2 text-gray-500 pointer-events-none">
+                              <IoCalendarNumberSharp />
+                            </span>
                           </div>
                         </div>
                       </div>
@@ -1501,7 +1578,7 @@ const StaysDetails = () => {
                       <div className="flex gap-4 w-full flex-col sm:flex-row">
                         {/* engagement date */}
                         <div className="flex flex-col sm:w-1/2 ">
-                          <div className="flex items-center border rounded-md">
+                          {/* <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <GiLovers />
                             </span>
@@ -1518,6 +1595,26 @@ const StaysDetails = () => {
                                 setEngagementDate(e.target.value)
                               }
                             />
+                          </div> */}
+
+                          <div className="relative flex items-center border rounded-md w-full">
+                            {/* Left Icon */}
+                            <span className="p-2">
+                              <GiLovers />
+                            </span>
+
+                            {/* Datepicker Input */}
+                            <DatePicker
+                              selected={engagementDate}
+                              onChange={(date) => setEngagementDate(date)}
+                              placeholderText="Select Engagement Date"
+                              className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                            />
+
+                            {/* Right Icon */}
+                            <span className="absolute right-2 text-gray-500 pointer-events-none">
+                              <IoCalendarNumberSharp />
+                            </span>
                           </div>
                         </div>
 
@@ -1708,7 +1805,7 @@ const StaysDetails = () => {
                       <div className="flex gap-4 w-full flex-col sm:flex-row">
                         {/*travel date*/}
                         <div className="flex flex-col sm:w-1/2">
-                          <div className="flex items-center border rounded-md">
+                          {/* <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <MdOutlineCalendarMonth />
                             </span>
@@ -1723,6 +1820,26 @@ const StaysDetails = () => {
                               placeholder="Select Checkin date"
                               onChange={(e) => setCheckinDate(e.target.value)}
                             />
+                          </div> */}
+
+                          <div className="relative flex items-center border rounded-md w-full">
+                            {/* Left Icon */}
+                            <span className="p-2">
+                              <MdOutlineCalendarMonth />
+                            </span>
+
+                            {/* Datepicker Input */}
+                            <DatePicker
+                              selected={dob}
+                              onChange={(date) => setCheckinDate(date)}
+                              placeholderText="Select Checkout Date"
+                              className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                            />
+
+                            {/* Right Icon */}
+                            <span className="absolute right-2 text-gray-500 pointer-events-none">
+                              <IoCalendarNumberSharp />
+                            </span>
                           </div>
                           {errors.checkin_date && (
                             <p className="text-red-500 text-xs">
@@ -1733,7 +1850,7 @@ const StaysDetails = () => {
 
                         {/*checkout data*/}
                         <div className="flex flex-col sm:w-1/2">
-                          <div className="flex items-center border rounded-md">
+                          {/* <div className="flex items-center border rounded-md">
                             <span className="p-2">
                               <FaHouse />
                             </span>
@@ -1748,6 +1865,26 @@ const StaysDetails = () => {
                               value={checkoutDate}
                               onChange={(e) => setCheckoutDate(e.target.value)}
                             />
+                          </div> */}
+
+                          <div className="relative flex items-center border rounded-md w-full">
+                            {/* Left Icon */}
+                            <span className="p-2">
+                              <FaHouse />
+                            </span>
+
+                            {/* Datepicker Input */}
+                            <DatePicker
+                              selected={checkoutDate}
+                              onChange={(date) => setCheckoutDate(date)}
+                              placeholderText="Select Checkout Date"
+                              className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                            />
+
+                            {/* Right Icon */}
+                            <span className="absolute right-2 text-gray-500 pointer-events-none">
+                              <IoCalendarNumberSharp />
+                            </span>
                           </div>
                           {errors.checkoutDate && (
                             <p className="text-red-500 text-xs">
@@ -1870,7 +2007,7 @@ const StaysDetails = () => {
       )}
 
       {loginCliked && (
-        <div className="fixed inset-0 z-40 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
+        <div className="fixed inset-0 z-50 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden">
           <div className="flex items-center justify-center  bg-white">
             <div className="w-screen   md:w-[70vw] py-3  lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-md">
               <button
@@ -1976,6 +2113,20 @@ const StaysDetails = () => {
                       ) : (
                         "Log In"
                       )}
+                    </button>
+
+                    <button
+                      onClick={() => login()}
+                      className="flex items-center justify-center gap-3 px-6 py-3 bg-white shadow-md rounded-lg border hover:bg-gray-50 transition"
+                    >
+                      <img
+                        src="https://developers.google.com/identity/images/g-logo.png"
+                        alt="Google Logo"
+                        className="w-5 h-5"
+                      />
+                      <span className="text-gray-700 font-medium">
+                        Continue with Google
+                      </span>
                     </button>
 
                     <div className="flex items-center flex-wrap mt-5 mb-5 gap-2 ">

@@ -6,6 +6,7 @@ let Privacypolicy_Content=lazy(()=>import("../components/Privacypolicy_Content")
 let Footer=lazy(()=>import("../components/Footer"))
 import { useEffect, useState } from "react";
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 
 function PrivacyPolicy() {
@@ -47,6 +48,8 @@ function PrivacyPolicy() {
           </div>
         }
       >
+                {/* <TopHeader/> */}
+
         <Header />
         <Privacypolicy_Hero />
         <Privacypolicy_Content />

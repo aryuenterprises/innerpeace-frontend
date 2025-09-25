@@ -229,7 +229,7 @@ function Header() {
       >
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 text-red-600 font-extrabold text-3xl"
+          className="absolute top-14 right-4 text-red-600 font-extrabold text-3xl"
         >
           &times;
         </button>

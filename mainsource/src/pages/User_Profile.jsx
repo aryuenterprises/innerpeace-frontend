@@ -8,6 +8,7 @@ import axios from "axios";
 let Footer = lazy(() => import("../components/Footer"));
 import whatsapp from "../assets/whatsapp.svg";
 import Swal from "sweetalert2";
+import TopHeader from "../components/TopHeader";
 
 const User_Profile = () => {
   const navigate = useNavigate();
@@ -183,6 +184,9 @@ const User_Profile = () => {
           </div>
         }
       >
+
+{/* <TopHeader/> */}
+
         <Header />
         <div className="flex flex-col md:flex-row pt-10 pb-4 px-5 md:px-10 gap-5">
           {/* Sidebar */}

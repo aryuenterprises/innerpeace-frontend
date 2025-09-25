@@ -10,6 +10,7 @@ let AboutUsOurValue=lazy(()=>import("../components/AboutUsOurValue"))
 let AboutUsGroupImg=lazy(()=>import("../components/AboutUsGroupImg"))
 let Footer=lazy(()=>import("../components/Footer"))
 import whatsapp from "../assets/whatsapp.svg";
+import TopHeader from "../components/TopHeader";
 
 
 
@@ -56,13 +57,13 @@ function AboutUs() {
           </div>
         }
       >
+        {/* <TopHeader/> */}
         <Header />
         <AboutUsHero />
         <AboutUsMission />
         <AboutUsOurStory />
         <AboutUsOurValue />
         <AboutUsGroupImg />
-
         <Footer />
       </Suspense>
     </div>

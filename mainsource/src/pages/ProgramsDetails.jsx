@@ -17,6 +17,7 @@ import customerservice from "../assets/customerservice.svg";
 import approve from "../assets/approve.svg";
 import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
+import TopHeader from "../components/TopHeader";
 
 function Programs() {
   useEffect(() => {
@@ -62,7 +63,6 @@ function Programs() {
         setLoading(false);
         setApiData(response.data.data);
         setHeroName(response?.data?.theme_details[0]?.name);
-
       } catch (err) {
         console.log(err);
         setLoading(false);
@@ -165,7 +165,7 @@ function Programs() {
 
     // Cleanup
     return () => window.removeEventListener("resize", handleResize);
-  }, []);  
+  }, []);
 
   return (
     <div>
@@ -191,6 +191,8 @@ function Programs() {
           </div>
         }
       >
+        {/* <TopHeader/> */}
+
         <Header />
 
         <div>
@@ -340,7 +342,7 @@ function Programs() {
                                   key={index}
                                   className="flex flex-col justify-center items-center  gap-1 w-20 flex-wrap"
                                 >
-                                  <span className="border-2 p-2  h-9 w-9 border-gray-300 rounded-full">
+                                  <span className="border-2 p-2 w-8 h-8 md:w-11 md:h-11 border-gray-300 rounded-full">
                                     <img
                                       src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
                                       alt=""
@@ -368,8 +370,8 @@ function Programs() {
                                 key={index}
                                 className="flex flex-col gap-1 w-20 justify-center items-center flex-wrap"
                               >
-                                <span className=" bg-sky-700 p-2 w-9 h-9  rounded-full">
-                                  <p className="text-white text-xs mx-auto">
+                                 <span className="bg-sky-700 p-2 w-8 h-8 md:w-11 md:h-11 flex items-center justify-center rounded-full">
+                                 <p className="text-white text-xs">
                                     +{item.amenities.length - 3}
                                   </p>
                                 </span>
