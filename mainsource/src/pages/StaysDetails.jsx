@@ -2621,7 +2621,6 @@ const StaysDetails = () => {
       setCheckoutDate("")
       setChildCount("");
       setChildAge([]);
-      setDob("");
       setEngagementDate("");
 
       // Clear success message after 5 seconds
