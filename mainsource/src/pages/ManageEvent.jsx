@@ -141,7 +141,7 @@ import React, { useState } from "react";
 import TopHeader from "../components/TopHeader";
 import Header from "../components/Header";
 import { motion } from "framer-motion";
-import { FaCalendarAlt } from "react-icons/fa";
+import { FaCalendar, FaCalendarAlt } from "react-icons/fa";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaSquareArrowUpRight, FaSquareShareNodes } from "react-icons/fa6";
 import { IoAdd } from "react-icons/io5";
@@ -153,6 +153,10 @@ import { FaImage } from "react-icons/fa6";
 import dummyEventImage from "../assets/dummyEventImage.avif";
 import styled from "styled-components";
 import { IoClose } from "react-icons/io5";
+import { FaUsers } from "react-icons/fa";
+import { FaCloudDownloadAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { MdLocationOn } from "react-icons/md";
 
 const ManageEvent = () => {
   const [eventName, setEventName] = useState("");
@@ -233,360 +237,520 @@ const ManageEvent = () => {
     }
   `;
 
+  // const [selectedTab, setSelectedTab] = useState("overview");
+
   return (
-    <>
-      <TopHeader />
-      <Header />
-      <div className="flex text-black/80 flex-col justify-center items-center min-h-screen relative overflow-hidden font-PlusJakartaSansMedium">
-        {/* Animated Gradient Background */}
-        <motion.div
-          className="absolute inset-0 h-full w-full"
-          style={{
-            background: `radial-gradient(circle at 20% 30%, skyblue, transparent 50%),
-                     radial-gradient(circle at 70% 20%, #0073aa, transparent 20%),
-                     radial-gradient(circle at 40% 70%, blue, transparent 50%),
-                     radial-gradient(circle at 80% 80%, #FFFFFF, transparent 50%)`,
-            backgroundBlendMode: "overlay",
-            backgroundSize: "200% 200%",
-            filter: "blur(120px)",
-          }}
-          animate={{
-            backgroundPosition: [
-              "0% 0%",
-              "50% 50%",
-              "100% 0%",
-              "50% 50%",
-              "0% 0%",
-            ],
-          }}
-          transition={{
-            duration: 5,
-            ease: "linear",
-            repeat: Infinity,
-          }}
-        >
-          {/* <div className="absolute inset-0 backdrop-blur-[2px] bg-black/20"></div> */}
-        </motion.div>
+    //     <>
+    //       <TopHeader />
+    //       <Header />
+    //       <div className="flex  text-black/80 flex-col items-center min-h-screen relative overflow-hidden font-PlusJakartaSansMedium">
+    //         {/* Animated Gradient Background */}
+    //         <motion.div
+    //           className="absolute inset-0 h-full w-full"
+    //           style={{
+    //             background: `radial-gradient(circle at 20% 30%, skyblue, transparent 50%),
+    //                      radial-gradient(circle at 70% 20%, #0073aa, transparent 20%),
+    //                      radial-gradient(circle at 40% 70%, blue, transparent 50%),
+    //                      radial-gradient(circle at 80% 80%, pink, transparent 50%)`,
+    //             backgroundBlendMode: "overlay",
+    //             backgroundSize: "200% 200%",
+    //             filter: "blur(120px)",
+    //           }}
+    //           animate={{
+    //             backgroundPosition: [
+    //               "0% 0%",
+    //               "50% 50%",
+    //               "100% 0%",
+    //               "50% 50%",
+    //               "0% 0%",
+    //             ],
+    //           }}
+    //           transition={{
+    //             duration: 10,
+    //             ease: "linear",
+    //             repeat: Infinity,
+    //           }}
+    //         >
+    //           {/* <div className="absolute inset-0 backdrop-blur-[2px] bg-black/20"></div> */}
+    //         </motion.div>
 
-        {/* Content Container */}
-        <div className="relative z-10 max-w-5xl w-full px-6 py-10 flex flex-col gap-10">
-          {/* Header Section */}
-          <div className="flex justify-between gap-5 items-start">
-            <h1 className="text-3xl font-bold leading-snug w-3/5">
-              Officia vel anim adipisci consequatur Ipsum fuga Assumenda
-              quibusdam
-            </h1>
+    //         {/* Content Container */}
+    //         <div className="relative z-10 max-w-5xl w-full px-6 py-10 flex flex-col gap-10">
+    //           {/* Header Section */}
+    //           <div className="flex justify-between gap-5 items-start">
+    //             <h1 className="text-3xl font-bold leading-snug w-3/5">
+    //               Officia vel anim adipisci consequatur Ipsum fuga Assumenda
+    //               quibusdam
+    //             </h1>
 
-            <div className="flex items-center gap-4 flex-wrap">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="bg-white/70 hover:bg-white text-black px-5 py-2 rounded-lg shadow-md flex items-center gap-2"
-              >
-                <FaSquareArrowUpRight />
-                <span>Event Page</span>
-              </motion.button>
+    //             {/* <div className="flex items-center gap-4 flex-wrap">
+    //               <Link to="/registerEvent">
 
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                className="bg-white/70 hover:bg-white text-black px-5 py-2 rounded-lg shadow-md flex items-center gap-2"
-              >
-                <FaSquareShareNodes />
-                <span>Share Event</span>
-              </motion.button>
+    //                 <motion.button
+    //                   whileHover={{ scale: 1.05 }}
+    //                   className="bg-white/70 hover:bg-white text-black px-5 py-2 rounded-lg shadow-md flex items-center gap-2"
+    //                 >
+    //                   <FaSquareArrowUpRight />
+    //                   <span>Register For Event</span>
+    //                 </motion.button>
+    //               </Link>
+
+    //             </div> */}
+    //           </div>
+
+    //           {/* <div className="flex items-center gap-3">
+    //             <button
+    //               onClick={() => setSelectedTab("overview")}
+    //               className={`text-black font-medium text-lg ${
+    //                 selectedTab === "overview"
+    //                   ? "underline underline-offset-8"
+    //                   : "no-underline"
+    //               }`}
+    //             >
+    //               Overview
+    //             </button>
+    //             <button
+    //               onClick={() => setSelectedTab("guest")}
+    //               className={`text-black font-medium text-lg ${
+    //                 selectedTab === "guest"
+    //                   ? "underline underline-offset-8"
+    //                   : "no-underline"
+    //               }`}
+    //             >
+    //               Guests
+    //             </button>
+    //           </div> */}
+
+    //           {/* {selectedTab === "overview" && ( */}
+    //             <div className="flex gap-8 w-full bg-white/60 backdrop-blur-3xl p-6 rounded-2xl shadow-xl shadow-black/30 ">
+    //               {/* <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl h-72 w-1/2 flex-grow shadow-inner" /> */}
+
+    //               <img
+    //                 src="https://fastly.picsum.photos/id/352/200/300.jpg?hmac=JRE6d4eB1tvPUpBESG8XEM2_22EaXNe2luRrVkydr2E"
+    //                 alt=""
+    //                 className="h-72 w-1/2 flex-grow "
+    //               />
+
+    //               <div className="flex-grow flex flex-col justify-between gap-6 w-1/2">
+    //                 <div className="flex flex-col gap-5">
+    //                   <p className="text-2xl font-semibold">📍 When & Where</p>
+
+    //                   <div className="flex gap-3 items-start">
+    //                     <FaCalendarAlt className="text-2xl text-blue-600 mt-1" />
+    //                     <div>
+    //                       <p className="font-medium">Today</p>
+    //                       <p className="text-sm text-gray-600">
+    //                         Today 6:30 PM - 7:30 PM GMT+5:30
+    //                       </p>
+    //                     </div>
+    //                   </div>
+
+    //                   <div className="flex gap-3 items-start">
+    //                     <IoLocationSharp className="text-2xl text-red-500 mt-1" />
+    //                     <div>
+    //                       <p className="font-medium">Venue</p>
+    //                       <p className="text-sm text-gray-600">
+    //                         Madras Classic Cafe, Chennai
+    //                       </p>
+    //                     </div>
+    //                   </div>
+    //                 </div>
+
+    //                 {/* <motion.button
+    //                 onClick={() => setEditEventClicked(true)}
+    //                 whileHover={{ scale: 1.05 }}
+    //                 className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md w-fit"
+    //               >
+    //                 Edit Event
+    //               </motion.button> */}
+    //               </div>
+    //               {/* <a
+    //   href="https://www.google.com/maps?q=13.06887215,80.2209766"
+    //   target="_blank"
+    // >
+    //   Open Anna Arch in Google Maps
+    // </a> */}
+
+    // {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d23603011.371223193!2d-88.18039999999999!3d-37.06083245!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x9662c5410425af2f%3A0x505e1131102b91d!2sChile!5e1!3m2!1sen!2sin!4v1758879385220!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> */}
+
+    // {/*
+    // <iframe src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3501.174890129668!2d80.0216810763556!3d14.14055415285755!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMTTCsDA4JzI2LjAiTiA4MMKwMDEnMzUuNiJF!5e1!3m2!1sen!2sin!4v1758879763207!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> */}
+
+    // <a
+    //   // href="https://www.google.com/maps?q=80.0216810763556,14.14055415285755"
+    //   href="https://maps.app.goo.gl/ctwjZfTEk8sssMJD7"
+    //   target="_blank"
+    // >
+    //   Open Chile in Google Maps
+    // </a>
+
+    //             </div>
+    //           {/* )} */}
+
+    //           {/* Invites Section */}
+    //           {/* <div className="bg-white/70 p-6 rounded-xl shadow-md">
+    //             <div className="flex items-center justify-between mb-3">
+    //               <p className="text-2xl font-semibold">Invites</p>
+    //               <button className="flex w-40 items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition">
+    //                 <IoAdd />
+    //                 <span>Invite Guests</span>
+    //               </button>
+    //             </div>
+    //             <p className="text-gray-700">
+    //               Invite subscribers, contacts, and past guests via email or SMS.
+    //             </p>
+    //           </div> */}
+
+    //           {/* Hosts Section */}
+    //           {/* <div className="bg-white/70 p-6 rounded-xl shadow-md">
+    //             <div className="flex items-center justify-between mb-3">
+    //               <p className="text-2xl font-semibold">Hosts</p>
+    //               <button className="flex items-center w-40 gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition">
+    //                 <IoAdd />
+    //                 <span>Add Host</span>
+    //               </button>
+    //             </div>
+    //             <p className="text-gray-700">
+    //               Add co-hosts to help manage and promote your event.
+    //             </p>
+    //           </div> */}
+
+    //           {/* {selectedTab === "guest" && (
+    //             <div className="flex flex-col gap-5 w-full bg-white/60 backdrop-blur-3xl p-6 rounded-2xl shadow-xl shadow-black/30 ">
+    //               <div className="flex justify-between w-full items-center">
+    //                 <p className="font-semibold text-lg">Guest List</p>
+    //                 <FaCloudDownloadAlt className="text-lg" />
+    //               </div>
+
+    //               <div className="flex w-full items-center justify-center">
+    //                 <FaUsers className="text-6xl" />
+    //               </div>
+
+    //               <p className="text-2xl mx-auto">No Guest Yet</p>
+    //               <p className="mx-auto">
+    //                 Share the event or invite people to get started!
+    //               </p>
+
+    //               <div className="flex"></div>
+    //             </div>
+    //           )} */}
+    //         </div>
+
+    //         {/* <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14068.24022177834!2d80.2209766!3d13.06887215!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a526704204e70af%3A0x51158b2d7c6529dd!2sAnna%20Arch!5e1!3m2!1sen!2sin!4v1758879101996!5m2!1sen!2sin" width="600" height="450" ></iframe> */}
+
+    //         {editEventClicked && (
+    //           <div
+    //             // initial={{ opacity: 0, y: 50 }}
+    //             // animate={{ opacity: 1, y: 0 }}
+    //             // transition={{ duration: 0.8 }}
+    //             className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden"
+    //           >
+    //             <div className="flex items-center justify-center rounded-xl bg-gray-200">
+    //               <div className="w-screen   md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-xl">
+    //                 <div
+    //                   onClick={() => setEditEventClicked(false)}
+    //                   className="flex justify-end mt-5 me-7"
+    //                 >
+    //                   <IoClose className="text-2xl cursor-pointer" />
+    //                 </div>
+
+    //                 {/* Form Container */}
+    //                 <form className="relative z-10 flex gap-10 p-5 rounded-xl items-start justify-center  shadow-2xl ">
+    //                   {/* Event Image Upload */}
+    //                   <label
+    //                     htmlFor="imageUpload"
+    //                     className="relative w-80 h-[350px] rounded-xl overflow-hidden group cursor-pointer"
+    //                   >
+    //                     <img
+    //                       src={previewImage || dummyEventImage}
+    //                       className="object-cover w-full h-full rounded-xl"
+    //                       alt="Event"
+    //                     />
+    //                     {/* Overlay Shine */}
+    //                     {/* <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent group-hover:opacity-70 transition"></div> */}
+
+    //                     {/* Upload Icon */}
+    //                     <div className="absolute bottom-3 right-3 w-10 h-10 flex items-center justify-center rounded-full bg-white/80 group-hover:bg-blue-500 text-black group-hover:text-white shadow-lg transition">
+    //                       <FaImage />
+    //                     </div>
+    //                   </label>
+    //                   <input
+    //                     onChange={onChangeImage}
+    //                     id="imageUpload"
+    //                     type="file"
+    //                     accept="image/*"
+    //                     className="hidden"
+    //                   />
+
+    //                   {/* Event Form Fields */}
+    //                   <div className="flex flex-col gap-5 w-96">
+    //                     {/* Event Name */}
+    //                     <input
+    //                       type="text"
+    //                       placeholder="Event Name"
+    //                       value={eventName}
+    //                       onChange={(e) => setEventName(e.target.value)}
+    //                       className="text-3xl font-bold bg-transparent border-none outline-none text-black placeholder-black/60"
+    //                     />
+
+    //                     {/* Start & End Dates */}
+    //                     <motion.div
+    //                       whileHover={{ scale: 1.01 }}
+    //                       className="bg-white/20 backdrop-blur-md px-4 py-3 gap-3 flex flex-col rounded-xl shadow-md"
+    //                     >
+    //                       <div className="flex justify-between items-center">
+    //                         <p className="text-lg font-medium text-black/80">
+    //                           Start
+    //                         </p>
+    //                         <div className="flex gap-2">
+    //                           <input
+    //                             type="date"
+    //                             value={startDate}
+    //                             onChange={(e) => setStartDate(e.target.value)}
+    //                             className="rounded-lg bg-white/30 outline-none text-black/80 px-2 py-1 cursor-pointer"
+    //                           />
+    //                           <input
+    //                             type="time"
+    //                             value={startTime}
+    //                             onChange={(e) => setStartTime(e.target.value)}
+    //                             className="rounded-lg bg-white/30 outline-none text-balck/80 px-2 py-1 cursor-pointer"
+    //                           />
+    //                         </div>
+    //                       </div>
+
+    //                       <div className="flex justify-between items-center">
+    //                         <p className="text-lg font-medium text-black/80">End</p>
+    //                         <div className="flex gap-2">
+    //                           <input
+    //                             type="date"
+    //                             value={endDate}
+    //                             onChange={(e) => setEndDate(e.target.value)}
+    //                             className="rounded-lg bg-white/30 outline-none text-black/80 px-2 py-1 cursor-pointer"
+    //                           />
+    //                           <input
+    //                             type="time"
+    //                             value={endTime}
+    //                             onChange={(e) => setEndTime(e.target.value)}
+    //                             className="rounded-lg bg-white/30 outline-none text-black/80 px-2 py-1 cursor-pointer"
+    //                           />
+    //                         </div>
+    //                       </div>
+    //                     </motion.div>
+
+    //                     {/* Location */}
+    //                     <motion.div
+    //                       whileHover={{ scale: 1.01 }}
+    //                       className="bg-white/20 backdrop-blur-md px-4 py-3 rounded-xl shadow-md flex items-center gap-2"
+    //                       onClick={() => setAddEventLocationClicked(true)}
+    //                     >
+    //                       <GoLocation className="text-black/80 text-xl" />
+    //                       {!addEventLocationClicked ? (
+    //                         <p className="text-black/80">Add Event Location</p>
+    //                       ) : (
+    //                         <input
+    //                           type="text"
+    //                           value={enteredLocation}
+    //                           onChange={(e) => setEnteredLocation(e.target.value)}
+    //                           className="bg-transparent text-black outline-none flex-1"
+    //                         />
+    //                       )}
+    //                     </motion.div>
+
+    //                     {/* Description */}
+    //                     <motion.div
+    //                       whileHover={{ scale: 1.01 }}
+    //                       className="bg-white/20 backdrop-blur-md px-4 py-3 rounded-xl shadow-md flex flex-col gap-2"
+    //                     >
+    //                       <div
+    //                         className="flex items-center gap-2 cursor-pointer"
+    //                         onClick={() => setShowDesciption(true)}
+    //                       >
+    //                         <IoDocumentTextOutline className="text-black/80 text-xl" />
+    //                         <p className="text-black/80">Add Event Description</p>
+    //                       </div>
+    //                       {showDescription && (
+    //                         <textarea
+    //                           value={description}
+    //                           onChange={(e) => setDesciption(e.target.value)}
+    //                           className="bg-transparent text-black outline-none resize-none mt-2"
+    //                           rows="3"
+    //                         ></textarea>
+    //                       )}
+    //                     </motion.div>
+
+    //                     {/* Event Options */}
+    //                     <div>
+    //                       <p className="mt-2 text-black/90 font-semibold">
+    //                         Event Options
+    //                       </p>
+    //                       <motion.div
+    //                         whileHover={{ scale: 1.01 }}
+    //                         className="bg-white/20 backdrop-blur-md px-4 py-4 mt-2 rounded-xl shadow-md flex flex-col gap-4"
+    //                       >
+    //                         {/* Approval */}
+    //                         <div className="flex justify-between items-center">
+    //                           <div className="flex items-center gap-2">
+    //                             <TbUserCheck className="text-black/80 text-xl" />
+    //                             <p className="text-black/80">Require Approval</p>
+    //                           </div>
+    //                           <label className="relative inline-flex items-center cursor-pointer">
+    //                             <input
+    //                               type="checkbox"
+    //                               checked={requireApproval}
+    //                               onChange={() =>
+    //                                 setRequireApproval(!requireApproval)
+    //                               }
+    //                               className="sr-only peer"
+    //                             />
+    //                             <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 transition"></div>
+    //                             <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition peer-checked:translate-x-5"></div>
+    //                           </label>
+    //                         </div>
+
+    //                         <hr className="border-white/20" />
+
+    //                         {/* Capacity */}
+    //                         <div className="flex flex-col gap-2">
+    //                           <div className="flex justify-between items-center">
+    //                             <div className="flex items-center gap-2">
+    //                               <IoIosPeople className="text-black/80 text-xl" />
+    //                               <p className="text-black/80">Capacity</p>
+    //                             </div>
+    //                             <input
+    //                               type="text"
+    //                               value={capacity}
+    //                               onChange={(e) => setCapacity(e.target.value)}
+    //                               className="w-12 bg-transparent text-black font-semibold outline-none"
+    //                             />
+    //                           </div>
+    //                           <input
+    //                             type="range"
+    //                             min="5"
+    //                             max="900"
+    //                             value={capacity}
+    //                             onChange={(e) => setCapacity(e.target.value)}
+    //                             className="w-full accent-blue-500"
+    //                           />
+    //                         </div>
+    //                       </motion.div>
+    //                     </div>
+
+    //                     {/* Submit Button */}
+    //                     {/* <motion.button
+    //               whileHover={{ scale: 1.05 }}
+    //               type="submit"
+    //               className="bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl w-full mt-4 py-3 font-bold text-white shadow-lg transition duration-500"
+    //             >
+    //               Create Event
+    //             </motion.button> */}
+
+    //                     <StyledWrapper className="mt-5">
+    //                       <button className="btn-donate w-full">
+    //                         <p className=""></p> Create Event
+    //                       </button>
+    //                     </StyledWrapper>
+    //                   </div>
+    //                 </form>
+    //               </div>
+    //             </div>
+    //           </div>
+    //         )}
+    //       </div>
+    //     </>
+
+    // <div className="overflow-hidden">
+    //   <TopHeader />
+    //   <Header />
+    //   <div className="flex text-black/80 flex-col items-center min-h-screen w-screen  relative overflow-hidden font-PlusJakartaSansMedium">
+        
+
+    //     <video
+    //       src="/Gradient.webm"
+    //       className="absolute inset-0 h-full w-screen overflow-hidden"
+    //       loop
+    //       autoPlay
+    //       playsInline
+    //       muted
+    //     />
+    <div className="overflow-hidden">
+  <TopHeader />
+  <Header />
+  <div className="relative min-h-screen w-screen overflow-hidden font-PlusJakartaSansMedium flex text-black/80 flex-col items-center">
+    <video
+      src="/Gradient.webm"
+      className="absolute inset-0 w-screen h-screen object-cover"
+      loop
+      autoPlay
+      playsInline
+      muted
+    />
+
+        {/* Content Container with Film Grain */}
+        <div className="max-w-6xl w-full mt-10 border font-PlusJakartaSansMedium bg-gray-100 shadow-2xl shadow-black/40 p-8 backdrop-blur-xl rounded-xl relative z-10 ">
+          <div className="flex gap-10">
+            <div className="flex flex-col gap-5">
+              <div className="w-96 h-72 rounded-xl bg-gray-400"></div>
+
+              <div className="flex flex-col gap-2">
+                <p>Hosted By</p>
+                <hr />
+                <p className="text-lg font-medium">Abdul Rahman</p>
+              </div>
             </div>
-          </div>
 
-          {/* Event Details Card */}
-          <div className="flex gap-8 w-full bg-white/60 backdrop-blur-3xl p-6 rounded-2xl shadow-lg">
-            {/* <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl h-72 w-1/2 flex-grow shadow-inner" /> */}
+            <div className="flex flex-col gap-5">
+              <p className="text-4xl">
+                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+              </p>
 
-            <img
-              src="https://fastly.picsum.photos/id/352/200/300.jpg?hmac=JRE6d4eB1tvPUpBESG8XEM2_22EaXNe2luRrVkydr2E"
-              alt=""
-              className="h-72 w-1/2 flex-grow "
-            />
-
-            <div className="flex-grow flex flex-col justify-between gap-6 w-1/2">
-              <div className="flex flex-col gap-5">
-                <p className="text-2xl font-semibold">📍 When & Where</p>
-
-                <div className="flex gap-3 items-start">
-                  <FaCalendarAlt className="text-2xl text-blue-600 mt-1" />
-                  <div>
-                    <p className="font-medium">Today</p>
-                    <p className="text-sm text-gray-600">
-                      Today 6:30 PM - 7:30 PM GMT+5:30
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex gap-3 items-start">
-                  <IoLocationSharp className="text-2xl text-red-500 mt-1" />
-                  <div>
-                    <p className="font-medium">Venue</p>
-                    <p className="text-sm text-gray-600">
-                      Madras Classic Cafe, Chennai
-                    </p>
-                  </div>
+              <div className="flex items-center gap-3">
+                <FaCalendar className="text-xl" />
+                <div>
+                  <p>Friday, October 3 </p>
+                  <p>1:30 PM - Oct 9, 3:30 PM</p>
                 </div>
               </div>
 
-              <motion.button
-                onClick={() => setEditEventClicked(true)}
-                whileHover={{ scale: 1.05 }}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg shadow-md w-fit"
-              >
-                Edit Event
-              </motion.button>
-            </div>
-          </div>
+              <div className="flex items-center gap-3">
+                <MdLocationOn className="text-xl" />
+                <p>MMDA Colony, Chennai</p>
+              </div>
 
-          {/* Invites Section */}
-          <div className="bg-white/70 p-6 rounded-xl shadow-md">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-2xl font-semibold">Invites</p>
-              <button className="flex w-40 items-center gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition">
-                <IoAdd />
-                <span>Invite Guests</span>
-              </button>
-            </div>
-            <p className="text-gray-700">
-              Invite subscribers, contacts, and past guests via email or SMS.
-            </p>
-          </div>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1322.3106982021636!2d79.34553041548328!3d10.948579331286446!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3baacd9db55ca1f5%3A0xa1dba868ae91b9c8!2sInnerpece!5e1!3m2!1sen!2sin!4v1758880731045!5m2!1sen!2sin"
+                className="w-full mt-3 rounded-xl"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
 
-          {/* Hosts Section */}
-          <div className="bg-white/70 p-6 rounded-xl shadow-md">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-2xl font-semibold">Hosts</p>
-              <button className="flex items-center w-40 gap-2 bg-blue-600 text-white px-3 py-1 rounded-md hover:bg-blue-700 transition">
-                <IoAdd />
-                <span>Add Host</span>
-              </button>
+              <div className="bg-white/30  rounded-xl">
+                <p className="text-black bg-white/50 p-3 rounded-t-xl">
+                  Registration
+                </p>
+
+                <div className="p-3 ">
+                  <p>Welcome! To join the event, please register below.</p>
+                  <StyledWrapper className="mt-5">
+                    <button className="btn-donate">
+                      Click here to register
+                    </button>
+                  </StyledWrapper>
+                </div>
+              </div>
+
+              <div className="bg-white/50  rounded-xl p-3 flex justify-between">
+                <p>Your'e in</p>
+
+                <button className="bg-black/50 rounded-xl text-xs text-white px-4 py-1">
+                  Starting in 6d 21h
+                </button>
+              </div>
             </div>
-            <p className="text-gray-700">
-              Add co-hosts to help manage and promote your event.
-            </p>
           </div>
         </div>
-
-        {editEventClicked && (
-          <div
-            // initial={{ opacity: 0, y: 50 }}
-            // animate={{ opacity: 1, y: 0 }}
-            // transition={{ duration: 0.8 }}
-            className="fixed inset-0 z-10 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto overflow-x-hidden"
-          >
-            <div className="flex items-center justify-center rounded-xl bg-gray-200">
-              <div className="w-screen   md:w-[70vw] lg:w-[60vw]  shadow-2xl  shadow-black/30 rounded-xl">
-                
-                <div onClick={()=>setEditEventClicked(false)} className="flex justify-end mt-5 me-7">
-                  <IoClose className="text-2xl cursor-pointer" />
-                </div>
-
-                {/* Form Container */}
-                <form className="relative z-10 flex gap-10 p-5 rounded-xl items-start justify-center  shadow-2xl ">
-                  {/* Event Image Upload */}
-                  <label
-                    htmlFor="imageUpload"
-                    className="relative w-80 h-[350px] rounded-xl overflow-hidden group cursor-pointer"
-                  >
-                    <img
-                      src={previewImage || dummyEventImage}
-                      className="object-cover w-full h-full rounded-xl"
-                      alt="Event"
-                    />
-                    {/* Overlay Shine */}
-                    {/* <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent group-hover:opacity-70 transition"></div> */}
-
-                    {/* Upload Icon */}
-                    <div className="absolute bottom-3 right-3 w-10 h-10 flex items-center justify-center rounded-full bg-white/80 group-hover:bg-blue-500 text-black group-hover:text-white shadow-lg transition">
-                      <FaImage />
-                    </div>
-                  </label>
-                  <input
-                    onChange={onChangeImage}
-                    id="imageUpload"
-                    type="file"
-                    accept="image/*"
-                    className="hidden"
-                  />
-
-                  {/* Event Form Fields */}
-                  <div className="flex flex-col gap-5 w-96">
-                    {/* Event Name */}
-                    <input
-                      type="text"
-                      placeholder="Event Name"
-                      value={eventName}
-                      onChange={(e) => setEventName(e.target.value)}
-                      className="text-3xl font-bold bg-transparent border-none outline-none text-black placeholder-black/60"
-                    />
-
-                    {/* Start & End Dates */}
-                    <motion.div
-                      whileHover={{ scale: 1.01 }}
-                      className="bg-white/20 backdrop-blur-md px-4 py-3 gap-3 flex flex-col rounded-xl shadow-md"
-                    >
-                      <div className="flex justify-between items-center">
-                        <p className="text-lg font-medium text-black/80">
-                          Start
-                        </p>
-                        <div className="flex gap-2">
-                          <input
-                            type="date"
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
-                            className="rounded-lg bg-white/30 outline-none text-black/80 px-2 py-1 cursor-pointer"
-                          />
-                          <input
-                            type="time"
-                            value={startTime}
-                            onChange={(e) => setStartTime(e.target.value)}
-                            className="rounded-lg bg-white/30 outline-none text-balck/80 px-2 py-1 cursor-pointer"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="flex justify-between items-center">
-                        <p className="text-lg font-medium text-black/80">End</p>
-                        <div className="flex gap-2">
-                          <input
-                            type="date"
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
-                            className="rounded-lg bg-white/30 outline-none text-black/80 px-2 py-1 cursor-pointer"
-                          />
-                          <input
-                            type="time"
-                            value={endTime}
-                            onChange={(e) => setEndTime(e.target.value)}
-                            className="rounded-lg bg-white/30 outline-none text-black/80 px-2 py-1 cursor-pointer"
-                          />
-                        </div>
-                      </div>
-                    </motion.div>
-
-                    {/* Location */}
-                    <motion.div
-                      whileHover={{ scale: 1.01 }}
-                      className="bg-white/20 backdrop-blur-md px-4 py-3 rounded-xl shadow-md flex items-center gap-2"
-                      onClick={() => setAddEventLocationClicked(true)}
-                    >
-                      <GoLocation className="text-black/80 text-xl" />
-                      {!addEventLocationClicked ? (
-                        <p className="text-black/80">Add Event Location</p>
-                      ) : (
-                        <input
-                          type="text"
-                          value={enteredLocation}
-                          onChange={(e) => setEnteredLocation(e.target.value)}
-                          className="bg-transparent text-black outline-none flex-1"
-                        />
-                      )}
-                    </motion.div>
-
-                    {/* Description */}
-                    <motion.div
-                      whileHover={{ scale: 1.01 }}
-                      className="bg-white/20 backdrop-blur-md px-4 py-3 rounded-xl shadow-md flex flex-col gap-2"
-                    >
-                      <div
-                        className="flex items-center gap-2 cursor-pointer"
-                        onClick={() => setShowDesciption(true)}
-                      >
-                        <IoDocumentTextOutline className="text-black/80 text-xl" />
-                        <p className="text-black/80">Add Event Description</p>
-                      </div>
-                      {showDescription && (
-                        <textarea
-                          value={description}
-                          onChange={(e) => setDesciption(e.target.value)}
-                          className="bg-transparent text-black outline-none resize-none mt-2"
-                          rows="3"
-                        ></textarea>
-                      )}
-                    </motion.div>
-
-                    {/* Event Options */}
-                    <div>
-                      <p className="mt-2 text-black/90 font-semibold">
-                        Event Options
-                      </p>
-                      <motion.div
-                        whileHover={{ scale: 1.01 }}
-                        className="bg-white/20 backdrop-blur-md px-4 py-4 mt-2 rounded-xl shadow-md flex flex-col gap-4"
-                      >
-                        {/* Approval */}
-                        <div className="flex justify-between items-center">
-                          <div className="flex items-center gap-2">
-                            <TbUserCheck className="text-black/80 text-xl" />
-                            <p className="text-black/80">Require Approval</p>
-                          </div>
-                          <label className="relative inline-flex items-center cursor-pointer">
-                            <input
-                              type="checkbox"
-                              checked={requireApproval}
-                              onChange={() =>
-                                setRequireApproval(!requireApproval)
-                              }
-                              className="sr-only peer"
-                            />
-                            <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-blue-600 transition"></div>
-                            <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition peer-checked:translate-x-5"></div>
-                          </label>
-                        </div>
-
-                        <hr className="border-white/20" />
-
-                        {/* Capacity */}
-                        <div className="flex flex-col gap-2">
-                          <div className="flex justify-between items-center">
-                            <div className="flex items-center gap-2">
-                              <IoIosPeople className="text-black/80 text-xl" />
-                              <p className="text-black/80">Capacity</p>
-                            </div>
-                            <input
-                              type="text"
-                              value={capacity}
-                              onChange={(e) => setCapacity(e.target.value)}
-                              className="w-12 bg-transparent text-black font-semibold outline-none"
-                            />
-                          </div>
-                          <input
-                            type="range"
-                            min="5"
-                            max="900"
-                            value={capacity}
-                            onChange={(e) => setCapacity(e.target.value)}
-                            className="w-full accent-blue-500"
-                          />
-                        </div>
-                      </motion.div>
-                    </div>
-
-                    {/* Submit Button */}
-                    {/* <motion.button
-              whileHover={{ scale: 1.05 }}
-              type="submit"
-              className="bg-gradient-to-r from-cyan-400 to-blue-500 rounded-xl w-full mt-4 py-3 font-bold text-white shadow-lg transition duration-500"
-            >
-              Create Event
-            </motion.button> */}
-
-                    <StyledWrapper className="mt-5">
-                      <button className="btn-donate w-full">
-                        <p className=""></p> Create Event
-                      </button>
-                    </StyledWrapper>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
-    </>
+    </div>
   );
 };
 

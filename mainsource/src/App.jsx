@@ -26,6 +26,7 @@ import FilteredList from "./pages/FilteredList";
 import CreateEvent from "./pages/CreateEvent";
 import EventsHistory from "./pages/EventsHistory";
 import ManageEvent from "./pages/ManageEvent";
+import EventRegisterPage from "./pages/EventRegisterPage";
 
 function App() {
   return (
@@ -40,9 +41,10 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
-            {/* <Route path="/createEvent" element={<CreateEvent />} /> */}
-            {/* <Route path="/eventsHistory" element={<EventsHistory />} /> */}
-            {/* <Route path="/manageEvent" element={<ManageEvent />} /> */}
+            <Route path="/createEvent" element={<CreateEvent />} />
+            <Route path="/eventsHistory" element={<EventsHistory />} />
+            <Route path="/manageEvent" element={<ManageEvent />} />
+            <Route path="/registerEvent" element={<EventRegisterPage />} />
             <Route path="/sendenquiry" element={<SendEnquiry />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/contactus" element={<ContactUs />} />
