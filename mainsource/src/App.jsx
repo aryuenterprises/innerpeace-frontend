@@ -41,10 +41,10 @@ function App() {
         >
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/createEvent" element={<CreateEvent />} />
-            <Route path="/eventsHistory" element={<EventsHistory />} />
-            <Route path="/manageEvent" element={<ManageEvent />} />
-            <Route path="/registerEvent" element={<EventRegisterPage />} />
+            {/* <Route path="/createEvent" element={<CreateEvent />} /> */}
+            {/* <Route path="/eventsHistory" element={<EventsHistory />} /> */}
+            {/* <Route path="/manageEvent" element={<ManageEvent />} /> */}
+            {/* <Route path="/registerEvent" element={<EventRegisterPage />} /> */}
             <Route path="/sendenquiry" element={<SendEnquiry />} />
             <Route path="/aboutus" element={<AboutUs />} />
             <Route path="/contactus" element={<ContactUs />} />

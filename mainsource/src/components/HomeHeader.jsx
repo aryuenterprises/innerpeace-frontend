@@ -179,11 +179,11 @@ function Header() {
               Customization Enquiry
             </Link>
           </li>
-          <li className="md:pe-5 lg:pe-8 xl:pe-10   font-semibold hover:text-gray-500">
+          {/* <li className="md:pe-5 lg:pe-8 xl:pe-10   font-semibold hover:text-gray-500">
             <Link className="cursor-pointer" to="/eventsHistory">
               Events
             </Link>
-          </li>
+          </li> */}
           <li className="md:pe-5 lg:pe-8 xl:pe-10   font-semibold hover:text-gray-500">
             <Link className="cursor-pointer" to="/aboutus">
               About Us
