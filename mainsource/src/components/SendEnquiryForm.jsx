@@ -32,6 +32,9 @@ import { GiLovers } from "react-icons/gi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { IoCalendarNumberSharp } from "react-icons/io5";
+import { format } from "date-fns";
+import CustomDatePicker from "./CustomDatePicker";
+import Swal from "sweetalert2";
 
 const SendEnquiryForm = () => {
   const [name, setName] = useState("");
@@ -49,6 +52,7 @@ const SendEnquiryForm = () => {
   const [femaleCount, setFemaleCount] = useState("");
   const [childCount, setChildCount] = useState("");
   const [travelDate, setTravelDate] = useState("");
+  const [travelEndDate, setTravelEndDate] = useState("");
   const [howManyRoomsYouNeed, setHowManyRoomsYouNeed] = useState("");
   const [comments, setCommends] = useState("");
   const [errors, setErrors] = useState({});
@@ -92,6 +96,7 @@ const SendEnquiryForm = () => {
           rooms_count: howManyRoomsYouNeed,
           total_count: totalCount,
           travel_date: travelDate,
+          travel_enddate: travelEndDate,
           travel_destination: travelDestination,
           male_count: maleCount,
           female_count: femaleCount,
@@ -111,20 +116,25 @@ const SendEnquiryForm = () => {
       // Successful submission
       setLoading("");
       setFailure("");
-      setSuccess(response.data.message);
+      // setSuccess(response.data.message);
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Submitted successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
       // Clear form values
-      // setName("");
-      // setPhone("");
-      // setEmail("");
+
       setCommends("");
       setBudgetPerHead("");
       setIsCabNeed("");
       setHowManyDays("");
-      // setYourResidenceLocation("");
       setHowManyRoomsYouNeed("");
       setTotalCount("");
       setTravelDate("");
+      setTravelEndDate("");
       setTravelDestination("");
       setMaleCount("");
       setFemaleCount("");
@@ -132,11 +142,6 @@ const SendEnquiryForm = () => {
       setChildAge([]);
       setDob("");
       setEngagementDate("");
-
-      // Clear success message after 5 seconds
-      setTimeout(() => {
-        setSuccess("");
-      }, 5000); // 5000 ms = 5 seconds
     } catch (error) {
       setLoading("");
       setFailure("Please fill all the fields");
@@ -160,19 +165,31 @@ const SendEnquiryForm = () => {
         email: loggedUser_email,
         phone: loggedUser_phone,
         city: loggedUser_city,
+        dob,
+        anniversary_date,
       } = loggedUserDetails;
 
-      setName(loggedUser_fistName + " " + loggedUser_lastName);
+      // setName(loggedUser_fistName + " " + loggedUser_lastName);
+
+      setName(`${loggedUser_fistName} ${loggedUser_lastName || ""}`.trim());
+
       setEmail(loggedUser_email);
       setPhone(loggedUser_phone);
+      setDob(dob);
       setYourResidenceLocation(loggedUser_city);
+      setEngagementDate(anniversary_date ? anniversary_date : "");
     }
   }, []);
 
   const onChangeChildAge = (e, key, index) => {
-    const updatedChildCount = [...childAge];
-    updatedChildCount[index] = e.target.value;
-    setChildAge(updatedChildCount);
+    const value = e.target.value;
+
+    // Allow only up to 10 digits (numbers only)
+    if (/^\d{0,10}$/.test(value)) {
+      const updatedChildCount = [...childAge];
+      updatedChildCount[index] = value;
+      setChildAge(updatedChildCount);
+    }
   };
 
   return (
@@ -182,7 +199,11 @@ const SendEnquiryForm = () => {
           <div className=' bg-[url("././assets/sendenquiry_formimage2.jpg")] max-md:hidden  w-1/2 flex-shrink bg-cover  bg-center bg-no-repeat rounded-3xl'></div>
 
           <div className="w-full">
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form
+              onSubmit={handleSubmit}
+              className="space-y-4"
+              autoComplete="off"
+            >
               <div className="flex flex-col gap-4">
                 {/* name and email */}
                 <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
@@ -193,7 +214,6 @@ const SendEnquiryForm = () => {
                         <IoIosContact />
                       </span>
                       <input
-                        autoComplete="on"
                         id="name"
                         type="text"
                         name="name"
@@ -215,7 +235,6 @@ const SendEnquiryForm = () => {
                         <AiOutlineMail />
                       </span>
                       <input
-                        autoComplete="on"
                         type="email"
                         className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
                         placeholder="Email"
@@ -239,15 +258,34 @@ const SendEnquiryForm = () => {
                       <span className="p-2">
                         <MdOutlinePhone />
                       </span>
-                      <input
-                        autoComplete="on"
-                        type="text"
+                      {/* <input
+                  
+                        type="number"
                         className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
                         placeholder="Phone"
                         id="phone"
                         name="phone"
                         value={phone}
+                        min={0}
                         onChange={(e) => setPhone(e.target.value)}
+                      /> */}
+                      <input
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder="Phone"
+                        id="phone"
+                        name="phone"
+                        value={phone}
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // allow only digits and limit length
+                          if (/^\d{0,10}$/.test(value)) {
+                            setPhone(value);
+                          }
+                        }}
                       />
                     </div>
                     {errors.phone && (
@@ -283,44 +321,7 @@ const SendEnquiryForm = () => {
 
                 {/* DOB and engagement date */}
                 <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
-                  {/* DOB Input */}
-                  {/* <div className="flex flex-col sm:w-1/2 ">
-                    <div className="flex items-center border rounded-md">
-                      <span className="p-2">
-                        <FaBirthdayCake />
-                      </span>
-                      <input
-                        autoComplete="on"
-                        type="text"
-                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                        placeholder="Select DOB"
-                        id="dob"
-                        name="dob"
-                        value={dob}
-                        onFocus={(e) => (e.target.type = "date")}
-                        onBlur={(e) => (e.target.type = "text")}
-                        onChange={(e) => setDob(e.target.value)}
-                      />
-                    </div>
-                   
-                  </div> */}
-
-                  {/* <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2 ">
-                    <div className="flex items-center border rounded-md">
-                      <span className="p-2">
-                        <FaBirthdayCake />
-                      </span>
-                      <DatePicker
-                        selected={dob}
-                        onChange={(date) => setDob(date)}
-                        placeholderText="Select DOB"
-                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 "
-                        icon={true}
-                      />
-                      <IoCalendarNumberSharp className="me-3" />
-                    </div>
-                  </div> */}
-
+                  {/* dob */}
                   <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
                     <div className="relative flex items-center border rounded-md w-full">
                       {/* Left Icon */}
@@ -329,11 +330,30 @@ const SendEnquiryForm = () => {
                       </span>
 
                       {/* Datepicker Input */}
-                      <DatePicker
+                      {/* <DatePicker
                         selected={dob}
                         onChange={(date) => setDob(date)}
                         placeholderText="Select DOB"
+                        dateFormat="dd/MM/yyyy"
                         className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                      /> */}
+
+                      {/* <DatePicker
+                        selected={
+                          dob
+                            ? new Date(dob.split("/").reverse().join("-"))
+                            : null
+                        }
+                        onChange={handleDateChange}
+                        placeholderText="Select DOB"
+                        dateFormat="dd/MM/yyyy"
+                        className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                      /> */}
+
+                      <CustomDatePicker
+                        value={dob}
+                        onChange={setDob}
+                        placeholder="Select DOB"
                       />
 
                       {/* Right Icon */}
@@ -352,11 +372,17 @@ const SendEnquiryForm = () => {
                       </span>
 
                       {/* Datepicker Input */}
-                      <DatePicker
+                      {/* <DatePicker
                         selected={engagementDate}
                         onChange={(e) => setEngagementDate(e)}
                         placeholderText="Select Engagement Date"
                         className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                      /> */}
+
+                      <CustomDatePicker
+                        value={engagementDate}
+                        onChange={setEngagementDate}
+                        placeholder="Select Anniversary Date"
                       />
 
                       {/* Right Icon */}
@@ -393,12 +419,23 @@ const SendEnquiryForm = () => {
                         <FaCalendarDays />
                       </span>
                       <input
-                        type="number"
-                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="No of days you would like to travel"
                         id="No of days you would like to travel"
                         value={howManyDays}
-                        onChange={(e) => setHowManyDays(e.target.value)}
+                        // onChange={(e) => setHowManyDays(e.target.value)}
+
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // allow only digits and limit length
+                          if (/^\d{0,5}$/.test(value)) {
+                            setHowManyDays(value);
+                          }
+                        }}
                       />
                     </div>
                     {errors.days && (
@@ -437,12 +474,22 @@ const SendEnquiryForm = () => {
                         <RiMoneyRupeeCircleFill />
                       </span>
                       <input
-                        type="number"
-                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="Budget Per Head"
                         id="Budget Per Head"
                         value={budgetPerHead}
-                        onChange={(e) => setBudgetPerHead(e.target.value)}
+                        // onChange={(e) => setBudgetPerHead(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // allow only digits and limit length
+                          if (/^\d{0,10}$/.test(value)) {
+                            setBudgetPerHead(value);
+                          }
+                        }}
                       />
                     </div>
                     <p className="text-gray-500 text-xs">
@@ -462,12 +509,23 @@ const SendEnquiryForm = () => {
                         <FaPeopleLine />
                       </span>
                       <input
-                        type="number"
-                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                         placeholder="Total Count"
                         id="Total Count"
                         value={totalCount}
-                        onChange={(e) => setTotalCount(e.target.value)}
+                        // onChange={(e) => setTotalCount(e.target.value)}
+
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // allow only digits and limit length
+                          if (/^\d{0,3}$/.test(value)) {
+                            setTotalCount(value);
+                          }
+                        }}
                       />
                     </div>
                     {errors.total_count && (
@@ -479,71 +537,134 @@ const SendEnquiryForm = () => {
                 </div>
 
                 {/*male &  count*/}
-                <div className="flex flex-col">
-                  <div className="flex gap-4  w-full flex-col sm:flex-row md:flex-col lg:flex-row">
-                    <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/3">
-                      <div className="flex items-center border rounded-md">
-                        <span className="p-2">
-                          <FaMale />
-                        </span>
-                        <input
-                          type="number"
-                          className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                          placeholder="Male Count"
-                          id="Male Count"
-                          value={maleCount}
-                          onChange={(e) => setMaleCount(e.target.value)}
-                        />
-                      </div>
-                      {errors.male_count && (
-                        <p className="text-red-500 text-xs">
-                          {errors.male_count[0]}
-                        </p>
-                      )}
-                    </div>
+                <div className="flex gap-4  w-full flex-col sm:flex-row md:flex-col lg:flex-row">
+                  <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/2">
+                    <div className="flex items-center border rounded-md">
+                      <span className="p-2">
+                        <FaMale />
+                      </span>
+                      <input
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder="Male Count"
+                        id="Male Count"
+                        value={maleCount}
+                        // onChange={(e) => setMaleCount(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
 
-                    <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/3">
-                      <div className="flex items-center border rounded-md">
-                        <span className="p-2">
-                          <FaFemale />
-                        </span>
-                        <input
-                          type="number"
-                          className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                          placeholder="Female Count"
-                          id="Female Count"
-                          value={femaleCount}
-                          onChange={(e) => setFemaleCount(e.target.value)}
-                        />
-                      </div>
-                      {errors.female_count && (
-                        <p className="text-red-500 text-xs">
-                          {errors.female_count[0]}
-                        </p>
-                      )}
+                          // allow only digits and limit length
+                          if (/^\d{0,3}$/.test(value)) {
+                            setMaleCount(value);
+                          }
+                        }}
+                      />
                     </div>
+                    {errors.male_count && (
+                      <p className="text-red-500 text-xs">
+                        {errors.male_count[0]}
+                      </p>
+                    )}
+                  </div>
 
-                    {/*Child count*/}
-                    <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/3">
-                      <div className="flex items-center border rounded-md">
-                        <span className="p-2">
-                          <FaChildReaching />
-                        </span>
-                        <input
-                          type="number"
-                          className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                          placeholder="Child Count"
-                          id="Child Count"
-                          value={childCount}
-                          onChange={(e) => setChildCount(e.target.value)}
-                        />
-                      </div>
-                      {errors.child_count && (
-                        <p className="text-red-500 text-xs">
-                          {errors.child_count[0]}
-                        </p>
-                      )}
+                  <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/2">
+                    <div className="flex items-center border rounded-md">
+                      <span className="p-2">
+                        <FaFemale />
+                      </span>
+                      <input
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder="Female Count"
+                        id="Female Count"
+                        value={femaleCount}
+                        // onChange={(e) => setFemaleCount(e.target.value)}
+
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // allow only digits and limit length
+                          if (/^\d{0,3}$/.test(value)) {
+                            setFemaleCount(value);
+                          }
+                        }}
+                      />
                     </div>
+                    {errors.female_count && (
+                      <p className="text-red-500 text-xs">
+                        {errors.female_count[0]}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
+                  {/*how many rooms you need*/}
+                  <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
+                    <div className="flex items-center border rounded-md">
+                      <span className="p-2">
+                        <FaHouse />
+                      </span>
+                      <input
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder="No of rooms required"
+                        id="No of rooms required"
+                        value={howManyRoomsYouNeed}
+                        // onChange={(e) => setHowManyRoomsYouNeed(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // allow only digits and limit length
+                          if (/^\d{0,3}$/.test(value)) {
+                            setHowManyRoomsYouNeed(value);
+                          }
+                        }}
+                      />
+                    </div>
+                    {errors.rooms_count && (
+                      <p className="text-red-500 text-xs">
+                        {errors.rooms_count[0]}
+                      </p>
+                    )}
+                  </div>
+
+                  {/*Child count*/}
+                  <div className="flex flex-col sm:w-1/3 md:w-full lg:w-1/2">
+                    <div className="flex items-center border rounded-md">
+                      <span className="p-2">
+                        <FaChildReaching />
+                      </span>
+                      <input
+                        type="text"
+                        inputMode="numeric" // shows numeric keypad on mobile
+                        maxLength={10}
+                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                        placeholder="Child Count"
+                        id="Child Count"
+                        value={childCount}
+                        // onChange={(e) => setChildCount(e.target.value)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+
+                          // allow only digits and limit length
+                          if (/^\d{0,3}$/.test(value)) {
+                            setChildCount(value);
+                          }
+                        }}
+                      />
+                    </div>
+                    {errors.child_count && (
+                      <p className="text-red-500 text-xs">
+                        {errors.child_count[0]}
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -558,14 +679,19 @@ const SendEnquiryForm = () => {
                             <span className="p-2">
                               <FaChild />
                             </span>
+
                             <input
-                              type="number"
+                              type="text"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              min={0}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder={` ${index + 1}st Child Age`}
-                              className="p-2 border-l w-full focus:outline-none me-2"
+                              value={childAge[index] || ""} // ✅ Controlled input
                               onChange={(e) =>
                                 onChangeChildAge(
                                   e,
-                                  ` ${index + 1}st_Child_Age`,
+                                  `${index + 1}st_Child_Age`,
                                   index
                                 )
                               }
@@ -580,24 +706,8 @@ const SendEnquiryForm = () => {
                 )}
 
                 <div className="flex gap-4 w-full flex-col sm:flex-row md:flex-col lg:flex-row">
-                  {/*travel date*/}
+                  {/*travel start date*/}
                   <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
-                    {/* <div className="flex items-center border rounded-md">
-                      <span className="p-2">
-                        <MdOutlineCalendarMonth />
-                      </span>
-                      <input
-                        type="text"
-                        className="w-full p-2 border-l text-black placeholder:text-gray-600 focus:outline-none sm:w-1/2 placeholder:text-sm me-2"
-                        id="Travel Date"
-                        value={travelDate}
-                        placeholder="Select travel date"
-                        onFocus={(e) => (e.target.type = "date")}
-                        onBlur={(e) => (e.target.type = "text")}
-                        onChange={(e) => setTravelDate(e.target.value)}
-                      />
-                    </div> */}
-
                     <div className="relative flex items-center border rounded-md w-full">
                       {/* Left Icon */}
                       <span className="p-2">
@@ -605,11 +715,18 @@ const SendEnquiryForm = () => {
                       </span>
 
                       {/* Datepicker Input */}
-                      <DatePicker
+                      {/* <DatePicker
                         selected={travelDate}
                         onChange={(date) => setTravelDate(date)}
-                        placeholderText="Select travel date"
+                        placeholderText="Select travel start date"
                         className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                      /> */}
+
+                      <CustomDatePicker
+                        value={travelDate}
+                        onChange={setTravelDate}
+                        placeholder="Select travel start date"
+                        pastDateRestrict={true}
                       />
 
                       {/* Right Icon */}
@@ -623,24 +740,39 @@ const SendEnquiryForm = () => {
                       </p>
                     )}
                   </div>
-                  {/*how many rooms you need*/}
+
+                  {/*travel end date*/}
                   <div className="flex flex-col sm:w-1/2 md:w-full lg:w-1/2">
-                    <div className="flex items-center border rounded-md">
+                    <div className="relative flex items-center border rounded-md w-full">
+                      {/* Left Icon */}
                       <span className="p-2">
-                        <FaHouse />
+                        <FaBirthdayCake />
                       </span>
-                      <input
-                        type="number"
-                        className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                        placeholder="No of rooms required"
-                        id="No of rooms required"
-                        value={howManyRoomsYouNeed}
-                        onChange={(e) => setHowManyRoomsYouNeed(e.target.value)}
+
+                      {/* Datepicker Input */}
+                      {/* <DatePicker
+                        selected={travelEndDate}
+                        onChange={(date) => setTravelEndDate(date)}
+                        placeholderText="Select travel end date"
+                        className="w-full border-l p-2 rounded-e-md focus:outline-none placeholder:text-gray-600 placeholder:text-sm"
+                      /> */}
+
+                      <CustomDatePicker
+                        value={travelEndDate}
+                        onChange={setTravelEndDate}
+                        placeholder="Select travel end date"
+                        pastDateRestrict={true}
+
                       />
+
+                      {/* Right Icon */}
+                      <span className="absolute right-2 text-gray-500 pointer-events-none">
+                        <IoCalendarNumberSharp />
+                      </span>
                     </div>
-                    {errors.rooms_count && (
+                    {errors.travel_enddate && (
                       <p className="text-red-500 text-xs">
-                        {errors.rooms_count[0]}
+                        {errors.travel_enddate[0]}
                       </p>
                     )}
                   </div>

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import defaultimg from "../../assets/defaultimg.png";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Aperture, ChevronLeft, ChevronRight } from "lucide-react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import ParallaxImage2 from "../ParallexImage2";
+import ParallaxImage from "../parallexImage";
 
 function HomePopularPrograms() {
   let navigate = useNavigate();
@@ -43,11 +45,11 @@ function HomePopularPrograms() {
   };
 
   const SkeletonCard = ({index}) => (
-    <div key={index} className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
+    <div key={index} className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-300 flex-grow rounded-2xl animate-pulse"></div>
   );
 
   const SkeletonCarouselCard = ({index}) => (
-    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
+    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-300   rounded-2xl animate-pulse"></div>
   );
 
   const responsive = {
@@ -68,6 +70,7 @@ function HomePopularPrograms() {
       items: 1,
     },
   };
+
 
   const CustomLeftArrow = ({ onClick }) => {
     return (
@@ -122,6 +125,9 @@ function HomePopularPrograms() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
+
+
   return (
     <>
       {loading ? (
@@ -169,29 +175,70 @@ function HomePopularPrograms() {
                   customRightArrow={<CustomRightArrow />}
                 >
                   {destinationData.map((item, index) => (
+                    // <div
+                    //   key={index}
+                    //   onClick={() => handleCardClick(item.id, item.city_name)}
+                    //   className="relative overflow-hidden rounded-2xl"
+                    // >
+                    //   <div className="relative h-80 md:h-96  shrink-0 rounded-2xl overflow-hidden  group  cursor-pointer">
+                    //     <img
+                    //       src={
+                    //         item.cities_pic
+                    //           ? `https://backoffice.innerpece.com/${item.cities_pic}`
+                    //           : defaultimg
+                    //       }
+                    //       alt={`trip-${index}`}
+                    //       className="h-full w-full -z-30 absolute object-cover transform transition-transform duration-500 group-hover:scale-125"
+                    //     />
+                    //     <div className="absolute -z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+                    //     <div className="absolute bottom-5 z-20 left-0 w-full text-white text-center py-2 px-3">
+                    //       <p className="font-rancho text-2xl md:text-3xl xl:text-4xl">
+                    //         {item.city_name}
+                    //       </p>
+                    //     </div>
+                    //   </div>
+                    // </div>
                     <div
-                      key={index}
-                      onClick={() => handleCardClick(item.id, item.city_name)}
-                      className="relative overflow-hidden rounded-2xl"
-                    >
-                      <div className="relative h-80 md:h-96  shrink-0 rounded-2xl overflow-hidden  group  cursor-pointer">
-                        <img
-                          src={
-                            item.cities_pic
-                              ? `https://backoffice.innerpece.com/${item.cities_pic}`
-                              : defaultimg
-                          }
-                          alt={`trip-${index}`}
-                          className="h-full w-full -z-30 absolute object-cover transform transition-transform duration-500 group-hover:scale-125"
-                        />
-                        <div className="absolute -z-10 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                        <div className="absolute bottom-5 z-20 left-0 w-full text-white text-center py-2 px-3">
-                          <p className="font-rancho text-2xl md:text-3xl xl:text-4xl">
-                            {item.city_name}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+  key={index}
+  onClick={() => handleCardClick(item.id, item.city_name)}
+  className="relative overflow-hidden rounded-2xl group cursor-pointer"
+>
+  <div className="relative h-80 md:h-96 shrink-0 rounded-2xl overflow-hidden">
+    {/* Background Image */}
+    <img
+      src={
+        item.cities_pic
+          ? `https://backoffice.innerpece.com/${item.cities_pic}`
+          : defaultimg
+      }
+      alt={`trip-${index}`}
+      className="h-full w-full absolute object-cover -z-40 transform transition-transform duration-700 group-hover:scale-110 group-hover:blur-sm"
+    />
+
+    {/* Gradient Overlay */}
+    <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+
+    {/* Title Animation */}
+    <p
+      className="absolute font-rancho text-2xl md:text-3xl xl:text-4xl text-white text-center bottom-5 
+      group-hover:bottom-1/2 group-hover:translate-y-1/2 
+      transition-all duration-700 ease-in-out w-full"
+    >
+      {item.city_name}
+    </p>
+
+    {/* Description Animation */}
+    <p
+      className="absolute text-white text-center px-4 opacity-0 translate-y-5 
+      group-hover:opacity-100 group-hover:translate-y-0 
+      transition-all duration-700 ease-out delay-150 
+      bottom-10 w-full "
+    >
+      Discover the charm and beauty of {item.city_name}.
+    </p>
+  </div>
+</div>
+
                   ))}
                 </Carousel>
               </div>

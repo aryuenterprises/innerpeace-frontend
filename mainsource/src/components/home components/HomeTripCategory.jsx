@@ -10,6 +10,7 @@ import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import ParallaxImage from "../parallexImage";
+import ParallaxImage2 from "../ParallexImage2";
 
 function HomeTripCategory() {
   const [programsData, setProgramsData] = useState([]);
@@ -77,14 +78,14 @@ function HomeTripCategory() {
   const SkeletonCard = ({ index }) => (
     <div
       key={index}
-      className=" max-md:hidden mx-3 h-[362px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"
+      className=" max-md:hidden mx-3 h-[362px]  bg-gray-300 flex-grow rounded-2xl animate-pulse"
     ></div>
   );
 
   const SkeletonCarouselCard = ({ index }) => (
     <div
       key={index}
-      className="w-[90vw] sm:w-[70vw] mx-auto h-60 md:hidden  bg-gray-600   rounded-2xl animate-pulse"
+      className="w-[90vw] sm:w-[70vw] mx-auto h-60 md:hidden  bg-gray-300   rounded-2xl animate-pulse"
     ></div>
   );
 
@@ -142,8 +143,6 @@ function HomeTripCategory() {
     );
   };
 
-  /*******************/
-
   return (
     <>
       {loading ? ( // Show skeleton loaders while fetching data
@@ -174,7 +173,7 @@ function HomeTripCategory() {
             <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
               <p className="text-2xl md:text-3xl  lg:text-4xl leading-loose text-[#141414] ">
                 <span className="font-jost font-medium ">Trip </span>{" "}
-                <span className="font-jost font-bold">Categories</span>
+                <span className=" font-jost font-bold">Categories</span>
               </p>
 
               <div className="">
@@ -184,7 +183,7 @@ function HomeTripCategory() {
                     swipeable={true}
                     draggable={true}
                     showDots={false}
-                    autoPlaySpeed={2000} 
+                    autoPlaySpeed={2000}
                     arrows={true}
                     autoPlay={true}
                     infinite={true}
@@ -192,9 +191,35 @@ function HomeTripCategory() {
                     customRightArrow={<CustomRightArrow />}
                     containerClass="carousel-container"
                     itemClass="px-2"
-                    
                   >
                     {programsData.map((item, index) => (
+                      // <div
+                      //   key={index}
+                      //   onClick={() =>
+                      //     handleThemeClick(item.id, item.themes_name)
+                      //   }
+                      //   className="relative h-[362px] cursor-pointer group w-full rounded-2xl overflow-hidden flex items-center justify-center flex-grow"
+                      // >
+                      //   <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
+
+                      //   <ParallaxImage
+                      //     src={
+                      //       item.theme_pic
+                      //         ? `https://backoffice.innerpece.com/${item.theme_pic}`
+                      //         : defaultimg
+                      //     }
+                      //     className="w-full h-[362px] flex-grow transform-all duration-700 group-hover:blur-sm -z-40 object-cover bg-center absolute inset-0"
+                      //     alt="travel type"
+                      //   />
+
+                      //   <p
+                      //     className="absolute font-rancho text-3xl lg:text-4xl text-white text-center bottom-5  group-hover:bottom-1/2 group-hover:translate-y-1/2 transition-all duration-1000 ease-in-out"
+                      //   >
+                      //     {item.themes_name}
+                      //   </p>
+
+                      //   <p className="text-white hidden group-hover:block absolute bottom-2 ransition-all duration-1000 ease-in-out">Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur, sint.</p>
+                      // </div>
                       <div
                         key={index}
                         onClick={() =>
@@ -203,23 +228,37 @@ function HomeTripCategory() {
                         className="relative h-[362px] cursor-pointer group w-full rounded-2xl overflow-hidden flex items-center justify-center flex-grow"
                       >
                         <div className="absolute -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
-                        {/* <img
+
+                        <img
                           src={
                             item.theme_pic
                               ? `https://backoffice.innerpece.com/${item.theme_pic}`
                               : defaultimg
                           }
-                          alt={item.themes_name}
-                          className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
-                        /> */}
-                        <ParallaxImage  src={
-                            item.theme_pic
-                              ? `https://backoffice.innerpece.com/${item.theme_pic}`
-                              : defaultimg
-                          }  className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"  alt="travel type"/>
+                          className="w-full h-[362px] flex-grow transform-all duration-700 group-hover:blur-sm -z-40 object-cover bg-center absolute inset-0"
+                          alt="travel type"
+                        />
 
-                        <p className="absolute font-rancho  text-3xl lg:text-4xl  text-white text-center bottom-5">
+                        {/* Title Animation */}
+                        <p
+                          className="absolute font-rancho text-3xl lg:text-4xl text-white text-center bottom-5 
+    group-hover:bottom-1/2 group-hover:translate-y-1/2 
+    transition-all duration-700 ease-in-out"
+                        >
                           {item.themes_name}
+                        </p>
+
+                        {/* Description Animation */}
+                        <p
+                          className="absolute text-white text-center px-4 opacity-0 translate-y-5 
+    group-hover:opacity-100 group-hover:translate-y-0 
+    transition-all duration-700 ease-out delay-100
+    bottom-10"
+                        >
+                          {/* Discover the charm and beauty of {item.themes_name}. */}
+                          {item.description
+                            ? item.description
+                            : `Discover the charm and beauty of ${item.themes_name}`}
                         </p>
                       </div>
                     ))}

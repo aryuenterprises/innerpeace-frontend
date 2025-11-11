@@ -9,7 +9,7 @@ function Hero() {
         <p className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-[#2D2D2D] font-mulish">
           CONTACT US
         </p>
-        <div className="flex gap-5 font-mulish">
+        {/* <div className="flex gap-5 font-mulish">
           <p
             className="text-sky-800 cursor-pointer hover:text-sky-800"
             onClick={() => navigate("/")}
@@ -17,7 +17,7 @@ function Hero() {
             HOME
           </p>
           <p className="text-sky-800 font-semibold">CONTACT US</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );

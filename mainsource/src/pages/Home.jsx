@@ -17,13 +17,13 @@ let HomePopularStays = lazy(() =>
 let HomeLetsGetStarted = lazy(() =>
   import("../components/home components/HomeLetsGetStarted")
 );
-import whatsapp from "../assets/whatsapp.svg";
 import HomeBlogs from "../components/home components/HomeBlogs";
 import HomePopularStaysHimachal from "../components/home components/HomePopularStaysHimachal";
-import TopHeader from "../components/TopHeader";
 import Footer from "../components/layouts/Footer";
-import Header from "../components/layouts/Header";
 import HomeHeader from "../components/HomeHeader";
+import GoToTop from "../components/GoToTop";
+import Reviews from "../components/Reviews";
+import TopHeader from "../components/TopHeader";
 
 function Home() {
   useEffect(() => {
@@ -32,18 +32,7 @@ function Home() {
 
   return (
     <div>
-      <div
-        onClick={() => window.open("https://wa.me/8807343642")}
-        className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
-      >
-        <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
-          <p>Whatsapp Enquiry</p>
-        </div>
-        <img
-          src={whatsapp}
-          className="h-10 w-10  transition-all duration-500"
-        />
-      </div>
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -52,10 +41,8 @@ function Home() {
           </div>
         }
       >
-        {/* <TopHeader /> */}
-        {/* <Header /> */}
-
-        <HomeHeader />
+        {/* <TopHeader/> */}
+        {/* <HomeHeader /> */}
         <HomeHero />
         <HomeTripCategory />
         <HomeChoosePerfectTravelType />
@@ -64,6 +51,7 @@ function Home() {
         <HomePopularStays />
         <HomePopularStaysHimachal />
         <HomeBlogs />
+        <Reviews />
         <Footer />
       </Suspense>
     </div>

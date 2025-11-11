@@ -20,7 +20,7 @@ const ParallaxImage2 = ({ src, alt, className }) => {
   return (
     <div ref={ref} className={`w-full h-full overflow-hidden ${className}`}>
       <motion.img
-        src={src}
+        src={`https://backoffice.innerpece.com/${src}`}
         alt={alt}
         className="w-full h-full object-cover"
         style={{ y, scale }}

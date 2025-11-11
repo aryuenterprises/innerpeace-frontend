@@ -11,6 +11,7 @@ import axios from "axios";
 // import { Helmet } from "react-helmet-async";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { BsHighlights } from "react-icons/bs";
+import Carousel from "react-multi-carousel";
 
 function Hero({
   handlehighlightsScroll,
@@ -77,6 +78,26 @@ function Hero({
     }
   }, [apiData]);
 
+  const CustomDot = ({ onClick, ...rest }) => {
+    const { active } = rest;
+    return (
+      <li
+        onClick={(e) => {
+          e.stopPropagation(); // Stop bubbling to card
+          onClick?.(); // Trigger dot click
+        }}
+        className="inline-block mx-1"
+      >
+        <button
+          className={`transition-all  duration-500 h-1 rounded-full ${
+            active ? "bg-white w-5" : "bg-white/50 w-2"
+          }`}
+        />
+      </li>
+    );
+  };
+
+
   return (
     <div className="relative ">
       <Helmet>
@@ -103,7 +124,7 @@ function Hero({
         </Helmet>
       </HelmetProvider>
 
-      {loading ? (
+      {/* {loading ? (
         <div className=" h-[50vh] md:h-[40vh] lg:h-[50vh] w-full bg-gray-500 animate-pulse"></div>
       ) : (
         <img
@@ -113,11 +134,11 @@ function Hero({
               : defaultimage
           }
           alt=""
-          className="h-[50vh] md:h-[40vh] lg:h-[50vh] w-full object-cover "
+          className="h-[50vh] md:h-[40vh] lg:h-[50vh] w-full object-cover hidden md:flex"
         />
       )}
 
-      <div className="absolute  bg-white  -bottom-9 left-1/2 -translate-x-1/2 flex flex-wrap  gap-2 justify-start  md:justify-between rounded-3xl lg:rounded-full px-5 md:px-10 py-3 md:py-4  w-full md:w-11/12 lg:w-4/5 items-center shadow-lg shadow-black/10">
+      <div className="absolute hidden md:flex  bg-white  -bottom-9 left-1/2 -translate-x-1/2  flex-wrap  gap-2 justify-start  md:justify-between rounded-3xl lg:rounded-full px-5 md:px-10 py-3 md:py-4  w-full md:w-11/12 lg:w-4/5 items-center shadow-lg shadow-black/10">
         <div
           onClick={handlehighlightsScroll}
           className="flex flex-grow cursor-pointer  gap-2 md:gap-3   py-1  items-center  md:justify-center"
@@ -171,7 +192,124 @@ function Hero({
             </p>
           </div>
         )}
-      </div>
+      </div> */}
+
+      {/* {apiData.gallery_img && (
+        <Carousel
+          pauseOnHover={false}
+          responsive={{
+            superLargeDesktop: {
+              breakpoint: { max: 4000, min: 1441 },
+              items: 1,
+            },
+            desktop: {
+              breakpoint: { max: 1440, min: 1024 },
+              items: 1,
+            },
+            tablet: {
+              breakpoint: { max: 1024, min: 640 },
+              items: 1,
+            },
+            mobile: {
+              breakpoint: { max: 640, min: 0 },
+              items: 1,
+            },
+          }}
+          autoPlay={true}
+          autoPlaySpeed={5000}
+          arrows={false}
+          keyBoardControl={true}
+          transitionDuration={1000}
+          containerClass="carousel-container mx-auto z-0 w-full object-cover "
+          itemClass="carousel-item-padding-40-px block shadow-lg   object-cover shadow-black/10 "
+          customDot={<CustomDot />}
+          infinite
+          swipeable
+          draggable
+          showDots
+        >
+          {apiData.gallery_img.map((item, index) => (
+            <div
+              key={item.id || index}
+              className="overflow-hidden block md:hidden  "
+            >
+              <img
+                src={
+                  item
+                    ? `https://backoffice.innerpece.com/${item}`
+                    : defaultimage
+                }
+                alt={`Gallery Image ${index + 1}`}
+                className="h-[50vh] md:h-[40vh] lg:h-[50vh] w-full object-cover "
+              />
+            </div>
+          ))}
+        </Carousel>
+      )} */}
+
+{loading ? (
+  // ✅ Skeleton Loader (Shimmer)
+  <div className="animate-pulse w-full md:hidden">
+    <div className="relative h-[50vh] md:h-[40vh] lg:h-[50vh] w-full bg-gray-300 rounded-lg overflow-hidden">
+      {/* shimmer gradient */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-[shimmer_2s_infinite]" />
+    </div>
+  </div>
+) : (
+  apiData.gallery_img && (
+    <Carousel
+      pauseOnHover={false}
+      responsive={{
+        superLargeDesktop: {
+          breakpoint: { max: 4000, min: 1441 },
+          items: 1,
+        },
+        desktop: {
+          breakpoint: { max: 1440, min: 1024 },
+          items: 1,
+        },
+        tablet: {
+          breakpoint: { max: 1024, min: 640 },
+          items: 1,
+        },
+        mobile: {
+          breakpoint: { max: 640, min: 0 },
+          items: 1,
+        },
+      }}
+      autoPlay={true}
+      autoPlaySpeed={5000}
+      arrows={false}
+      keyBoardControl={true}
+      transitionDuration={1000}
+      containerClass="carousel-container mx-auto z-0 w-full object-cover"
+      itemClass="carousel-item-padding-40-px block shadow-lg object-cover shadow-black/10"
+      customDot={<CustomDot />}
+      infinite
+      swipeable
+      draggable
+      showDots
+    >
+      {apiData.gallery_img.map((item, index) => (
+        <div
+          key={item.id || index}
+          className="overflow-hidden block md:hidden"
+        >
+          <img
+            src={
+              item
+                ? `https://backoffice.innerpece.com/${item}`
+                : defaultimage
+            }
+            alt={`Gallery Image ${index + 1}`}
+            className="h-[50vh] md:h-[40vh] lg:h-[50vh] w-full object-cover"
+          />
+        </div>
+      ))}
+    </Carousel>
+  )
+)}
+
     </div>
   );
 }

@@ -7,6 +7,9 @@ let Footer=lazy(()=>import("../components/Footer"))
 import { useEffect, useState } from "react";
 import whatsapp from "../assets/whatsapp.svg";
 import TopHeader from "../components/TopHeader";
+import GoToTop from "../components/GoToTop";
+import { Link } from "react-router-dom";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 
 function PrivacyPolicy() {
@@ -31,15 +34,9 @@ function PrivacyPolicy() {
 
   return (
     <div>
-      <div
-        onClick={() => window.open("https://wa.me/6384131642")}
-        className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
-      >
-        <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
-          <p>Whatsapp Enquiry</p>
-        </div>
-        <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
-      </div>
+     
+     <GoToTop/>
+
 
       <Suspense
         fallback={
@@ -51,6 +48,18 @@ function PrivacyPolicy() {
                 {/* <TopHeader/> */}
 
         <Header />
+
+        <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+        
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          <p className="text-blue-500 font-medium sm:font-semibold">
+            Privacy Policy
+          </p>
+        </div>
+
         <Privacypolicy_Hero />
         <Privacypolicy_Content />
         <Footer />

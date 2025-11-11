@@ -1,33 +1,31 @@
 import React from "react";
-import { useEffect,useState } from "react";
+import { useEffect, useState } from "react";
 import { Suspense } from "react";
 import { lazy } from "react";
-let Header=lazy(()=>import("../components/Header"))
-let AboutUsHero=lazy(()=>import("../components/AboutUsHero"))
-let AboutUsMission=lazy(()=>import("../components/AboutUsOurMission"))
-let AboutUsOurStory=lazy(()=>import("../components/AboutUsOurStory"))
-let AboutUsOurValue=lazy(()=>import("../components/AboutUsOurValue"))
-let AboutUsGroupImg=lazy(()=>import("../components/AboutUsGroupImg"))
-let Footer=lazy(()=>import("../components/Footer"))
+let Header = lazy(() => import("../components/Header"));
+let AboutUsHero = lazy(() => import("../components/AboutUsHero"));
+let AboutUsMission = lazy(() => import("../components/AboutUsOurMission"));
+let AboutUsOurStory = lazy(() => import("../components/AboutUsOurStory"));
+let AboutUsOurValue = lazy(() => import("../components/AboutUsOurValue"));
+let AboutUsGroupImg = lazy(() => import("../components/AboutUsGroupImg"));
+let Footer = lazy(() => import("../components/Footer"));
 import whatsapp from "../assets/whatsapp.svg";
 import TopHeader from "../components/TopHeader";
-
-
+import GoToTop from "../components/GoToTop";
+import { Link } from "react-router-dom";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 function AboutUs() {
-    // const [isLoading, setIsLoading] = useState(true); // Loading state
-  
+  // const [isLoading, setIsLoading] = useState(true); // Loading state
+
   useEffect(() => {
     document.title = "About Us - Innerpece";
     // const timer = setTimeout(() => {
     //   setIsLoading(false);
     // }, 200); // Adjust time as needed
 
-
     // return () => clearTimeout(timer); // Cleanup timeout
   }, []); // Empty dependency array ensures it runs once on mount
-
-
 
   // if (isLoading) {
   //   return (
@@ -38,8 +36,7 @@ function AboutUs() {
   // }
   return (
     <div>
-
-<div
+      {/* <div
         onClick={() => window.open("https://wa.me/6384131642")}
         className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
       >
@@ -47,8 +44,9 @@ function AboutUs() {
           <p>Whatsapp Enquiry</p>
         </div>
         <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
-      </div>
+      </div> */}
 
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -57,8 +55,19 @@ function AboutUs() {
           </div>
         }
       >
-        {/* <TopHeader/> */}
         <Header />
+       
+        <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+         
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          <p className="text-blue-500 font-medium sm:font-semibold">
+            About Us
+          </p>
+        </div>
+
         <AboutUsHero />
         <AboutUsMission />
         <AboutUsOurStory />
@@ -69,6 +78,5 @@ function AboutUs() {
     </div>
   );
 }
-
 
 export default AboutUs;

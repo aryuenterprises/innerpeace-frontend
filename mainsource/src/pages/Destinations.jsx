@@ -1,9 +1,12 @@
 import React, { lazy, Suspense, useEffect } from "react";
 import TopHeader from "../components/TopHeader";
+import GoToTop from "../components/GoToTop";
 
 const Header = lazy(() => import("../components/Header"));
 const DestinationsHero = lazy(() => import("../components/DestinationsHero"));
-const DestinationsSearch = lazy(() => import("../components/DestinationsSearch"));
+const DestinationsSearch = lazy(() =>
+  import("../components/DestinationsSearch")
+);
 const Footer = lazy(() => import("../components/Footer"));
 
 function Destinations() {
@@ -13,6 +16,8 @@ function Destinations() {
 
   return (
     <div>
+      <GoToTop />
+
       <Suspense
         fallback={
           <div className="fixed inset-0 flex items-center justify-center backdrop-blur-md bg-transparent">
@@ -20,7 +25,7 @@ function Destinations() {
           </div>
         }
       >
-                {/* <TopHeader/> */}
+        {/* <TopHeader/> */}
 
         <Header />
         <DestinationsHero />

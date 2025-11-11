@@ -53,7 +53,12 @@ function GetInTouch() {
         setEmail(value);
         break;
       case "phone":
-        setPhone(value.slice(0, 10));
+        // allow only digits and limit length
+        if (/^\d{0,10}$/.test(value)) {
+          setPhone(value);
+        }
+
+        // setPhone(value.slice(0, 10));
         break;
       case "message":
         setMessage(value);
@@ -66,25 +71,28 @@ function GetInTouch() {
   const onClickSendMessage = async () => {
     const isValid = validateForm();
     if (!isValid) return; // don't proceed if invalid
-  
+
     setLoading(true); // move setLoading after validation passes
-  
+
     try {
-      await axios.post(`https://backoffice.innerpece.com/api/v1/contact`, {
-        first_name: firstname,
-        last_name: lastname,
-        email,
-        phone,
-        message,
-      });
-  
+      await axios.post(
+        `https://backoffice.innerpece.com/api/v1/contact`,
+        {
+          first_name: firstname,
+          last_name: lastname,
+          email,
+          phone,
+          message,
+        }
+      );
+
       // Clear form
       setFirstname("");
       setLastname("");
       setPhone("");
       setEmail("");
       setMessage("");
-  
+
       Swal.fire({
         position: "center",
         icon: "success",
@@ -104,7 +112,6 @@ function GetInTouch() {
       setLoading(false); // always reset loading at the end
     }
   };
-  
 
   return (
     <div>
@@ -179,14 +186,16 @@ function GetInTouch() {
               <div className="flex flex-grow flex-col gap-3">
                 <label htmlFor="phone">Your Phone No</label>
                 <input
+                  type="text"
+                  inputMode="numeric" // shows numeric keypad on mobile
+                  maxLength={10}
                   placeholder="Enter your phone No"
-                  type="number"
                   id="phone"
                   name="phone"
                   onChange={onChangeInput}
                   value={phone}
                   autoComplete="off"
-                  className="border-2 bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5 text-sm"
+                  className="border-2 bg-gray-100/90 outline-none border-none rounded-xl px-5 py-5 text-sm [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 />
                 {errors.phone && (
                   <p className="text-red-500 text-sm">{errors.phone}</p>

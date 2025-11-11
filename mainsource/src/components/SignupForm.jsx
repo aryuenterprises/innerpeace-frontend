@@ -55,9 +55,7 @@ function Signup() {
 
   function navigateToTermsOfService() {
     // navigate("/termsofservice");
-      window.open("/termsofservice", "_blank");
-    
-    
+    window.open("/termsofservice", "_blank");
 
     window.scrollTo({
       top: 0,
@@ -90,7 +88,11 @@ function Signup() {
       setAnniversaryDate(value);
     }
     if (name === "phone") {
-      setPhone(value.slice(0, 10));
+      
+      if (/^[0-9]*$/.test(value)) {
+        setPhone(value);
+      }
+      // setPhone(value.slice(0, 10));
     }
     if (name === "street") {
       setStreet(value);
@@ -258,7 +260,7 @@ function Signup() {
                     src={selectedImage}
                     alt="Selected"
                     onClick={() => setOpenImageModal(true)} // Open modal on click
-                    className="w-28 h-28 object-fill cursor-pointer  rounded-full"
+                    className="w-28 h-28 object-cover object-center cursor-pointer  rounded-full"
                   />
                 </div>
               )}
@@ -383,6 +385,7 @@ function Signup() {
                     onChange={handleInputChanges}
                     className="border-2 border-gray-300 outline-none p-2 rounded-md"
                     placeholder="Enter your phone number"
+                    min={0}
                   />
                   {userDetailsError.phone && (
                     <p className="text-red-500 text-xs sm:text-sm ">

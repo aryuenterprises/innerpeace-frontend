@@ -44,7 +44,7 @@ const ParallaxImage = ({ src, alt, className }) => {
 
   // Add spring for smooth motion
   const y = useSpring(yRange, {
-    stiffness: 50,   // lower = smoother
+    stiffness: 30,   // lower = smoother
     damping: 20,     // controls bounciness
     mass: 0.5,       // affects inertia
   });
@@ -54,7 +54,7 @@ const ParallaxImage = ({ src, alt, className }) => {
       <motion.img
         src={src}
         alt={alt}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover object-bottom" 
         style={{ y, scale: 1.2 }} // keep slight scale for depth effect
       />
     </div>

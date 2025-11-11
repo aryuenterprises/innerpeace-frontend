@@ -18,7 +18,8 @@ const HomePopularStaysHimachal = () => {
           "https://backoffice.innerpece.com/api/v1/get-stays",
           {
             params: {
-              destination: "Himachal Pradesh",
+              // destination: "Himachal Pradesh",
+              destination: 15,
             },
           }
         );
@@ -56,14 +57,14 @@ const HomePopularStaysHimachal = () => {
   const SkeletonCard = ({ index }) => (
     <div
       key={index}
-      className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-600 flex-grow rounded-2xl animate-pulse"
+      className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-300 flex-grow rounded-2xl animate-pulse"
     ></div>
   );
 
   const SkeletonCarouselCard = ({ index }) => (
     <div
       key={index}
-      className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-600   rounded-2xl animate-pulse"
+      className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-300   rounded-2xl animate-pulse"
     ></div>
   );
 
@@ -133,11 +134,12 @@ const HomePopularStaysHimachal = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+
   return (
     <>
       {loading ? (
         <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-          <p className="text-2xl md:text-3xl  lg:text-4xl  leading-loose text-[#141414]">
+          <p className="text-2xl md:text-3xl  lg:text-4xl  text-[#141414]">
             <span className="font-jost font-medium">Popular Stays in </span>
             <span className="font-jost font-bold">Himachal Pradesh</span>
           </p>
@@ -162,7 +164,7 @@ const HomePopularStaysHimachal = () => {
         <>
           {apiData && apiData.length > 0 && (
             <div className="ms-5 me-5 mt-10 md:ms-16 md:me-16  md:mt-16">
-              <p className="text-2xl md:text-3xl   lg:text-4xl  leading-loose text-[#141414]">
+              <p className="text-2xl md:text-3xl   lg:text-4xl   text-[#141414]">
                 <span className="font-jost font-medium">Popular Stays in </span>
                 <span className="font-jost font-bold">Himachal Pradesh</span>
               </p>
@@ -195,7 +197,7 @@ const HomePopularStaysHimachal = () => {
                         <div className="absolute  -z-20 bg-gradient-to-b from-transparent from-60% to-black h-full w-full"></div>
                         <img
                           src={
-                            item.images[0]
+                            item?.images[0]
                               ? `https://backoffice.innerpece.com/${item.images[0]}`
                               : defaultimg
                           }

@@ -27,7 +27,7 @@ function Featured() {
     combinedGalleryImagesAndStayImages,
     setCombinedGalleryImagesAndStayImages,
   ] = useState("");
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState([]);
   const currentUrl = window.location.href;
   const metaDescription = apiData?.program_desc || "";
   const [userName, setUserName] = useState("");
@@ -64,7 +64,6 @@ function Featured() {
         { headers }
       );
 
-      console.log(response);
       setIsWishlisted((prev) => !prev);
 
       const fetchProgramData = async () => {
@@ -105,6 +104,7 @@ function Featured() {
       };
 
       fetchProgramData();
+      // window.location.reload()
     } catch (error) {
       console.error("An error occurred while updating wishlist:", error);
     }
@@ -112,6 +112,7 @@ function Featured() {
 
   const slicedPathName = window.location.pathname.split("/")[1];
   const slicedUserId = window.location.href.split("#")[1];
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -140,7 +141,7 @@ function Featured() {
               "https://backoffice.innerpece.com/api/v1/get-program-details",
               payload1
             );
-
+setLoading(false)
         setUserName(response.data.data.name);
         setApiData(response.data.data);
         setIsWishlisted(response.data.data.wishlists);
@@ -148,6 +149,7 @@ function Featured() {
           ...(response.data.data.gallery_img || []),
           ...(response.data.data.stay_images || []),
         ]);
+
       } catch (err) {
         console.log(err);
       }
@@ -218,26 +220,7 @@ function Featured() {
     };
   }, [seeAllImageModalOpen]);
 
-  // const sanitizedHTML = DOMPurify.sanitize(apiData.current_location);
-  // console.log(sanitizedHTML);
-
-  // const cleanHTML = (htmlString) => {
-  //   const sanitizedHTML = DOMPurify.sanitize(htmlString);
-
-  //   const cleaned = sanitizedHTML
-  //     .replace(/<span[^>]*>|<\/span>/gi, "")
-  //     .replace(/<o:p>|<\/o:p>/gi, "")
-  //     .replace(/style="[^"]*"/gi, "")
-  //     .replace(/&nbsp;/gi, " ")
-  //     .replace(/<p[^>]*>/gi, "")
-  //     .replace(/<\/p>/gi, "")
-  //     .replace(/·\s*/g, "<li>") // convert bullets to list items
-  //     .trim();
-
-  //   return cleaned;
-  // };
-
-  // console.log(cleanHTML(apiData.current_location))
+  
 
   function cleanApiHtml(str = "") {
     if (!str) return "";
@@ -260,188 +243,394 @@ function Featured() {
   const cleaned = cleanApiHtml(rawData);
 
   return (
-    <div className="mt-20 md:mt-28  mx-3 md:mx-10   xl:mx-20 ">
-      <div className="flex flex-wrap flex-col items-start justify-between gap-2">
-        {userName && (
-          <p className="font-medium text-lg font-jakarta bg-gradient-to-r from-[#0E598F] to-[#041A29] text-transparent bg-clip-text ">{`Welcome, ${userName}`}</p>
-        )}
+    // <div className="mt-10 md:mt-20  mx-3 md:mx-10   xl:mx-20 ">
+    //   <div className="flex flex-wrap flex-col items-start justify-between gap-2">
+    //     {userName && (
+    //       <p className="font-medium text-lg font-jakarta bg-gradient-to-r from-[#0E598F] to-[#041A29] text-transparent bg-clip-text ">{`Welcome, ${userName}`}</p>
+    //     )}
 
-        <p className="font-semibold text-2xl md:text-4xl">{apiData.title}</p>
+    //     <p className="font-semibold text-2xl md:text-4xl">{apiData.title}</p>
 
-        <div className="flex flex-wrap gap-5">
-          {apiData.member_capacity && (
-            <div className="flex items-center flex-wrap gap-1">
-              <img src={guests} alt="" className="object-contain" />
-              <p className="text-gray-600">
-                {apiData.member_capacity}{" "}
-                {apiData.member_capacity === "1" ? "member" : "members"}
-              </p>
-            </div>
-          )}
+    //     <div className="flex flex-wrap gap-5 justify-between w-full">
+    //       <div className="flex gap-5 ">
+    //         {apiData.member_capacity && (
+    //           <div className="flex items-center flex-wrap gap-1">
+    //             <img src={guests} alt="" className="object-contain" />
+    //             <p className="text-gray-600">
+    //               {apiData.member_capacity}{" "}
+    //               {apiData.member_capacity === "1" ? "member" : "members"}
+    //             </p>
+    //           </div>
+    //         )}
 
-          {apiData.current_location && (
-            <div className="flex items-center  gap-1">
-              <img src={locationimg} alt="" className="object-contain" />
-              {/* <p className="text-gray-600">{apiData.current_location}</p> */}
-              <p
-                className="text-gray-600"
-                dangerouslySetInnerHTML={{
-                  __html: cleaned,
-                }}
-              />
-            </div>
-          )}
+    //         {apiData.current_location && (
+    //           <div className="flex items-center  gap-1">
+    //             <img src={locationimg} alt="" className="object-contain" />
+    //             {/* <p className="text-gray-600">{apiData.current_location}</p> */}
+    //             <p
+    //               className="text-gray-600"
+    //               dangerouslySetInnerHTML={{
+    //                 __html: cleaned,
+    //               }}
+    //             />
+    //           </div>
+    //         )}
+    //       </div>
 
-          {/* {apiData.start_date && apiData.end_date && (
-            <div className="flex items-center flex-wrap gap-1">
-              <MdDateRange className="inline-block  text-red-600 text-lg md:text-xl" />
-              {apiData.start_date} - {apiData.end_date}
-            </div>
-          )} */}
+    //       <div className="flex w-full sm:w-fit flex-row  flex-wrap md:flex-col gap-5 ">
+    //         <div className="flex flex-wrap justify-between sm:justify-start w-full sm:w-fit items-center gap-2 md:gap-5">
+    //           <FacebookShareButton
+    //             url={currentUrl}
+    //             quote={metaDescription}
+    //             hashtag="#innerpece"
+    //           >
+    //             <div className="flex items-center cursor-pointer border-2 hover:bg-[#0965FE]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
+    //               <FacebookIcon size={22} round={true} />
+    //               <p className="text-xs md:text-base">Share</p>
+    //             </div>
+    //           </FacebookShareButton>
 
-          <div className="flex w-full sm:w-fit flex-row  flex-wrap md:flex-col gap-5 ">
-            <div className="flex flex-wrap justify-between sm:justify-start w-full sm:w-fit items-center gap-2 md:gap-5">
-              <FacebookShareButton
-                url={currentUrl}
-                quote={metaDescription}
-                hashtag="#innerpece"
-              >
-                <div className="flex items-center cursor-pointer border-2 hover:bg-[#0965FE]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
-                  <FacebookIcon size={22} round={true} />
-                  <p className="text-xs md:text-base">Share</p>
-                </div>
-              </FacebookShareButton>
+    //           <LinkedinShareButton
+    //             url={currentUrl}
+    //             quote={metaDescription}
+    //             hashtag="#innerpece"
+    //           >
+    //             <div className="flex items-center cursor-pointer border-2 hover:bg-[#0077B5]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
+    //               <LinkedinIcon size={22} round={true} />
+    //               <p className="text-xs md:text-base">Share</p>
+    //             </div>
+    //           </LinkedinShareButton>
 
-              <LinkedinShareButton
-                url={currentUrl}
-                quote={metaDescription}
-                hashtag="#innerpece"
-              >
-                <div className="flex items-center cursor-pointer border-2 hover:bg-[#0077B5]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
-                  <LinkedinIcon size={22} round={true} />
-                  <p className="text-xs md:text-base">Share</p>
-                </div>
-              </LinkedinShareButton>
+    //           <WhatsappShareButton
+    //             url={currentUrl}
+    //             quote={metaDescription}
+    //             hashtag="#innerpece"
+    //           >
+    //             <div className="flex items-center cursor-pointer border-2 hover:bg-[#25D366]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
+    //               <WhatsappIcon size={22} round={true} />
+    //               <p className="text-xs md:text-base">Share</p>
+    //             </div>
+    //           </WhatsappShareButton>
 
-              <WhatsappShareButton
-                url={currentUrl}
-                quote={metaDescription}
-                hashtag="#innerpece"
-              >
-                <div className="flex items-center cursor-pointer border-2 hover:bg-[#25D366]  hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
-                  <WhatsappIcon size={22} round={true} />
-                  <p className="text-xs md:text-base">Share</p>
-                </div>
-              </WhatsappShareButton>
+    //           {/* wishlist */}
+    //           <div
+    //             className="flex items-center cursor-pointer border-2 hover:bg-red-500  hover:border-white border-gray-700 text-gray-700 text-2xl sm:text-base hover:text-white transition-all ease-in duration-200  rounded-full p-2 gap-2 "
+    //             onClick={() => handleWishlistClick(id)}
+    //           >
+    //             {isWishlisted ? (
+    //               <IoHeartSharp className="text-red-300 " />
+    //             ) : (
+    //               <IoHeartOutline />
+    //             )}
+    //             <p className="hidden md:block">WishList</p>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
 
-              {/* wishlist */}
-              <div
-                className="flex items-center cursor-pointer border-2 hover:bg-red-500  hover:border-white border-gray-700 text-gray-700 text-2xl sm:text-base hover:text-white transition-all ease-in duration-200  rounded-full p-2 gap-2 "
-                onClick={() => handleWishlistClick(id)}
-              >
-                {isWishlisted ? (
-                  <IoHeartSharp className="text-red-300 " />
-                ) : (
-                  <IoHeartOutline />
-                )}
-                <p className="hidden md:block">WishList</p>
+    //   {apiData && apiData.gallery_img && (
+    //     <>
+    //       <div className="flex gap-5 mt-5 h-[60vh] max-md:hidden">
+    //         {/* Left Large Image */}
+    //         <img
+    //           src={`https://backoffice.innerpece.com/${apiData.gallery_img[0]}`}
+    //           alt=""
+    //           className="rounded-xl w-[60%] h-full object-cover"
+    //         />
+
+    //         {/* Right Grid of 4 Small Images */}
+    //         <div className="w-[40%] grid grid-cols-2 grid-rows-2 gap-5">
+    //           {apiData.gallery_img.slice(1, 5).map((img, index) => (
+    //             <div
+    //               onClick={() => openModal(index + 1)}
+    //               key={index}
+    //               className="w-full h-full relative cursor-pointer "
+    //             >
+    //               {/* <div className="bg-black/40 hover:bg-transparent transition-all duration-500 rounded-xl  absolute w-full h-full z-10"></div> */}
+    //               <img
+    //                 src={`https://backoffice.innerpece.com/${img}`}
+    //                 alt=""
+    //                 className="rounded-xl w-full   h-full object-cover absolute"
+    //               />
+    //               {index === 3 && (
+    //                 <div
+    //                   onClick={(e) => {
+    //                     e.stopPropagation(); // This stops the outer div's onClick from firing
+    //                     openModal(0);
+    //                   }}
+    //                   className="flex items-center gap-3 absolute bottom-2 right-2  bg-white rounded-full px-4 py-1"
+    //                 >
+    //                   <FaImage />
+    //                   <p className="font-medium text-sm text-black text">
+    //                     See All
+    //                   </p>
+    //                 </div>
+    //               )}
+    //             </div>
+    //           ))}
+    //         </div>
+    //       </div>
+    //       <></>
+    //     </>
+    //   )}
+
+    //   {seeAllImageModalOpen && (
+    //     <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-xl">
+    //       <div className="absolute w-full top-4 right-4 flex items-center justify-between">
+    //         <p></p>
+    //         <p className="text-white font-dmSans font-semibold">
+    //           {currentIndex1 + 1} / {combinedGalleryImagesAndStayImages.length}
+    //         </p>
+
+    //         {/* Close button */}
+    //         <button
+    //           onClick={closeModal}
+    //           className="  text-white bg-black/50 p-2 rounded-full hover:bg-black"
+    //         >
+    //           <FaTimes size={20} />
+    //         </button>
+    //       </div>
+
+    //       {/* Arrows and Image */}
+    //       <div className="relative flex items-center justify-center w-full">
+    //         {/* Left arrow */}
+    //         <button
+    //           onClick={goPrev}
+    //           className="absolute left-5 text-white bg-black/50 p-2 rounded-full hover:bg-black"
+    //         >
+    //           <FaChevronLeft size={24} />
+    //         </button>
+
+    //         {/* Current image */}
+    //         <img
+    //           src={`https://backoffice.innerpece.com/${combinedGalleryImagesAndStayImages[currentIndex1]}`}
+    //           alt="modal-img"
+    //           className={`w-[80vw] h-[80vh] object-cover rounded-xl  transition-opacity duration-200 ease-out ${
+    //             isFading ? "opacity-0" : "opacity-100"
+    //           }`}
+    //         />
+
+    //         {/* Right arrow */}
+    //         <button
+    //           onClick={goNext}
+    //           className="absolute right-5 text-white bg-black/50 p-2 rounded-full hover:bg-black"
+    //         >
+    //           <FaChevronRight size={24} />
+    //         </button>
+    //       </div>
+    //     </div>
+    //   )}
+    // </div>
+ 
+ <div className="mt-10 md:mt-20 mx-3 md:mx-10 xl:mx-20">
+      {/* ✅ Skeleton Loader */}
+      {loading ? (
+        <div className="animate-pulse w-full">
+          <div className="h-6 bg-gray-300 rounded w-1/4 mb-3" />
+          <div className="h-10 bg-gray-300 rounded w-2/3 mb-6" />
+
+          <div className="flex flex-wrap justify-between gap-5 w-full">
+            <div className="flex gap-5">
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-gray-300 rounded-full" />
+                <div className="w-20 h-4 bg-gray-300 rounded" />
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-gray-300 rounded-full" />
+                <div className="w-24 h-4 bg-gray-300 rounded" />
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {apiData && apiData.gallery_img && (
-        <>
-          <div className="flex gap-5 mt-5 h-[60vh] max-md:hidden">
-            {/* Left Large Image */}
-            <img
-              src={`https://backoffice.innerpece.com/${apiData.gallery_img[0]}`}
-              alt=""
-              className="rounded-xl w-[60%] h-full object-cover"
-            />
-
-            {/* Right Grid of 4 Small Images */}
-            <div className="w-[40%] grid grid-cols-2 grid-rows-2 gap-5">
-              {apiData.gallery_img.slice(1, 5).map((img, index) => (
+            <div className="flex flex-wrap gap-4">
+              {[1, 2, 3, 4].map((i) => (
                 <div
-                  onClick={() => openModal(index + 1)}
-                  key={index}
-                  className="w-full h-full relative cursor-pointer "
-                >
-                  {/* <div className="bg-black/40 hover:bg-transparent transition-all duration-500 rounded-xl  absolute w-full h-full z-10"></div> */}
-                  <img
-                    src={`https://backoffice.innerpece.com/${img}`}
-                    alt=""
-                    className="rounded-xl w-full   h-full object-cover absolute"
-                  />
-                  {index === 3 && (
-                    <div
-                      onClick={(e) => {
-                        e.stopPropagation(); // This stops the outer div's onClick from firing
-                        openModal(0);
-                      }}
-                      className="flex items-center gap-3 absolute bottom-2 right-2  bg-white rounded-full px-4 py-1"
-                    >
-                      <FaImage />
-                      <p className="font-medium text-sm text-black text">
-                        See All
-                      </p>
-                    </div>
-                  )}
-                </div>
+                  key={i}
+                  className="w-24 h-8 bg-gray-300 rounded-full"
+                ></div>
               ))}
             </div>
           </div>
-          <></>
-        </>
-      )}
 
-      {seeAllImageModalOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-xl">
-          <div className="absolute w-full top-4 right-4 flex items-center justify-between">
-            <p></p>
-            <p className="text-white font-dmSans font-semibold">
-              {currentIndex1 + 1} / {combinedGalleryImagesAndStayImages.length}
-            </p>
-
-            {/* Close button */}
-            <button
-              onClick={closeModal}
-              className="  text-white bg-black/50 p-2 rounded-full hover:bg-black"
-            >
-              <FaTimes size={20} />
-            </button>
-          </div>
-
-          {/* Arrows and Image */}
-          <div className="relative flex items-center justify-center w-full">
-            {/* Left arrow */}
-            <button
-              onClick={goPrev}
-              className="absolute left-5 text-white bg-black/50 p-2 rounded-full hover:bg-black"
-            >
-              <FaChevronLeft size={24} />
-            </button>
-
-            {/* Current image */}
-            <img
-              src={`https://backoffice.innerpece.com/${combinedGalleryImagesAndStayImages[currentIndex1]}`}
-              alt="modal-img"
-              className={`w-[80vw] h-[80vh] object-cover rounded-xl  transition-opacity duration-200 ease-out ${
-                isFading ? "opacity-0" : "opacity-100"
-              }`}
-            />
-
-            {/* Right arrow */}
-            <button
-              onClick={goNext}
-              className="absolute right-5 text-white bg-black/50 p-2 rounded-full hover:bg-black"
-            >
-              <FaChevronRight size={24} />
-            </button>
+          <div className="mt-8 flex gap-5 h-[60vh] max-md:hidden">
+            <div className="w-[60%] bg-gray-300 rounded-xl"></div>
+            <div className="w-[40%] grid grid-cols-2 grid-rows-2 gap-5">
+              {[...Array(4)].map((_, i) => (
+                <div key={i} className="bg-gray-300 w-full h-full rounded-xl"></div>
+              ))}
+            </div>
           </div>
         </div>
+      ) : (
+        <>
+          {/* ✅ Actual Loaded Content */}
+          <div className="flex flex-wrap flex-col items-start justify-between gap-2">
+            {userName && (
+              <p className="font-medium text-lg font-jakarta bg-gradient-to-r from-[#0E598F] to-[#041A29] text-transparent bg-clip-text ">
+                {`Welcome, ${userName}`}
+              </p>
+            )}
+
+            <p className="font-semibold text-2xl md:text-4xl">
+              {apiData.title}
+            </p>
+
+            <div className="flex flex-wrap gap-5 justify-between w-full">
+              <div className="flex gap-5 ">
+                {apiData.member_capacity && (
+                  <div className="flex items-center flex-wrap gap-1">
+                    <img src={guests} alt="" className="object-contain" />
+                    <p className="text-gray-600">
+                      {apiData.member_capacity}{" "}
+                      {apiData.member_capacity === "1" ? "member" : "members"}
+                    </p>
+                  </div>
+                )}
+
+                {apiData.current_location && (
+                  <div className="flex items-center gap-1">
+                    <img src={locationimg} alt="" className="object-contain" />
+                    <p
+                      className="text-gray-600"
+                      dangerouslySetInnerHTML={{
+                        __html: cleaned,
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex w-full sm:w-fit flex-row flex-wrap md:flex-col gap-5 ">
+                <div className="flex flex-wrap justify-between sm:justify-start w-full sm:w-fit items-center gap-2 md:gap-5">
+                  <FacebookShareButton
+                    url={currentUrl}
+                    quote={metaDescription}
+                    hashtag="#innerpece"
+                  >
+                    <div className="flex items-center cursor-pointer border-2 hover:bg-[#0965FE] hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
+                      <FacebookIcon size={22} round={true} />
+                      <p className="text-xs md:text-base">Share</p>
+                    </div>
+                  </FacebookShareButton>
+
+                  <LinkedinShareButton
+                    url={currentUrl}
+                    quote={metaDescription}
+                    hashtag="#innerpece"
+                  >
+                    <div className="flex items-center cursor-pointer border-2 hover:bg-[#0077B5] hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
+                      <LinkedinIcon size={22} round={true} />
+                      <p className="text-xs md:text-base">Share</p>
+                    </div>
+                  </LinkedinShareButton>
+
+                  <WhatsappShareButton
+                    url={currentUrl}
+                    quote={metaDescription}
+                    hashtag="#innerpece"
+                  >
+                    <div className="flex items-center cursor-pointer border-2 hover:bg-[#25D366] hover:border-white border-gray-700 text-gray-700 hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 px-3">
+                      <WhatsappIcon size={22} round={true} />
+                      <p className="text-xs md:text-base">Share</p>
+                    </div>
+                  </WhatsappShareButton>
+
+                  {/* Wishlist */}
+                  <div
+                    className="flex items-center cursor-pointer border-2 hover:bg-red-500 hover:border-white border-gray-700 text-gray-700 text-2xl sm:text-base hover:text-white transition-all ease-in duration-200 rounded-full p-2 gap-2 "
+                    onClick={() => handleWishlistClick(id)}
+                  >
+                    {isWishlisted ? (
+                      <IoHeartSharp className="text-red-300 " />
+                    ) : (
+                      <IoHeartOutline />
+                    )}
+                    <p className="hidden md:block">WishList</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {apiData && apiData.gallery_img && (
+            <div className="flex gap-5 mt-5 h-[60vh] max-md:hidden">
+              <img
+                src={`https://backoffice.innerpece.com/${apiData.gallery_img[0]}`}
+                alt=""
+                className="rounded-xl w-[60%] h-full object-cover"
+              />
+
+              <div className="w-[40%] grid grid-cols-2 grid-rows-2 gap-5">
+                {apiData.gallery_img.slice(1, 5).map((img, index) => (
+                  <div
+                    onClick={() => openModal(index + 1)}
+                    key={index}
+                    className="w-full h-full relative cursor-pointer "
+                  >
+                    <img
+                      src={`https://backoffice.innerpece.com/${img}`}
+                      alt=""
+                      className="rounded-xl w-full h-full object-cover absolute"
+                    />
+                    {index === 3 && (
+                      <div
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openModal(0);
+                        }}
+                        className="flex items-center gap-3 absolute bottom-2 right-2 bg-white rounded-full px-4 py-1"
+                      >
+                        <FaImage />
+                        <p className="font-medium text-sm text-black">See All</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {seeAllImageModalOpen && (
+            <div className="fixed inset-0 z-[200] flex items-center justify-center bg-black/50 backdrop-blur-xl">
+              <div className="absolute w-full top-4 right-4 flex items-center justify-between">
+                <p></p>
+                <p className="text-white font-dmSans font-semibold">
+                  {currentIndex1 + 1} / {combinedGalleryImagesAndStayImages.length}
+                </p>
+                <button
+                  onClick={closeModal}
+                  className="text-white bg-black/50 p-2 rounded-full hover:bg-black"
+                >
+                  <FaTimes size={20} />
+                </button>
+              </div>
+
+              <div className="relative flex items-center justify-center w-full">
+                <button
+                  onClick={goPrev}
+                  className="absolute left-5 text-white bg-black/50 p-2 rounded-full hover:bg-black"
+                >
+                  <FaChevronLeft size={24} />
+                </button>
+
+                <img
+                  src={`https://backoffice.innerpece.com/${combinedGalleryImagesAndStayImages[currentIndex1]}`}
+                  alt="modal-img"
+                  className={`w-[80vw] h-[80vh] object-cover rounded-xl transition-opacity duration-200 ease-out ${
+                    isFading ? "opacity-0" : "opacity-100"
+                  }`}
+                />
+
+                <button
+                  onClick={goNext}
+                  className="absolute right-5 text-white bg-black/50 p-2 rounded-full hover:bg-black"
+                >
+                  <FaChevronRight size={24} />
+                </button>
+              </div>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

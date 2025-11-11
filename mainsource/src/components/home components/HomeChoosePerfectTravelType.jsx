@@ -9,8 +9,6 @@ import "react-multi-carousel/lib/styles.css";
 import Marquee from "react-fast-marquee";
 
 const HomeChoosePerfectTravelType = () => {
- 
-
   const items = [
     { image: traveltype5, name: "Trips for your peace" },
     { image: dummy2, name: "Trips for beaches & water activities" },
@@ -89,12 +87,7 @@ const HomeChoosePerfectTravelType = () => {
       </div> */}
 
       <div className="w-full md:w-2/3 h-full rounded-xl overflow-hidden">
-        <Marquee
-          speed={60}
-          gradient={false}
-          pauseOnHover={false}
-          loop={0} 
-        >
+        <Marquee speed={60} gradient={false} pauseOnHover={false} loop={0}>
           {items.map((item, index) => (
             <div
               key={index}
@@ -106,7 +99,7 @@ const HomeChoosePerfectTravelType = () => {
                 className="absolute w-full h-full object-cover"
               />
 
-{/* <ParallaxImage  src={item.image}  alt="travel type"/> */}
+              {/* <ParallaxImage  src={item.image}  alt="travel type"/> */}
 
               <div className="absolute w-full h-full z-10 bg-gradient-to-b from-black to-transparent"></div>
               <div className="absolute top-2 w-full z-10 font-jost tracking-[0.2em] uppercase text-sm text-white text-center p-2 [text-shadow:2px_2px_4px_rgba(0,0,0,0.5)]">

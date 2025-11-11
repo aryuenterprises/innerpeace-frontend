@@ -34,10 +34,12 @@ import { FaChildReaching } from "react-icons/fa6";
 import { FaChild } from "react-icons/fa6";
 import { FaBirthdayCake } from "react-icons/fa";
 import { GiLovers } from "react-icons/gi";
-import { IoClose } from "react-icons/io5";
+import { IoChevronDown, IoClose } from "react-icons/io5";
 import { IoLocationSharp } from "react-icons/io5";
 import { useGoogleLogin } from "@react-oauth/google";
-
+import CustomDatePicker from "./CustomDatePicker";
+import { IoCalendarNumberSharp } from "react-icons/io5";
+import telegram from "../assets/telegram.png";
 
 function Mainbar({
   highlightsRef,
@@ -67,8 +69,6 @@ function Mainbar({
   const slicedPathName = window.location.pathname.split("/")[1];
   const slicedUserId = window.location.href.split("#")[1];
   const slicedStayId = window.location.href.split("#")[2];
-  // console.log(slicedUserId);
-  // console.log(slicedStayId);
 
   useEffect(() => {
     const loggedUserDetails = localStorage.getItem("loginDetails")
@@ -85,7 +85,9 @@ function Mainbar({
         dob: loggedUser_dob,
       } = loggedUserDetails;
 
-      setName(loggedUser_fistName + " " + loggedUser_lastName);
+      setName(`${loggedUser_fistName} ${loggedUser_lastName || ""}`.trim());
+
+      // setName(loggedUser_fistName + " " + loggedUser_lastName);
       setEmail(loggedUser_email);
       setPhone(loggedUser_phone);
       setYourResidenceLocation(loggedUser_city);
@@ -236,7 +238,8 @@ function Mainbar({
           if (metaOgImage) {
             metaOgImage.setAttribute(
               "content",
-              `https://backoffice.innerpece.com/${apiData.cover_img}` || ""
+              `https://backoffice.innerpece.com/${apiData.cover_img}` ||
+                ""
             );
           }
         } catch (err) {
@@ -278,6 +281,7 @@ function Mainbar({
 
   const handleLoginClick = () => {
     setLoginClicked(true);
+    setBookNowClicked(false);
   };
 
   const [loginEmail, setLoginEmail] = useState("");
@@ -386,7 +390,6 @@ function Mainbar({
     return cleaned;
   };
 
-  // **************************************************************************//
   const [openIndex, setOpenIndex] = useState(null);
 
   const toggleIndex = (index) => {
@@ -411,6 +414,7 @@ function Mainbar({
   const [maleCount, setMaleCount] = useState("");
   const [femaleCount, setFemaleCount] = useState("");
   const [travelDate, setTravelDate] = useState("");
+  const [travelEndDate, setTravelEndDate] = useState("");
   const [howManyRoomsYouNeed, setHowManyRoomsYouNeed] = useState("");
   const [comments, setCommends] = useState("");
   const [map, setMap] = useState("");
@@ -422,9 +426,15 @@ function Mainbar({
   const [selectedPackage, setSelectedPackage] = useState("");
   const [priceSelected, setPriceSelected] = useState("");
   const [show, setShow] = useState(false);
-  const handleShow = () => setShow(true);
   const [errors, setErrors] = useState({});
   const [bookNowClicked, setBookNowClicked] = useState(false);
+  const [pricingCalculatorClicked, setPricingCalculatorClicked] =
+    useState(false);
+
+  const handleShow = () => {
+    setShow(true);
+    setBookNowClicked(false);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -441,6 +451,7 @@ function Mainbar({
     setSuccess(false);
     setLoading(false);
     setShow(false);
+    setErrors({});
   };
 
   const onChangePrice = (item, index) => {
@@ -475,6 +486,7 @@ function Mainbar({
           rooms_count: howManyRoomsYouNeed,
           total_count: totalCount,
           travel_date: travelDate,
+          travel_enddate: travelEndDate,
           travel_destination: apiData.title,
           male_count: maleCount,
           female_count: femaleCount,
@@ -495,36 +507,39 @@ function Mainbar({
 
       // Successful submission
       setLoadingform("");
-      setSuccess(response.data.message);
+      // setSuccess(response.data.message);
       setErrors({});
-
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: "Submitted successfully",
+        showConfirmButton: false,
+        timer: 1500,
+      });
       // Clear form values
-      // setName("");
-      // setPhone("");
-      // setEmail("");
+
       setCommends("");
       setBudgetPerHead("");
       setIsCabNeed("");
       setHowManyDays("");
-      // setYourResidenceLocation("");
       setHowManyRoomsYouNeed("");
       setTotalCount("");
       setTravelDate("");
+      setTravelEndDate("");
       setTravelDestination("");
       setMaleCount("");
       setFemaleCount("");
       setChildCount("");
       setChildAge([]);
-      setDob("");
-      setEngagementDate("");
+      // setDob("");
+      // setEngagementDate("");
 
       // Clear success message after 5 seconds
-      setTimeout(() => {
-        setSuccess("");
-        setShow(false);
-      }, 3000); // 5000 ms = 5 seconds
 
       setBookNowClicked(false);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000); // 5000 ms = 5 seconds
     } catch (error) {
       // Handle validation errors if any
       setLoadingform("");
@@ -537,46 +552,18 @@ function Mainbar({
     }
   };
 
-  // this will stop scroll when modal is open
+  // this will stop scroll when model is open
   useEffect(() => {
-    // Add or remove the 'overflow-hidden' class on the <body> based on modal state
-    if (loginCliked) {
-      document.body.classList.add("overflow-hidden");
+    if (loginCliked || show || pricingCalculatorClicked) {
+      document.body.style.overflow = "hidden";
     } else {
-      document.body.classList.remove("overflow-hidden");
+      document.body.style.overflow = "";
     }
 
-    // Clean up on component unmount
     return () => {
-      document.body.classList.remove("overflow-hidden");
+      document.body.style.overflow = "";
     };
-  }, [loginCliked]);
-
-  const onClickStayName = async (id) => {
-    navigate(`/staysdetails/${id}`, {
-      state: { id },
-    });
-
-    window.scrollTo({
-      top: 0,
-      behavior: "instant",
-    });
-  };
-
-  const responsive = {
-    desktop: {
-      breakpoint: { max: 3000, min: 1024 },
-      items: 1, // Show one image at a time inside the card
-    },
-    tablet: {
-      breakpoint: { max: 1024, min: 640 },
-      items: 1,
-    },
-    mobile: {
-      breakpoint: { max: 640, min: 0 },
-      items: 1,
-    },
-  };
+  }, [loginCliked, show, pricingCalculatorClicked]);
 
   const CustomDot = ({ onClick, ...rest }) => {
     const { active } = rest;
@@ -589,16 +576,14 @@ function Mainbar({
         className="inline-block mx-1"
       >
         <button
-          className={`transition-all duration-500 h-2 rounded-full ${
-            active ? "bg-white w-10" : "bg-white/50 w-3"
+          className={`transition-all duration-500 h-1.5 rounded-full ${
+            active ? "bg-white w-8" : "bg-white/50 w-3"
           }`}
         />
       </li>
     );
   };
 
-
-  
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
       try {
@@ -662,61 +647,59 @@ function Mainbar({
         timer: 2500,
       });
     }
-  };  
+  };
+
+  const handleCardClick = (id) => {
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+
+    const url = `/staysdetails/${id}`;
+    window.open(url, "_blank"); // opens in new tab
+  };
+
+  const onChangeChildAge = (e, key, index) => {
+    const value = e.target.value;
+
+    // Allow only up to 10 digits (numbers only)
+    if (/^\d{0,10}$/.test(value)) {
+      const updatedChildCount = [...childAge];
+      updatedChildCount[index] = value;
+      setChildAge(updatedChildCount);
+    }
+  };
+
+  const responsive = {
+    desktop: {
+      breakpoint: { max: 3000, min: 1024 },
+      items: 1, // Show one image at a time inside the card
+    },
+    tablet: {
+      breakpoint: { max: 1024, min: 640 },
+      items: 1,
+    },
+    mobile: {
+      breakpoint: { max: 640, min: 0 },
+      items: 1,
+    },
+  };
+
+  const onClickStayName = (id) => {
+    navigate(`/staysdetails/${id}`, {
+      state: { id },
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "instant",
+    });
+  };
+
+  const [packagePricingDropDown, setPackagePricingDropdown] = useState(false);
 
   return (
     <div className="w-full md:basis-[45%] bg-[#FEFEFE] xl:basis-[55%] overflow-x-hidden font-mulish  flex-grow ">
-      {apiData.gallery_img && (
-        <Carousel
-          swipeable={true}
-          draggable={true}
-          pauseOnHover={false}
-          responsive={{
-            superLargeDesktop: {
-              breakpoint: { max: 4000, min: 1441 },
-              items: 1,
-            },
-            desktop: {
-              breakpoint: { max: 1440, min: 1024 },
-              items: 1,
-            },
-            tablet: {
-              breakpoint: { max: 1024, min: 640 },
-              items: 1,
-            },
-            mobile: {
-              breakpoint: { max: 640, min: 0 },
-              items: 1,
-            },
-          }}
-          infinite={true}
-          autoPlay={true}
-          autoPlaySpeed={5000}
-          arrows={true}
-          keyBoardControl={true}
-          transitionDuration={1000}
-          containerClass="carousel-container mx-auto z-0 w-full object-cover rounded-xl mt-5"
-          itemClass="carousel-item-padding-40-px block shadow-lg   object-cover shadow-black/10 "
-        >
-          {apiData.gallery_img.map((item, index) => (
-            <div
-              key={item.id || index}
-              className="overflow-hidden block md:hidden  "
-            >
-              <img
-                src={
-                  item
-                    ? `https://backoffice.innerpece.com/${item}`
-                    : defaultimage
-                }
-                alt={`Gallery Image ${index + 1}`}
-                className="h-[30vh]  lg:h-[440px] w-full object-cover "
-              />
-            </div>
-          ))}
-        </Carousel>
-      )}
-
       {apiData.program_desc && (
         <>
           <div
@@ -735,7 +718,6 @@ function Mainbar({
           ></p>
         </>
       )}
-
       {apiData.tour_planning && (
         <div ref={TourPlanningRef} className="mt-8 md:mt-10">
           <div className="flex gap-2 mt-8 items-center">
@@ -755,8 +737,8 @@ function Mainbar({
                     onClick={() => toggleIndex(index)}
                     className="w-full flex justify-between items-center text-left font-mulish text-[#0E598F] font-semibold focus:outline-none"
                   >
-                    <div className="flex gap-2 items-center">
-                      <span>{item.title}</span>
+                    <div className="flex gap-2 ">
+                      <span className="shrink-0">{item.title}</span>
                       {/* <p className="border-black font-semibold border-2 h-4"></p> */}
                       <p className="text-black font-medium">{item.subtitle}</p>
                     </div>
@@ -787,45 +769,9 @@ function Mainbar({
                 </div>
               );
             })}
-
-            {/* {Object.keys(apiData.tour_planning).map((key, index) => {
-              const item = apiData.tour_planning[key];
-              const isOpen = openIndex === index;
-
-              return (
-                <div key={key} className="pb-2">
-                  <button
-                    onClick={() => toggleIndex(index)}
-                    className="w-full flex justify-between items-center text-left font-mulish text-[#0E598F] font-semibold focus:outline-none"
-                  >
-                    <div className="flex gap-2 items-center flex-wrap">
-                      <span>{item.title}</span>
-                      <p className="border-black font-semibold border-2 h-4"></p>
-                      <p className="text-black font-medium">{item.subtitle}</p>
-                    </div>
-                    <FaChevronDown
-                      className={`transition-transform text-black duration-300 ${
-                        isOpen ? "rotate-180" : "rotate-0"
-                      }`}
-                    />
-                  </button>
-
-                  <div
-                    className={`overflow-hidden transition-all duration-500 ease-out ${
-                      isOpen ? " opacity-100 mt-2" : "max-h-0 opacity-0"
-                    }`}
-                  >
-                    <p className="text-[#0D3756] font-normal">
-                      {item.description}
-                    </p>
-                  </div>
-                </div>
-              );
-            })} */}
           </div>
         </div>
       )}
-
       {apiData.amenity_details &&
         Object.keys(apiData.amenity_details).length > 0 && (
           <div className="mt-8 md:mt-10">
@@ -855,7 +801,6 @@ function Mainbar({
             </div>
           </div>
         )}
-
       {apiData.foodBeverages &&
         Object.keys(apiData.foodBeverages).length > 0 && (
           <div className="    mt-8 md:mt-10 ">
@@ -890,7 +835,6 @@ function Mainbar({
             </div>
           </div>
         )}
-
       {apiData.safety_features &&
         Object.keys(apiData.safety_features).length > 0 && (
           <div className="w-50vw  mt-8 md:mt-10 ">
@@ -924,7 +868,6 @@ function Mainbar({
             </div>
           </div>
         )}
-
       {apiData.activities && Object.keys(apiData.activities).length > 0 && (
         <div className="mt-8 md:mt-10">
           {/* <p className="font-semibold text-2xl ">
@@ -958,7 +901,6 @@ function Mainbar({
           </div>
         </div>
       )}
-
       {apiData.payment_policy && (
         <div className="mt-8 md:mt-10  ">
           <div className="flex gap-2 mt-8 items-center">
@@ -980,7 +922,6 @@ function Mainbar({
           )}
         </div>
       )}
-
       {apiData.important_info && apiData.important_info !== "<p><br></p>" && (
         <div ref={informationRef} className="mt-8 md:mt-10   ">
           <div className="flex gap-2 mt-8 items-center">
@@ -1004,7 +945,6 @@ function Mainbar({
           </div>
         </div>
       )}
-
       {apiData.program_inclusion &&
         apiData.program_inclusion !== "<p><br></p>" && (
           <div className="mt-8 md:mt-10   ">
@@ -1026,7 +966,6 @@ function Mainbar({
             </div>
           </div>
         )}
-
       {apiData.program_exclusion &&
         apiData.program_exclusion !== "<p><br></p>" && (
           <div className="mt-8 md:mt-10   ">
@@ -1051,64 +990,153 @@ function Mainbar({
 
       {/* Price Options */}
       {apiData?.price_amount?.length > 0 && (
-        <div className="block shadow-[0_0_20px_rgba(0,0,0,0.3)] border shadow-black/20  mt-8  mb-5 bg-white p-4  rounded-lg  md:hidden">
-          <div className="flex gap-2 items-center justify-between">
-            <div className="flex gap-2 items-center">
-              <p className="border-l-[7px] h-8  border-sky-500 "></p>
-              <p className="font-semibold text-xl md:text-2xl  text-[#040404]">
-                Pricing
-              </p>
+        <>
+          {!slicedUserId && (
+            <div className="block shadow-[0_0_20px_rgba(0,0,0,0.3)] border shadow-black/20  mt-8  mb-5 bg-white p-4  rounded-lg  md:hidden ">
+              <div className="flex gap-2 items-center justify-between">
+                <div className="flex gap-2 items-center">
+                  <p className="border-l-[7px] h-8  border-sky-500 "></p>
+                  <p className="font-semibold text-xl md:text-2xl  text-[#040404]">
+                    Pricing
+                  </p>
+                </div>
+
+                <p className="text-[#8E8E8E] text-xs">Per person</p>
+              </div>
+
+              <div className="flex flex-col items-start gap-3 mt-5 md:leading-7">
+                {(() => {
+                  // find last non-null index once
+                  const lastIndex = apiData.price_title
+                    .map((v, i) => (v !== null ? i : -1))
+                    .filter((i) => i !== -1)
+                    .pop();
+
+                  return apiData.price_title.map((item, index, array) => (
+                    <React.Fragment key={index}>
+                      {item && (
+                        <>
+                          <label className="flex items-center cursor-pointer gap-2 w-full">
+                            <input
+                              type="radio"
+                              id={`price-${index}`}
+                              value={item}
+                              checked={selectedPackage === item}
+                              onChange={() => onChangePrice(item, index)}
+                              className="hidden peer"
+                            />
+                            <span className="w-4 h-4 flex-shrink-0 rounded-full border-2 border-gray-400 peer-checked:bg-blue-500 peer-checked:border-blue-500"></span>
+
+                            <span className="text-black font-medium">
+                              {item}
+                            </span>
+                            <span className="font-semibold text-sky-950 text-xl ml-auto">
+                              ₹
+                              {Number(
+                                apiData.price_amount[index] || 0
+                              ).toLocaleString("en-IN")}
+                            </span>
+                          </label>
+
+                          {index !== lastIndex && (
+                            <div className="border border-b border-blue-400/20 w-full"></div>
+                          )}
+                        </>
+                      )}
+                    </React.Fragment>
+                  ));
+                })()}
+              </div>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* customer package price */}
+      {slicedUserId && (
+        <div className="relative block lg:hidden w-full mt-8 md:mt-10  bg-white border border-gray-100 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] overflow-hidden transition-all duration-500 hover:shadow-[0_8px_30px_rgba(0,0,0,0.1)]">
+          {/* Gradient Accent Bar */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-[#0E598F] "></div>
+
+          {/* Content */}
+          <div className="flex flex-col gap-5 p-4">
+            {/* Header */}
+            <div className="flex justify-between gap-3 flex-wrap items-center">
+              <div className="flex flex-col">
+                <p className="text-gray-600 text-sm font-medium uppercase tracking-wider">
+                  Total Amount
+                </p>
+                <p className=" font-bold text-gray-900 tracking-tight">
+                  {/* ₹{apiData?.pricing_calculator?.grandTotal} */}₹
+                  {Number(
+                    apiData?.pricing_calculator?.grand_total
+                  ).toLocaleString("en-IN")}
+                </p>
+              </div>
+              <div className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full">
+                Affordable Adventures
+              </div>
             </div>
 
-            <p className="text-[#8E8E8E] text-xs">Per person</p>
-          </div>
+            {/* Price Breakdown Button */}
+            <button
+              onClick={() => setPricingCalculatorClicked(true)}
+              className="w-fit text-sm text-blue-600 hover:text-blue-800 flex items-center gap-1 underline underline-offset-4 transition-all"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z"
+                />
+              </svg>
+              View Price Breakdown
+            </button>
 
-          <div className="flex flex-col items-start gap-5 mt-5 md:leading-7">
-            {(() => {
-              // find last non-null index once
-              const lastIndex = apiData.price_title
-                .map((v, i) => (v !== null ? i : -1))
-                .filter((i) => i !== -1)
-                .pop();
-
-              return apiData.price_title.map((item, index, array) => (
-                <React.Fragment key={index}>
-                  {item && (
-                    <>
-                      <label className="flex items-center cursor-pointer gap-2 w-full">
-                        <input
-                          type="radio"
-                          id={`price-${index}`}
-                          value={item}
-                          checked={selectedPackage === item}
-                          onChange={() => onChangePrice(item, index)}
-                          className="hidden peer"
-                        />
-                        {/* custom radio icon */}
-                        <span className="w-4 h-4 flex-shrink-0 rounded-full border-2 border-gray-400 peer-checked:bg-blue-500 peer-checked:border-blue-500"></span>
-
-                        <span className="text-black font-medium">{item}</span>
-                        <span className="font-semibold text-sky-950 text-xl ml-auto">
-                          ₹
-                          {Number(
-                            apiData.price_amount[index] || 0
-                          ).toLocaleString("en-IN")}
-                        </span>
-                      </label>
-
-                      {index !== lastIndex && (
-                        <div className="border border-b border-blue-400/20 w-full"></div>
-                      )}
-                    </>
-                  )}
-                </React.Fragment>
-              ));
-            })()}
+             <div className="border-t border-gray-200"></div>
+            
+                        {/* Booking Button */}
+                        <button
+                          onClick={handleShow}
+                          disabled={!userDetails}
+                          className={`group flex items-center justify-center gap-2 w-full py-2 rounded-xl text-sm font-medium tracking-wide transition-all duration-300 ${
+                            userDetails
+                              ? "bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 hover:shadow-[0_4px_20px_rgba(239,68,68,0.4)]"
+                              : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                          }`}
+                        >
+                          <img
+                            src={telegram}
+                            alt=""
+                            className="w-5 h-5 transition-transform duration-300 group-hover:scale-110"
+                          />
+                          Book Now
+                        </button>
+            
+                         {!userDetails && (
+                          <p className="text-red-500 text-center">
+                            Please{" "}
+                            <span
+                              className="underline cursor-pointer"
+                              onClick={handleLoginClick}
+                            >
+                              Login
+                            </span>{" "}
+                            to book now
+                          </p>
+                        )}
           </div>
         </div>
       )}
 
-      {apiData.stay_details_list && (
+      {apiData.stay_details_list && apiData.stay_details_list.length > 0 && (
         <div className="mt-8 md:mt-10   ">
           <div className="flex gap-2 mt-8 items-center">
             <p className="border-l-[7px] h-8  border-[#0E598F] "></p>
@@ -1125,8 +1153,8 @@ function Mainbar({
           </div> */}
 
           <div
-            onClick={() => onClickStayName(apiData.stay_details_list.id)}
-            // onClick={() => handleCardClick(item.id)}
+            // onClick={() => onClickStayName(apiData.stay_details_list.id)}
+            onClick={() => handleCardClick(apiData.stay_details_list[0].id)}
             className="flex-shrink-0 w-full lg:w-[30vw] cursor-pointer mt-3 md:mt-5 flex flex-col gap-1 font-jakarta border rounded-2xl border-gray-300"
           >
             <div>
@@ -1147,7 +1175,7 @@ function Mainbar({
                       <img
                         src={
                           item1
-                            ? `https://backoffice.innerpece.com/${item1}`
+                            ? `https://backoffice.innerpece.com//${item1}`
                             : defaultimage
                         }
                         alt=""
@@ -1168,32 +1196,36 @@ function Mainbar({
             </div>
 
             <div className="flex flex-col px-3 gap-x-5 justify-between flex-wrap p-3 font-PlusJakartaSansMedium font-semibold">
-              <p>{apiData.stay_details_list.stay_title}</p>
+              <p>{apiData.stay_details_list[0].stay_title}</p>
 
               <div className="flex items-center gap-2 mt-2">
                 <IoLocationSharp className="text-sky-800" />
                 <p className="font-normal text-sky-800">
-                  {apiData.stay_details_list.tag_line}
+                  {apiData.stay_details_list[0].tag_line}
                 </p>
               </div>
             </div>
           </div>
         </div>
       )}
-
       {/* Floating Button */}
-      <div
-        onClick={() => setBookNowClicked(!bookNowClicked)}
-        className="fixed md:hidden flex items-center justify-center px-5 py-4 shadow-2xl shadow-black left-0 bottom-0 w-full bg-white z-20"
-      >
-        <button className="w-full font-semibold text-white rounded-lg text-base py-3 bg-gradient-to-r from-sky-600 to-sky-800 transition-transform hover:scale-105 duration-300">
-          Book Now
-        </button>
-      </div>
-
+      {!slicedUserId && !show && !loginCliked && (
+        <div
+          onClick={() =>
+            // slicedUserId ? handleShow() : 
+            setBookNowClicked(!bookNowClicked)
+          }
+          // onClick={handleShow}
+          className="fixed lg:hidden flex items-center justify-center px-5 py-4 shadow-2xl shadow-black left-0 bottom-0 w-full bg-white z-[1000]"
+        >
+          <button className="w-full font-semibold text-white rounded-lg text-base py-3 bg-gradient-to-r from-sky-600 to-sky-800 transition-transform hover:scale-105 duration-300">
+            Book Now
+          </button>
+        </div>
+      )}
       {/* Slide-Up Panel */}
       <div
-        className={`fixed bottom-0 left-0 right-0 z-30 transition-all duration-500 ease-in-out transform ${
+        className={`fixed bottom-0 left-0 right-0 z-[1000] transition-all duration-500 ease-in-out transform ${
           bookNowClicked
             ? "translate-y-0 opacity-100"
             : "translate-y-full opacity-0"
@@ -1268,8 +1300,8 @@ function Mainbar({
       </div>
 
       {show && (
-        <div className="fixed inset-0 z-50 flex items-center bg-black/10 justify-center backdrop-blur overflow-y-auto">
-          <div className="bg-white rounded-lg shadow-lg max-w-full w-[100%] sm:w-[80%] h-screen  sm:max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center bg-black/10 backdrop-blur">
+          <div className="bg-white rounded-lg shadow-lg w-full sm:w-[80%] max-h-dvh overflow-y-auto">
             <button
               onClick={handleClose}
               className="text-gray-500 w-full pe-5 pt-3 font-extrabold text-xl hover:text-gray-700 focus:outline-none placeholder:text-gray-600 placeholder:text-sm flex justify-end"
@@ -1280,16 +1312,6 @@ function Mainbar({
             <div className="flex  p-6 border-b">
               {/* Image Section */}
               <div className="flex flex-col-reverse md:flex-row w-full gap-8  ">
-                {/* <img
-                          className="md:w-1/2 h-40  object-cover rounded-lg"
-                          src={
-                            apiData.gallery_img && apiData.gallery_img[0]
-                              ? `https://backoffice.innerpece.com/${apiData.gallery_img[0]}`
-                              : defaultimg
-                          }
-                          alt=""
-                        /> */}
-
                 {homeImage.length > 0 && (
                   <div className="relative w-full h-52 md:w-1/2 overflow-hidden">
                     {homeImage.map((image, index) => (
@@ -1315,17 +1337,33 @@ function Mainbar({
                     {apiData.title}
                   </h1>
                   <div className="  flex items-center gap-3 flex-wrap">
-                    {/* <span className="block  text-gray-500">Starting From</span>
-                            
-                            <span className="text-green-800 font-semibold text-xl ms-1">
-                              ₹{`${apiData.price_amount && apiData.price_amount[0]}`}
-                            </span> */}
-                    <p>
+                    {/* <p>
                       {selectedPackage} :{" "}
                       <span className="font-semibold text-xl lg:text-2xl text-green-800">
                         ₹ {Number(priceSelected).toLocaleString("en-IN")}
                       </span>{" "}
-                    </p>
+                    </p> */}
+
+                    {slicedUserId ? (
+                      <div className="flex items-center gap-5">
+                        <p className="text-gray-600 text-sm font-medium uppercase tracking-wider">
+                          Total Amount
+                        </p>
+                        <p className=" font-bold text-green-800 ">
+                          {/* ₹{apiData?.pricing_calculator?.stayTotal} */}₹
+                          {Number(
+                            apiData?.pricing_calculator?.grand_total
+                          ).toLocaleString("en-IN")}
+                        </p>
+                      </div>
+                    ) : (
+                      <p>
+                        {selectedPackage} :{" "}
+                        <span className="font-semibold text-xl lg:text-2xl text-green-800">
+                          ₹ {Number(priceSelected).toLocaleString("en-IN")}
+                        </span>{" "}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1336,7 +1374,11 @@ function Mainbar({
               <div className="flex flex-col md:flex-row gap-5">
                 {/* Form Section */}
                 <div className="w-full">
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form
+                    onSubmit={handleSubmit}
+                    className="space-y-4"
+                    autoComplete="off"
+                  >
                     <div className="flex flex-col gap-4">
                       {/* name and email */}
                       <div className="flex gap-4 w-full flex-col sm:flex-row">
@@ -1396,13 +1438,27 @@ function Mainbar({
                               <MdOutlinePhone />
                             </span>
                             <input
+                              // type="text"
+                              // className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+
                               type="text"
-                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="Phone"
                               id="phone"
                               name="phone"
                               value={phone}
-                              onChange={(e) => setPhone(e.target.value)}
+                              // onChange={(e) => setPhone(e.target.value)}
+
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                // allow only digits and limit length
+                                if (/^\d{0,10}$/.test(value)) {
+                                  setPhone(value);
+                                }
+                              }}
                             />
                           </div>
                           {errors.phone && (
@@ -1485,7 +1541,7 @@ function Mainbar({
                             <span className="p-2">
                               <FaBirthdayCake />
                             </span>
-                            <input
+                            {/* <input
                               autoComplete="on"
                               type="text"
                               className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
@@ -1496,6 +1552,12 @@ function Mainbar({
                               onFocus={(e) => (e.target.type = "date")}
                               onBlur={(e) => (e.target.type = "text")}
                               onChange={(e) => setDob(e.target.value)}
+                            /> */}
+
+                            <CustomDatePicker
+                              value={dob}
+                              onChange={setDob}
+                              placeholder="Select DOB"
                             />
                           </div>
                         </div>
@@ -1508,7 +1570,7 @@ function Mainbar({
                             <span className="p-2">
                               <GiLovers />
                             </span>
-                            <input
+                            {/* <input
                               type="text"
                               className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
                               placeholder="Select Engagement Date"
@@ -1520,6 +1582,12 @@ function Mainbar({
                               onChange={(e) =>
                                 setEngagementDate(e.target.value)
                               }
+                            /> */}
+
+                            <CustomDatePicker
+                              value={engagementDate}
+                              onChange={setEngagementDate}
+                              placeholder="Select Engagement Date"
                             />
                           </div>
                         </div>
@@ -1531,13 +1599,23 @@ function Mainbar({
                               <FaCalendarDays />
                             </span>
                             <input
-                              type="number"
-                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              type="text"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="Number of days you would like to travel"
                               id="Number of days you would like to travel"
                               name="Number of days you would like to travel"
                               value={howManyDays}
-                              onChange={(e) => setHowManyDays(e.target.value)}
+                              // onChange={(e) => setHowManyDays(e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                // allow only digits and limit length
+                                if (/^\d{0,10}$/.test(value)) {
+                                  setHowManyDays(value);
+                                }
+                              }}
                             />
                           </div>
                           {errors.days && (
@@ -1549,32 +1627,6 @@ function Mainbar({
                       </div>
 
                       <div className="flex gap-4 w-full flex-col sm:flex-row">
-                        {/*Budget Per Head */}
-                        {/* <div className="flex flex-col sm:w-1/2">
-                                  <div className="flex items-center border rounded-md">
-                                    <span className="p-2">
-                                      <RiMoneyRupeeCircleFill />
-                                    </span>
-                                    <input
-                                      type="number"
-                                      className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                                      placeholder="Budget Per Head"
-                                      id="Budget Per Head"
-                                      name="Budget Per Head"
-                                      value={budgetPerHead}
-                                      onChange={(e) => setBudgetPerHead(e.target.value)}
-                                    />
-                                  </div>
-                                  <p className="text-gray-500 text-xs">
-                                    Note : Excluding flight/train cost
-                                  </p>
-                                  {errors.budget_per_head && (
-                                    <p className="text-red-500 text-xs">
-                                      {errors.budget_per_head[0]}
-                                    </p>
-                                  )}
-                                </div> */}
-
                         {/*total count*/}
                         <div className="flex flex-col sm:w-1/2">
                           <div className="flex items-center border rounded-md">
@@ -1582,13 +1634,23 @@ function Mainbar({
                               <FaPeopleLine />
                             </span>
                             <input
-                              type="number"
-                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              type="text"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="Total Count"
                               id="Total Count"
                               name="Total Count"
                               value={totalCount}
-                              onChange={(e) => setTotalCount(e.target.value)}
+                              // onChange={(e) => setTotalCount(e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                // allow only digits and limit length
+                                if (/^\d{0,10}$/.test(value)) {
+                                  setTotalCount(value);
+                                }
+                              }}
                             />
                           </div>
                           {errors.total_count && (
@@ -1604,13 +1666,23 @@ function Mainbar({
                               <FaMale />
                             </span>
                             <input
-                              type="number"
-                              className="w-full p-2 border-l focus:outline-none me-2 placeholder:text-gray-600 placeholder:text-sm "
+                              type="text"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="Male Count"
                               id="Male Count"
                               name="Male Count"
                               value={maleCount}
-                              onChange={(e) => setMaleCount(e.target.value)}
+                              // onChange={(e) => setMaleCount(e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                // allow only digits and limit length
+                                if (/^\d{0,10}$/.test(value)) {
+                                  setMaleCount(value);
+                                }
+                              }}
                             />
                           </div>
                           {errors.male_count && (
@@ -1630,13 +1702,23 @@ function Mainbar({
                               <FaFemale />
                             </span>
                             <input
-                              type="number"
-                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              type="text"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="Female Count"
                               id="Female Count"
                               name="Female Count"
                               value={femaleCount}
-                              onChange={(e) => setFemaleCount(e.target.value)}
+                              // onChange={(e) => setFemaleCount(e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                // allow only digits and limit length
+                                if (/^\d{0,10}$/.test(value)) {
+                                  setFemaleCount(value);
+                                }
+                              }}
                             />
                           </div>
                           {errors.female_count && (
@@ -1653,13 +1735,23 @@ function Mainbar({
                               <FaChildReaching />
                             </span>
                             <input
-                              type="number"
-                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                              type="text"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                               placeholder="Child Count"
                               id="Child Count"
                               name="Child Count"
                               value={childCount}
-                              onChange={(e) => setChildCount(e.target.value)}
+                              // onChange={(e) => setChildCount(e.target.value)}
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                // allow only digits and limit length
+                                if (/^\d{0,10}$/.test(value)) {
+                                  setChildCount(value);
+                                }
+                              }}
                             />
                           </div>
                           {errors.child_count && (
@@ -1684,15 +1776,30 @@ function Mainbar({
                                     <FaChild />
                                   </span>
                                   <input
-                                    id="number"
-                                    name="number"
-                                    type="number"
+                                    // id="number"
+                                    // name="number"
+                                    // type="number"
+                                    // placeholder={` ${index + 1}st Child Age`}
+                                    // className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                                    // onChange={(e) =>
+                                    //   onChangeChildAge(
+                                    //     e,
+                                    //     ` ${index + 1}st_Child_Age`,
+                                    //     index
+                                    //   )
+                                    // }
+
+                                    type="text"
+                                    inputMode="numeric" // shows numeric keypad on mobile
+                                    maxLength={10}
+                                    min={0}
+                                    className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                     placeholder={` ${index + 1}st Child Age`}
-                                    className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
+                                    value={childAge[index] || ""} // ✅ Controlled input
                                     onChange={(e) =>
                                       onChangeChildAge(
                                         e,
-                                        ` ${index + 1}st_Child_Age`,
+                                        `${index + 1}st_Child_Age`,
                                         index
                                       )
                                     }
@@ -1711,21 +1818,20 @@ function Mainbar({
                       <div className="flex gap-4 w-full flex-col sm:flex-row">
                         {/*travel date*/}
                         <div className="flex flex-col sm:w-1/2">
-                          <div className="flex items-center border rounded-md">
+                          <div className="relative flex items-center border rounded-md">
                             <span className="p-2">
                               <MdOutlineCalendarMonth />
                             </span>
-                            <input
-                              type="text"
-                              className="w-full p-2 border-l  focus:outline-none placeholder:text-gray-600 text-black placeholder:text-sm me-2"
-                              id="Travel Date"
-                              name="Travel Date"
+
+                            <CustomDatePicker
                               value={travelDate}
-                              onFocus={(e) => (e.target.type = "date")}
-                              onBlur={(e) => (e.target.type = "text")}
-                              placeholder="Select travel date"
-                              onChange={(e) => setTravelDate(e.target.value)}
+                              onChange={setTravelDate}
+                              placeholder="Select travel start date"
+                              pastDateRestrict={true}
                             />
+                            <span className="absolute right-2 text-gray-500 pointer-events-none">
+                              <IoCalendarNumberSharp />
+                            </span>
                           </div>
                           {errors.travel_date && (
                             <p className="text-red-500 text-xs">
@@ -1734,27 +1840,26 @@ function Mainbar({
                           )}
                         </div>
 
-                        {/*how many rooms you need*/}
                         <div className="flex flex-col sm:w-1/2">
-                          <div className="flex items-center border rounded-md">
+                          <div className="relative flex items-center border rounded-md w-full">
                             <span className="p-2">
-                              <FaHouse />
+                              <MdOutlineCalendarMonth />
                             </span>
-                            <input
-                              type="number"
-                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2"
-                              placeholder="No of rooms required"
-                              id="No of rooms required"
-                              name="No of rooms required"
-                              value={howManyRoomsYouNeed}
-                              onChange={(e) =>
-                                setHowManyRoomsYouNeed(e.target.value)
-                              }
+
+                            <CustomDatePicker
+                              value={travelEndDate}
+                              onChange={setTravelEndDate}
+                              placeholder="Select travel end date"
+                              pastDateRestrict={true}
                             />
+
+                            <span className="absolute right-2 text-gray-500 pointer-events-none">
+                              <IoCalendarNumberSharp />
+                            </span>
                           </div>
-                          {errors.rooms_count && (
+                          {errors.travel_enddate && (
                             <p className="text-red-500 text-xs">
-                              {errors.rooms_count[0]}
+                              {errors.travel_enddate[0]}
                             </p>
                           )}
                         </div>
@@ -1801,6 +1906,43 @@ function Mainbar({
                           )}
                         </div>
 
+                        {/*how many rooms you need*/}
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaHouse />
+                            </span>
+                            <input
+                              type="text"
+                              inputMode="numeric" // shows numeric keypad on mobile
+                              maxLength={10}
+                              className="w-full p-2 border-l focus:outline-none placeholder:text-gray-600 placeholder:text-sm me-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                              placeholder="No of rooms required"
+                              id="No of rooms required"
+                              name="No of rooms required"
+                              value={howManyRoomsYouNeed}
+                              // onChange={(e) =>
+                              //   setHowManyRoomsYouNeed(e.target.value)
+                              // }
+                              onChange={(e) => {
+                                const value = e.target.value;
+
+                                // allow only digits and limit length
+                                if (/^\d{0,10}$/.test(value)) {
+                                  setHowManyRoomsYouNeed(value);
+                                }
+                              }}
+                            />
+                          </div>
+                          {errors.rooms_count && (
+                            <p className="text-red-500 text-xs">
+                              {errors.rooms_count[0]}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      <div className="flex gap-4 w-full flex-col sm:flex-row">
                         {/* Comments Input */}
                         <div className="flex flex-col sm:w-1/2">
                           <div className="flex items-center border rounded-md">
@@ -1823,18 +1965,41 @@ function Mainbar({
                             </p>
                           )}
                         </div>
-                      </div>
 
-                      <div className="flex items-center border rounded-md">
-                        <span className="p-2">
-                          <FaPeopleLine />
-                        </span>
+                        <div className="flex flex-col sm:w-1/2">
+                          <div className="flex items-center border rounded-md">
+                            <span className="p-2">
+                              <FaPeopleLine />
+                            </span>
 
-                        <div className="flex flex-wrap gap-2 p-2 border-l">
-                          <p>{selectedPackage} :</p>
-                          <p>
-                            ₹ {Number(priceSelected).toLocaleString("en-IN")}
-                          </p>
+                            {/* <div className="flex flex-wrap gap-2 p-2 border-l">
+                              <p>{selectedPackage} :</p>
+                              <p>
+                                ₹{" "}
+                                {Number(priceSelected).toLocaleString("en-IN")}
+                              </p>
+                            </div> */}
+
+                            {slicedUserId ? (
+                              <div className="flex p-2 gap-2 border-l">
+                                ₹{" "}
+                                {Number(
+                                  apiData?.pricing_calculator?.grand_total
+                                ).toLocaleString("en-IN")}
+                                {/* <p>₹{apiData?.pricing_calculator?.stayTotal}</p> */}
+                              </div>
+                            ) : (
+                              <div className="flex p-2 gap-2 border-l">
+                                <p>{selectedPackage} :</p>
+                                <p>
+                                  ₹{" "}
+                                  {Number(priceSelected).toLocaleString(
+                                    "en-IN"
+                                  )}
+                                </p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -1844,11 +2009,11 @@ function Mainbar({
                         {success}
                       </div>
                     )}
-                    {loadingform && (
+                    {/* {loadingform && (
                       <div className="bg-orange-100  text-orange-700 p-2 rounded mb-4">
                         {loadingform}
                       </div>
-                    )}
+                    )} */}
                     {failure && (
                       <div className="bg-red-100  text-red-700 p-2 rounded mb-4">
                         {failure}
@@ -1856,12 +2021,52 @@ function Mainbar({
                     )}
 
                     {/* Submit Button */}
-                    <div className="text-center mt-4">
+                    {/* <div className="text-center mt-4">
                       <button
                         type="submit"
                         className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700"
                       >
                         Send me Details
+                      </button>
+                    </div> */}
+
+                    <div className="text-center mt-4 mx-auto">
+                      <button
+                        type="submit"
+                        disabled={loadingform}
+                        className={`flex items-center mx-auto justify-center gap-2 bg-blue-600 text-white py-2 px-4 rounded transition-all duration-200 ${
+                          loadingform
+                            ? "opacity-70 cursor-not-allowed"
+                            : "hover:bg-blue-700"
+                        }`}
+                      >
+                        {loadingform ? (
+                          <>
+                            <svg
+                              className="w-5 h-5 animate-spin text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                              ></path>
+                            </svg>
+                            <span>Sending...</span>
+                          </>
+                        ) : (
+                          "Send me Details"
+                        )}
                       </button>
                     </div>
                   </form>
@@ -1871,7 +2076,6 @@ function Mainbar({
           </div>
         </div>
       )}
-
       <div ref={reviewRef} className="mt-8 md:mt-10 max-lg:hidden">
         <div className="flex flex-wrap flex-col justify-start ">
           <div className="flex gap-2 ">
@@ -2208,6 +2412,161 @@ function Mainbar({
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {pricingCalculatorClicked && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-3 sm:px-4 py-4 sm:py-0">
+          {/* Modal Container */}
+          <div className="relative w-full max-w-xl bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden max-h-[90vh] flex flex-col">
+            {/* Header */}
+            <div className="flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
+              <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-800">
+                Price Breakdown
+              </h2>
+              <button
+                onClick={() => setPricingCalculatorClicked(false)}
+                className="text-gray-500 hover:text-gray-700 text-3xl leading-none"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* Body */}
+            <div className="p-4 sm:p-6 space-y-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent">
+              <div className="flex justify-between items-center border-b border-gray-200 py-2 ">
+                <span className="font-medium text-gray-600 capitalize">
+                  Package pricing
+                </span>
+                <span className="text-gray-900 font-semibold">
+                  ₹
+                  {Number(
+                    apiData?.pricing_calculator?.package_pricing
+                  ).toLocaleString("en-IN")}
+                </span>
+              </div>
+
+              <div className="border-b border-gray-200 overflow-hidden bg-white">
+                {/* Header (click to toggle) */}
+                <div
+                  onClick={() =>
+                    setPackagePricingDropdown(!packagePricingDropDown)
+                  }
+                  className="flex justify-between items-center cursor-pointer py-3   transition-colors"
+                >
+                  <span className="font-medium text-gray-600 capitalize">
+                    Pricing Calculator Price
+                  </span>
+                  <div className="flex items-center gap-1">
+                    <span className="text-gray-900 font-semibold">
+                      ₹
+                      {Number(
+                        Number(apiData.pricing_calculator.stayTotal) +
+                          Number(apiData.pricing_calculator.activityTotal) +
+                          Number(apiData.pricing_calculator.cabTotal)
+                      ).toLocaleString("en-IN")}
+                    </span>
+                    <IoChevronDown
+                      className={`text-gray-600 text-lg transform transition-transform duration-300 ${
+                        packagePricingDropDown ? "rotate-180" : ""
+                      }`}
+                    />
+                  </div>
+                </div>
+
+                {/* Dropdown content */}
+                <div
+                  className={`transition-all duration-500 ease-in-out  px-4 overflow-hidden ${
+                    packagePricingDropDown
+                      ? "max-h-40 opacity-100 py-3"
+                      : "max-h-0 opacity-0 py-0"
+                  }`}
+                >
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between text-gray-700">
+                      <span>Stay Total</span>
+                      <span>
+                        ₹
+                        {Number(
+                          apiData.pricing_calculator.stayTotal
+                        ).toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-gray-700">
+                      <span>Activity Total</span>
+                      <span>
+                        ₹
+                        {Number(
+                          apiData.pricing_calculator.activityTotal
+                        ).toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-gray-700">
+                      <span>Cab Total</span>
+                      <span>
+                        ₹
+                        {Number(
+                          apiData.pricing_calculator.cabTotal
+                        ).toLocaleString("en-IN")}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex justify-between items-center border-b border-gray-200 py-2 ">
+                <span className="font-medium text-gray-600 capitalize">
+                  Service fee + tax ({apiData?.pricing_calculator?.tax_amount}%)
+                </span>
+                <span className="text-gray-900 font-semibold">
+                  {/* ₹ */}
+                  {/* {Number(Number(
+                                  apiData?.pricing_calculator?.service_fee
+                                ).toLocaleString("en-IN")+Number(
+                                  apiData?.pricing_calculator?.tax_amount
+                                ).toLocaleString("en-IN"))} */}
+                  {/* {Number(
+                                  apiData?.pricing_calculator?.service_fee
+                                ).toLocaleString("en-IN")}{" "}
+                                + */}
+                  {/* ₹ */}
+                  {/* {Math.floor(
+                                  (Number(
+                                    Number(apiData.pricing_calculator.selected_value) +
+                                      Number(apiData.pricing_calculator.service_fee) +
+                                      Number(apiData.pricing_calculator.package_pricing)
+                                  ) *
+                                    Number(apiData.pricing_calculator.tax_amount)) /
+                                    100
+                                ).toLocaleString("en-IN")} */}
+                  {/* {Number(
+                                  apiData?.pricing_calculator?.tax_amount
+                                ).toLocaleString("en-IN")} */}
+                  ₹
+                  {(
+                    Number(apiData?.pricing_calculator?.service_fee) +
+                    ((Number(apiData?.pricing_calculator?.selected_value) +
+                      Number(apiData?.pricing_calculator?.service_fee) +
+                      Number(apiData?.pricing_calculator?.package_pricing)) *
+                      Number(apiData?.pricing_calculator?.tax_amount)) /
+                      100
+                  ).toLocaleString("en-IN")}
+                </span>
+              </div>
+
+              <div className="flex justify-between items-center">
+                <p className="text-gray-700 font-semibold text-lg">
+                  Grand Total
+                </p>
+                <p className="text-blue-600 font-bold text-2xl">
+                  {/* ₹{apiData.pricing_calculator.grandTotal} */}₹
+                  {Number(
+                    apiData.pricing_calculator.grand_total
+                  ).toLocaleString("en-IN")}
+                </p>
               </div>
             </div>
           </div>

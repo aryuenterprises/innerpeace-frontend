@@ -5,6 +5,8 @@ import defaultimg from "../../assets/defaultimg.png";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
+import ParallaxImage2 from "../ParallexImage2";
+import ParallaxImage from "../parallexImage";
 
 const HomePopularStays = () => {
   let navigate = useNavigate();
@@ -50,14 +52,14 @@ const HomePopularStays = () => {
   const SkeletonCard = ({ index }) => (
     <div
       key={index}
-      className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-600 flex-grow rounded-2xl animate-pulse"
+      className=" max-sm:hidden mx-2 h-80 md:h-96  bg-gray-300 flex-grow rounded-2xl animate-pulse"
     ></div>
   );
 
   const SkeletonCarouselCard = ({ index }) => (
     <div
       key={index}
-      className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-600   rounded-2xl animate-pulse"
+      className="w-[90vw] sm:w-[70vw] mx-auto h-80 sm:hidden  bg-gray-300   rounded-2xl animate-pulse"
     ></div>
   );
 
@@ -237,20 +239,20 @@ const HomePopularStays = () => {
                     >
                       <div
                         onClick={() => handleCardClick(item.id, item.city_name)}
-                        className="relative cursor-pointer group h-[260px] shadow-xl shadow-black/20 w-[260px] rounded-full overflow-hidden  "
+                        className="relative cursor-pointer group h-[260px] shadow-xl shadow-black/15 w-[260px] rounded-full overflow-hidden  border-[10px] border-white"
                       >
                         <div className="absolute inset-0 bg-gradient-to-b from-transparent from-60% to-black z-10"></div>
                         <img
                           src={
-                            item.city_image
-                              ? `https://backoffice.innerpece.com/${item.city_image}`
+                            item.stay_images
+                              ? `https://backoffice.innerpece.com/${item.stay_images}`
                               : defaultimg
                           }
-                          alt={item.city_name}
+                          alt={item.stay_alternate_name}
                           className="h-full w-full object-cover transform transition-transform duration-500 group-hover:scale-110"
                         />
                       </div>
-                      <p className="font-jost font-medium text-center text-xl text-black">
+                      <p className="font-rancho font-medium text-center text-3xl text-[#2D2D2D]">
                         {item.city_name}
                       </p>
                     </div>

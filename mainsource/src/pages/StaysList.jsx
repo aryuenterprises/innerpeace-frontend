@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 let Header = lazy(() => import("../components/Header"));
 let Footer = lazy(() => import("../components/Footer"));
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaLocationDot } from "react-icons/fa6";
@@ -17,6 +17,8 @@ import "react-multi-carousel/lib/styles.css";
 import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import defaultimg from "../assets/defaultimg.png";
 import TopHeader from "../components/TopHeader";
+import GoToTop from "../components/GoToTop";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 const StaysList = () => {
   const responsive = {
@@ -39,9 +41,7 @@ const StaysList = () => {
   }, []); // Empty dependency array ensures it runs once on mount
 
   const location = useLocation();
-
   const { id, stay_title } = location.state || {};
-
   const [apiData, setApiData] = useState([]);
   const [filteredApiData, setFilteredApiData] = useState([]);
   const [sortBy, setSortBy] = useState("");
@@ -70,13 +70,12 @@ const StaysList = () => {
 
   const pathName = window.location.pathname;
   const slicedLocationName = pathName.split("/")[3]?.split("-");
+  const slicedLocationId = pathName.split("/")[2];
 
   const mappedSlicedLocationName = slicedLocationName.map(
     (item) => item[0].toUpperCase() + item.slice(1)
   );
   const upperCasedLocationName = mappedSlicedLocationName.join(" ");
-
-  const slicedLocationid = pathName.split("/")[2];
 
   useEffect(() => {
     const fetchProgramData = async () => {
@@ -86,15 +85,14 @@ const StaysList = () => {
           "https://backoffice.innerpece.com/api/v1/get-stays",
           {
             params: {
-              destination: stay_title ? stay_title : slicedLocationName,
+              destination: id ? id : slicedLocationId,
             },
           }
-        );        
+        );
 
         setApiData(response.data);
         setFilteredApiData(response.data);
         setLoading(false);
-  
       } catch (err) {
         console.log(err);
 
@@ -104,11 +102,9 @@ const StaysList = () => {
     fetchProgramData();
   }, [pathName]);
 
-  
-
   const handleCardClick = (id, stay_title) => {
     navigate(`/staysdetails/${id}`, {
-      state: { id },
+      state: { id,stayCategories:true },
     });
 
     window.scrollTo({
@@ -116,7 +112,7 @@ const StaysList = () => {
       behavior: "instant",
     });
   };
-  
+
   useEffect(() => {
     if (filterButtonClicked) {
       document.body.classList.add("overflow-hidden");
@@ -127,61 +123,34 @@ const StaysList = () => {
     return () => document.body.classList.remove("overflow-hidden");
   }, [filterButtonClicked]);
 
-  const [sliceCount, setSliceCount] = useState(2);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1300) {
-        setSliceCount(3); // large screens
-      } else if (window.innerWidth >= 1024) {
-        setSliceCount(3); // large screens
-      } else if (window.innerWidth >= 768) {
-        setSliceCount(3); // large screens
-      } else if (window.innerWidth >= 500) {
-        setSliceCount(3); // small screens
-      } else {
-        setSliceCount(2); // small screens
-      }
-    };
-
-    // Initial check
-    handleResize();
-
-    // Event listener
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   const SkeletonLoader = () => {
     return (
-      <div className="animate-pulse flex flex-col  gap-4  w-full m">
+      <div className="animate-pulse grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4 w-full">
         {[...Array(4)].map((_, index) => (
           <div
             key={index}
-            className="bg-gray-300  mt-11 justify-between flex flex-col gap-2 lg:flex-row rounded-xl"
+            className="flex flex-col gap-2 pb-2 font-jakarta border rounded-2xl border-gray-300"
           >
-            {/* Left section */}
-            <div className="rounded-t-xl lg:rounded-s-xl lg:rounded-r-none  h-32 lg:h-52 bg-gray-500 w-full lg:w-1/4 "></div>
+            {/* Image skeleton */}
+            <div className="h-64 md:h-72 w-full bg-gray-300 rounded-xl"></div>
 
-            {/* Middle section */}
-            <div className="flex flex-col gap-2 md:gap-4 lg:gap-6 md:py-2 flex-1 border-r border-gray-400">
-              <div className="w-1/2 lg:w-96 h-10 bg-gray-500 rounded-lg"></div>
-              <div className="w-1/4 lg:w-52 h-10 bg-gray-500 rounded-lg"></div>
-
-              <div className="flex gap-8 justify-between md:justify-normal px-5">
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
+            {/* Title & rating skeleton */}
+            <div className="flex px-3 gap-x-5 justify-between flex-wrap">
+              <div className="w-1/2 h-5 bg-gray-300 rounded-md"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-gray-300 rounded-full"></div>
+                <div className="w-16 h-4 bg-gray-300 rounded-md"></div>
               </div>
             </div>
 
-            {/* Right section */}
-            <div className="flex lg:flex-col justify-center gap-2 px-5 md:gap-5 pb-2 md:py-2 md:pe-5 rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl">
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
+            {/* Location skeleton */}
+            <div className="px-3">
+              <div className="w-3/4 h-4 bg-gray-300 rounded-md"></div>
+            </div>
+
+            {/* Price skeleton */}
+            <div className="px-3">
+              <div className="w-24 h-5 bg-gray-300 rounded-md"></div>
             </div>
           </div>
         ))}
@@ -218,7 +187,6 @@ const StaysList = () => {
   };
 
   const handleStaysClick = (districtName) => {
-  
     let a = apiData.data.filter(
       (item, index) => item.district === districtName
     );
@@ -240,30 +208,33 @@ const StaysList = () => {
         className="inline-block mx-1"
       >
         <button
-          className={`transition-all duration-500 h-2 rounded-full ${
-            active ? "bg-white w-10" : "bg-white/50 w-3"
+          className={`transition-all duration-500 h-1.5 rounded-full ${
+            active ? "bg-white w-8" : "bg-white/50 w-3"
           }`}
         />
       </li>
     );
   };
 
+  // const [filteredDistrict, setFilteredDistrict] = useState([]);
+
+  // useEffect(() => {
+  //   if (apiData?.districts && apiData?.data) {
+  //     // Get all matching districts where item.name === dataItem.district
+  //     const matchedDistricts = apiData.districts.filter((district) =>
+  //       apiData.data.some((dataItem) => dataItem.district === district.name)
+  //     );
+
+  //     setFilteredDistrict(matchedDistricts);
+  //   }
+  // }, [apiData]);
+
+  // console.log("api data",apiData)
+  // console.log("filtered district",filteredDistrict)
+
   return (
     <div>
-      {!filterButtonClicked && (
-        <div
-          onClick={() => window.open("https://wa.me/6384131642")}
-          className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
-        >
-          <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
-            <p>Whatsapp Enquiry</p>
-          </div>
-          <img
-            src={whatsapp}
-            className="h-12 w-12  transition-all duration-500"
-          />
-        </div>
-      )}
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -272,9 +243,20 @@ const StaysList = () => {
           </div>
         }
       >
-                {/* <TopHeader/> */}
+        {/* <TopHeader/> */}
 
         <Header />
+
+        <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          <p className="text-blue-500 font-medium sm:font-semibold">
+            Stay List
+          </p>
+        </div>
 
         {/* Hero Section */}
 
@@ -303,39 +285,55 @@ const StaysList = () => {
         </div>
 
         {/* main section */}
-
         <div className="ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 mt-5 ">
           <div>
-            {apiData?.districts?.length>0 && (
-            <p className="font-PlusJakartaSansMedium font-medium text-lg">
-              Explore more places
-            </p>
-             )} 
+            {/* Title */}
+            {loading ? (
+              // Skeleton title loader
+              <div className="h-6 w-40 bg-gray-200 rounded-md animate-pulse mb-2"></div>
+            ) : (
+              apiData.districts?.length > 0 && (
+                <p className="font-PlusJakartaSansMedium font-medium text-lg">
+                  Explore more places
+                </p>
+              )
+            )}
 
-            <div className="flex overflow-x-auto gap-2 md:gap-8 xl:gap-16 mt-3  scrollbar-hide">
-              {apiData?.districts?.map((item, index) => (
-                <div
-                  onClick={() => handleStaysClick(item.name)}
-                  key={index}
-                  className="flex cursor-pointer flex-col items-center justify-start w-20 flex-shrink-0"
-                >
-                  <div className="w-16 h-16 md:w-20 overflow-hidden md:h-20  border-2  border-[#0F5B92] rounded-full p-0.5">
-                    <img
-                      src={
-                        item.image
-                          ? `https://backoffice.innerpece.com${item.image}`
-                          : defaultimg
-                      }
-                      alt="story"
-                      className=" rounded-full  hover:scale-125 transition-all duration-300 w-full h-full   object-cover"
-                    />
-                  </div>
-
-                  <p className="text-xs font-PlusJakartaSansMedium font-medium mt-1 text-center">
-                    {item.name}
-                  </p>
-                </div>
-              ))}
+            <div className="flex overflow-x-auto gap-2 md:gap-8 xl:gap-16 mt-3 scrollbar-hide">
+              {loading
+                ? // Skeleton loader (show 6 fake items)
+                  Array.from({ length: 6 }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col items-center justify-start w-20 flex-shrink-0"
+                    >
+                      <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-200 animate-pulse"></div>
+                      <div className="h-3 w-12 bg-gray-200 rounded mt-2 animate-pulse"></div>
+                    </div>
+                  ))
+                : // Actual content
+                  apiData.districts?.map((item, index) => (
+                    <div
+                      onClick={() => handleStaysClick(item.name)}
+                      key={index}
+                      className="flex cursor-pointer flex-col items-center justify-start w-20 flex-shrink-0"
+                    >
+                      <div className="w-16 h-16 md:w-20 overflow-hidden md:h-20 border-2 border-[#0F5B92] rounded-full p-0.5">
+                        <img
+                          src={
+                            item.image
+                              ? `https://backoffice.innerpece.com${item.image}`
+                              : defaultimg
+                          }
+                          alt={item.name}
+                          className="rounded-full hover:scale-125 transition-all duration-300 w-full h-full object-cover"
+                        />
+                      </div>
+                      <p className="text-xs font-PlusJakartaSansMedium font-medium mt-1 text-center">
+                        {item.name}
+                      </p>
+                    </div>
+                  ))}
             </div>
           </div>
 
@@ -347,10 +345,9 @@ const StaysList = () => {
               ) : (
                 <>
                   <div className="">
-                    {/* Horizontal Scroll Section */}
-                    {/* <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 md:gap-10  py-4"> */}
                     {filteredApiData?.data?.length > 0 ? (
-                      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4">
+                      // grid-cols-[repeat(auto-fill,minmax(280px,1fr))]
+                      <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))]  gap-5 py-4">
                         {filteredApiData?.data.map((item, outerIndex) => (
                           <div
                             key={outerIndex}
@@ -370,15 +367,26 @@ const StaysList = () => {
                               >
                                 {item?.images.length > 0 ? (
                                   item?.images.map((item1, index) => (
-                                    <div key={index} className="w-full h-full">
+                                    // <div key={index} className="w-full h-full">
+                                    //   <img
+                                    //     src={
+                                    //       item1
+                                    //         ? `https://backoffice.innerpece.com/${item1}`
+                                    //         : defaultimage
+                                    //     }
+                                    //     alt=""
+                                    //     className="h-64 md:h-72 object-cover w-full"
+                                    //   />
+                                    // </div>
+                                    <div className="h-64 md:h-72 overflow-hidden rounded-xl">
                                       <img
                                         src={
                                           item1
                                             ? `https://backoffice.innerpece.com/${item1}`
                                             : defaultimage
                                         }
-                                        alt=""
-                                        className="h-64 md:h-72 object-cover w-full"
+                                        alt={item.title}
+                                        className=" object-cover w-full h-full rounded-xl hover:scale-105 transition-all duration-300 ease-in-out"
                                       />
                                     </div>
                                   ))
@@ -394,27 +402,44 @@ const StaysList = () => {
                               </Carousel>
                             </div>
 
-                            <div className="flex px-3 gap-x-5 justify-between flex-wrap font-PlusJakartaSansMedium font-semibold">
-                              <p>{item.stay_title}</p>
+                            <div className="flex flex-col justify-between flex-1">
+                              <div>
+                                {/* Title + Rating */}
+                                <div className="flex px-3 gap-x-5 justify-between flex-wrap font-PlusJakartaSansMedium font-semibold">
+                                  <p className="line-clamp-1">
+                                    {item.stay_title}
+                                  </p>
 
-                              <div className="flex items-center">
-                                <FaStar className="text-yellow-500" />
-                                <p> 5.0 (2)</p>
+                                  <div className="flex items-center">
+                                    <FaStar className="text-yellow-500" />
+                                    <p>5.0 (2)</p>
+                                  </div>
+                                </div>
+
+                                {/* Tagline */}
+                                {item.tag_line && (
+                                  <p className="text-gray-600 px-3 line-clamp-1">
+                                    {item.tag_line}
+                                  </p>
+                                )}
                               </div>
-                            </div>
 
-                            <p className="text-gray-600 px-3">
-                              {item.tag_line}
-                            </p>
+                              {/* Price — Always at Bottom */}
+                              <div className="flex items-center gap-2 px-3 mt-auto pt-2">
+                                <del className="font-PlusJakartaSansMedium text-[#7C7C7C] font-medium">
+                                  ₹{" "}
+                                  {Number(item.actual_price).toLocaleString(
+                                    "en-IN"
+                                  )}
+                                </del>
 
-                            <div className="flex items-center gap-2 pb-2">
-                              <del className="font-PlusJakartaSansMedium text-[#7C7C7C] px-3 font-medium">
-                                ₹ {Number(item.actual_price).toLocaleString()}
-                              </del>
-
-                              <p className="lg:text-xl font-PlusJakartaSansMedium px-3 font-semibold">
-                                ₹ {Number(item.discount_price).toLocaleString()}
-                              </p>
+                                <p className="lg:text-xl text-sky-800 font-PlusJakartaSansMedium font-semibold">
+                                  ₹{" "}
+                                  {Number(item.discount_price).toLocaleString(
+                                    "en-IN"
+                                  )}
+                                </p>
+                              </div>
                             </div>
                           </div>
                         ))}
@@ -437,7 +462,7 @@ const StaysList = () => {
                         <li key={i + 1} className="relative">
                           <button
                             onClick={() => paginate(i + 1)}
-                            className={`px-4 py-2 border-2 rounded text-black ${
+                            className={`px-4 py-2 border-2 rounded-full text-black ${
                               currentPage === i + 1
                                 ? "bg-sky-700 border-sky-700 text-white"
                                 : "hover:bg-sky-700 hover:border-sky-700"
@@ -542,26 +567,3 @@ const StaysList = () => {
 };
 
 export default StaysList;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

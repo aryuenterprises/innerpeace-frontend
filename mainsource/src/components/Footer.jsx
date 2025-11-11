@@ -16,7 +16,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { FaSquarePhone } from "react-icons/fa6";
 
-function Footer({className}) {
+function Footer({ className }) {
   const [footerContent, setFooterContent] = useState("");
   let navigator = useNavigate();
 
@@ -44,7 +44,6 @@ function Footer({className}) {
   function onClickSitemap() {
     window.location.href = "/sitemap.xml"; // This will redirect to the sitemap
   }
-  
 
   return (
     <div className="mt-8 md:mt-20 font-raleway">
@@ -99,17 +98,25 @@ function Footer({className}) {
                 </div>
               </a>
 
-              <div className="flex items-center mt-3 md:mt-5">
-                <span className="inline-block me-5">
-                  <FaMapLocationDot className="text-lg md:text-2xl  text-sky-300" />
-                </span>
-                <p className="font-medium"> {footerContent.contact_address}</p>
-              </div>
+              <a
+                href="https://maps.app.goo.gl/fsk65r78kG724Gvs8"
+                target="_blank"
+              >
+                <div className="flex items-center mt-3 md:mt-5">
+                  <span className="inline-block me-5">
+                    <FaMapLocationDot className="text-lg md:text-2xl  text-sky-300" />
+                  </span>
+                  <p className="font-medium">
+                    {" "}
+                    {footerContent.contact_address}
+                  </p>
+                </div>
+              </a>
             </div>
 
             <div className="text-white basis-30 flex gap-2 flex-col  md:gap-4">
               <p className="font-semibold text-xl  pb-3 md:pb-5 ">
-                Services Request 
+                Services Request
               </p>
 
               <p
@@ -256,7 +263,9 @@ function Footer({className}) {
             </p>
           </div> */}
 
-          <div className={`flex flex-wrap gap-8 items-center justify-between ${className}`}>
+          <div
+            className={`flex flex-wrap gap-8 items-center justify-between ${className}`}
+          >
             <p className="text-xs md:text-sm text-white ">
               {footerContent.copyright}
             </p>

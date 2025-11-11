@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 let Header = lazy(() => import("../components/Header"));
 let Footer = lazy(() => import("../components/Footer"));
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaLocationDot } from "react-icons/fa6";
@@ -13,6 +13,13 @@ import approve from "../assets/approve.svg";
 import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
 import TopHeader from "../components/TopHeader";
+import GoToTop from "../components/GoToTop";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import { Carousel } from "react-responsive-carousel";
+import { FaStar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import defaultimg from "../assets/defaultimg.png";
+import dummyImage from "../assets/dummy5.jpeg";
+import ParallexImage from "../components/ParallexImage";
 
 function DestinationsDetails() {
   useEffect(() => {
@@ -21,22 +28,17 @@ function DestinationsDetails() {
   const location = useLocation();
   const { id, city_name } = location.state || {};
   const [apiData, setApiData] = useState([]);
-  const [sortBy, setSortBy] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [searchTitle, setSearchTitle] = useState("");
+  const [filteredApiData, setFilteredApiData] = useState([]);
+  const [apiDistrictData, setApiDistrictData] = useState([]);
+  const [apiDataBannerImage, setApiDataBannerImage] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+  const [itemsPerPage] = useState(9);
   const [loading, setLoading] = useState(true); // Add a loading state
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
   let navigate = useNavigate();
-
-  const currentItems = Array.isArray(apiData)
-    ? apiData.slice(indexOfFirstItem, indexOfLastItem)
-    : [];
 
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -63,7 +65,11 @@ function DestinationsDetails() {
           }
         );
 
+        setCurrentPage(1);
+        setApiDistrictData(response.data.districtsData);
+        setApiDataBannerImage(response.data.city_details.cities_pic);
         setApiData(response.data.data);
+        setFilteredApiData(response.data.data);
         setLoading(false);
 
         const firstProgram = response.data.data[0];
@@ -89,7 +95,8 @@ function DestinationsDetails() {
         if (metaOgImage) {
           metaOgImage.setAttribute(
             "content",
-            `https://backoffice.innerpece.com/${firstProgram.cover_img}` || ""
+            `https://backoffice.innerpece.com/${firstProgram.cover_img}` ||
+              ""
           );
         }
       } catch (err) {
@@ -98,33 +105,6 @@ function DestinationsDetails() {
     };
     fetchProgramData();
   }, [id]);
-
-  const handleSearchClick = async () => {
-    try {
-      // Post request to search-program API
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/search-program",
-        {
-          destination: city_name,
-          title: searchTitle,
-        }
-      );
-
-      if (response.data.status === "success") {
-        if (response.data.data.length === 0) {
-          setApiData([]); // No data found, set empty array
-        } else {
-          setApiData(response.data.data); // Set the retrieved data
-        }
-      } else {
-        console.error("Error fetching programs:", response.data.message);
-        setApiData([]); // Error occurred, set empty array
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setApiData([]); // Set empty array on exception
-    }
-  };
 
   const handleCardClick = (id, title) => {
     const formattedTitleName = title
@@ -141,94 +121,6 @@ function DestinationsDetails() {
       top: 0,
       behavior: "instant",
     });
-  };
-
-  const handleSortChange = async (event) => {
-    setFilterButtonClicked(false);
-
-    const selectedSort = event.target.value;
-    setSortBy(selectedSort);
-
-    try {
-      const response = await axios.post(
-        // "https://backoffice.innerpece.com/api/sort-destination ",
-        // "https://backoffice.innerpece.com/api/v1/filter-program-by-price_sort",
-        "https://backoffice.innerpece.com/api/v1/destination-program-by-price_sort",
-        {
-          sort_order: selectedSort,
-          city: city_name,
-        }
-      );
-
-      if (response.data.status === "success") {
-        const dataObject = response.data.data;
-        // Convert the data object to an array
-        const dataArray = Object.values(dataObject);
-        setApiData(dataArray);
-      } else {
-        console.error("Error sorting programs:", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
-
-  const handleFilterClick = async () => {
-    setFilterButtonClicked(false);
-
-    try {
-      const response = await axios.post(
-        "https://backoffice.innerpece.com/api/v1/filter-destination",
-        {
-          start_date: startDate,
-          to_date: toDate,
-          destination: city_name,
-        }
-      );
-
-      if (response.data.status === "success") {
-        const data = Object.values(response.data.data); // Convert data to an array
-
-        if (data.length === 0) {
-          setApiData([]); // No data found, set empty array
-        } else {
-          setApiData(data); // Set the retrieved data as an array
-        }
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      setApiData([]);
-    }
-  };
-
-  const handleDateChange = (e) => {
-    setStartDate(e.target.value);
-  };
-
-  const handleToChange = (e) => {
-    setToDate(e.target.value);
-  };
-
-  const handleClearFilterClicked = async () => {
-    setFilterButtonClicked(false);
-
-    const fetchProgramData = async () => {
-      try {
-        const response = await axios.post(
-          // "https://backoffice.innerpece.com/api/v1/destination",
-          "https://backoffice.innerpece.com/api/v1/get-program",
-          {
-            destination: id,
-          }
-        );
-        setStartDate("");
-        setToDate("");
-        setApiData(response.data.data);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchProgramData();
   };
 
   useEffect(() => {
@@ -270,32 +162,32 @@ function DestinationsDetails() {
 
   const SkeletonLoader = () => {
     return (
-      <div className="animate-pulse flex flex-col  gap-4  w-full m">
+      <div className="animate-pulse grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4 w-full">
         {[...Array(4)].map((_, index) => (
           <div
             key={index}
-            className="bg-gray-300  mt-11 justify-between flex flex-col gap-2 lg:flex-row rounded-xl"
+            className="flex flex-col gap-2 pb-2 font-jakarta border rounded-2xl border-gray-300"
           >
-            {/* Left section */}
-            <div className="rounded-t-xl lg:rounded-s-xl lg:rounded-r-none  h-32 lg:h-52 bg-gray-500 w-full lg:w-1/4 "></div>
+            {/* Image skeleton */}
+            <div className="h-64 md:h-72 w-full bg-gray-300 rounded-xl"></div>
 
-            {/* Middle section */}
-            <div className="flex flex-col gap-2 md:gap-4 lg:gap-6 md:py-2 flex-1 border-r border-gray-400">
-              <div className="w-1/2 lg:w-96 h-10 bg-gray-500 rounded-lg"></div>
-              <div className="w-1/4 lg:w-52 h-10 bg-gray-500 rounded-lg"></div>
-
-              <div className="flex gap-8 justify-between md:justify-normal px-5">
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
+            {/* Title & rating skeleton */}
+            <div className="flex px-3 gap-x-5 justify-between flex-wrap">
+              <div className="w-1/2 h-5 bg-gray-300 rounded-md"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-gray-300 rounded-full"></div>
+                <div className="w-16 h-4 bg-gray-300 rounded-md"></div>
               </div>
             </div>
 
-            {/* Right section */}
-            <div className="flex lg:flex-col justify-center gap-2 px-5 md:gap-5 pb-2 md:py-2 md:pe-5 rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl">
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
+            {/* Location skeleton */}
+            <div className="px-3">
+              <div className="w-3/4 h-4 bg-gray-300 rounded-md"></div>
+            </div>
+
+            {/* Price skeleton */}
+            <div className="px-3">
+              <div className="w-24 h-5 bg-gray-300 rounded-md"></div>
             </div>
           </div>
         ))}
@@ -303,10 +195,29 @@ function DestinationsDetails() {
     );
   };
 
+  // let a = apiData?.destination_name?.filter(
+  //   (item, index) => item === districtName
+  // );
+
+  const handleStaysClick = (districtName) => {
+    // Filter apiData to include only objects that contain the districtName
+
+    const filtered = apiData.filter((item) =>
+      item.destination_name.includes(districtName)
+    );
+
+    setFilteredApiData(filtered);
+  };
+
+  const currentItems = Array.isArray(filteredApiData)
+    ? filteredApiData.slice(indexOfFirstItem, indexOfLastItem)
+    : [];
+
+  // pagination pending
+
   return (
     <div>
-      {!filterButtonClicked && (
-        <div
+      {/* <div
           onClick={() => window.open("https://wa.me/6384131642")}
           className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
         >
@@ -317,8 +228,8 @@ function DestinationsDetails() {
             src={whatsapp}
             className="h-12 w-12  transition-all duration-500"
           />
-        </div>
-      )}
+        </div> */}
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -327,36 +238,129 @@ function DestinationsDetails() {
           </div>
         }
       >
-        {/* <TopHeader /> */}
         <Header />
 
-        {/* Hero Section */}
+        {/* <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          <p className="text-blue-500 font-medium sm:font-semibold">
+            Popular Programs
+          </p>
+        </div> */}
 
+        <div className="flex gap-1 sm:gap-2 px-2 py-0.5 items-center">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          <p className="text-blue-500 font-medium sm:font-semibold">
+            Popular Programs
+          </p>
+        </div>
+
+        {/* Hero Section */}
         <div
           id="hero"
-          className="h-64 md:h-80 lg:h-[420px]  
- relative bg-[url('././assets/dummy5.jpeg')] bg-cover bg-center bg-no-repeat bg-fixed"
+          className="relative h-64 md:h-80 lg:h-[480px] overflow-hidden"
         >
-          <div className="absolute flex w-full h-full items-center justify-center">
-            <div
-              id="blur"
-              className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
-            >
-              <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl  font-rancho tracking-widest text-center  font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">{`Explore ${
-                apiData?.length > 0
-                  ? // ? apiData[0]?.destination[0]?.city_name
-                    apiData[0]?.destination
-                  : upperCasedLocationName
-              }`}</h1>
-              <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
-                Find your perfect trip with personalized themes and destinations
-                to match your preferences
-              </p>
+          {loading ? (
+            // 🌟 Skeleton Loader
+            <div className="absolute inset-0 animate-pulse">
+              <div className="w-full h-full bg-gray-300" />
+              <div className="absolute flex w-full h-full items-center justify-center">
+                <div className="h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl bg-gray-400 backdrop-blur-md" />
+              </div>
             </div>
-          </div>
+          ) : (
+            <>
+              {/* ✅ Actual Background Image */}
+              <ParallexImage
+                src={
+                  apiData[0]?.theme[0]?.image
+                    ? `https://backoffice.innerpece.com/${apiDataBannerImage}`
+                    : dummyImage
+                }
+                className="absolute inset-0 w-full h-full object-cover object-bottom"
+                alt="Hero Background"
+              />
+
+              {/* ✅ Overlay Content */}
+              <div className="absolute flex w-full h-full items-center justify-center">
+                <div
+                  id="blur"
+                  className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-xl"
+                >
+                  <h1 className="text-white text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-rancho tracking-widest text-center font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
+                    {`Explore ${
+                      apiData?.length > 0
+                        ? apiData[0]?.destination
+                        : upperCasedLocationName
+                    }`}
+                  </h1>
+
+                  <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
+                    Find your perfect trip with personalized themes and
+                    destinations to match your preferences
+                  </p>
+                </div>
+              </div>
+            </>
+          )}
         </div>
 
         {/* main section */}
+        <div className="ps-4 pe-4 md:px-7 lg:px-8 xl:px-10 mt-5">
+          {/* --- Title or Title Skeleton --- */}
+          {loading ? (
+            <div className="h-6 w-40 bg-gray-300 rounded animate-pulse" />
+          ) : (
+            apiDistrictData?.length > 0 && (
+              <p className="font-PlusJakartaSansMedium font-medium text-lg">
+                Explore more places
+              </p>
+            )
+          )}
+
+          {/* --- Loader or Data --- */}
+          <div className="flex overflow-x-auto gap-2 md:gap-8 xl:gap-16 mt-3 scrollbar-hide">
+            {loading
+              ? // Skeleton cards
+                Array.from({ length: 4 }).map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex flex-col items-center justify-start w-20 flex-shrink-0 animate-pulse"
+                  >
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-300" />
+                    <div className="w-12 h-3 bg-gray-300 rounded mt-2" />
+                  </div>
+                ))
+              : // Actual content
+                apiDistrictData?.map((item, index) => (
+                  <div
+                    key={index}
+                    className="flex cursor-pointer flex-col items-center justify-start w-20 flex-shrink-0"
+                    onClick={() => handleStaysClick(item.destination)}
+                  >
+                    <div className="w-16 h-16 md:w-20 overflow-hidden md:h-20 border-2 border-[#0F5B92] rounded-full p-0.5">
+                      <img
+                        src={
+                          item.image_path
+                            ? `https://backoffice.innerpece.com${item.image_path}`
+                            : defaultimg
+                        }
+                        alt={item.destination}
+                        className="rounded-full hover:scale-125 transition-all duration-300 w-full h-full object-cover"
+                      />
+                    </div>
+                    <p className="text-xs font-PlusJakartaSansMedium font-medium mt-1 text-center">
+                      {item.destination}
+                    </p>
+                  </div>
+                ))}
+          </div>
+        </div>
 
         <div className="relative">
           <div className="bg-image-behind"></div>
@@ -364,120 +368,20 @@ function DestinationsDetails() {
           <div className="absolute w-full h-full bg-gradient-to-b from-white  via-transparent to-white -z-10"></div>
           <div className="flex flex-col xl:flex-row gap-2 md:gap-5 lg:gap-7 xl:gap-10  ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 ">
             {/* main section > mainBar */}
-            <div className="  w-full md:mt-10">
-              {/* this will show only in smaller screens */}
-              {/* {currentItems.length > 0 && (
-                <p
-                  onClick={() => setFilterButtonClicked(!filterButtonClicked)}
-                  className={`mt-10 w-28 text-center py-2 px-2 md:p-2 md:px-6 rounded-lg block md:hidden ${
-                    filterButtonClicked
-                      ? "bg-red-600 text-white"
-                      : "bg-gray-300"
-                  } }`}
-                >
-                  {`${filterButtonClicked ? "Close Filter" : "Filter"}`}
-                </p>
-              )} */}
-
-              {/* <div
-                className={`fixed bottom-0 z-10 left-0 right-0 px-2 bg-white border-t-2 rounded-t-lg transform transition-transform duration-500 ease-in-out ${
-                  filterButtonClicked
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-full opacity-0"
-                }`}
-              >
-                <div className="flex flex-col md:hidden  py-2 gap-3 max-w-sm w-full mx-auto">
-                  <div className="flex justify-between items-center">
-                    <p className="text-lg">Search By Filter</p>
-                    <button
-                      onClick={() => setFilterButtonClicked(false)}
-                      className="text-gray-600 text-xl font-bold transition-transform duration-300 transform hover:scale-110"
-                    >
-                      &times;
-                    </button>
-                  </div>
-
-                  <div className="flex flex-wrap gap-5">
-                    <div className="flex gap-2 items-center">
-                      <label htmlFor="frmDate" className="w-20">
-                        From Date
-                      </label>
-                      <input
-                        id="frmDate"
-                        type="date"
-                        value={startDate}
-                        onChange={handleDateChange}
-                        className="border-2 p-2 rounded"
-                      />
-                    </div>
-
-                    <div className="flex gap-2 items-center">
-                      <label htmlFor="tDate" className="w-20">
-                        To Date
-                      </label>
-                      <input
-                        type="date"
-                        id="tDate"
-                        value={toDate}
-                        onChange={handleToChange}
-                        className="border-2 p-2 rounded"
-                      />
-                    </div>
-
-                    <div className="flex items-center gap-2 flex-wrap">
-                      <button
-                        className="bg-sky-600 hover:bg-sky-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                        value="FILTER"
-                        onClick={handleFilterClick}
-                      >
-                        Filter
-                      </button>
-
-                      <button
-                        className="bg-red-600 hover:bg-red-800 active:bg-gray-600 px-8 rounded-lg text-center py-2 text-white w-36"
-                        value="FILTER"
-                        onClick={handleClearFilterClicked}
-                      >
-                        Clear Filter
-                      </button>
-                    </div>
-                  </div>
-
-                  <p className="text-lg">Sort By</p>
-
-                  <select
-                    name="selectsmaller"
-                    id="selectsmaller"
-                    className="border-2 p-2 outline-none"
-                    onChange={handleSortChange}
-                    value={sortBy}
-                  >
-                    <option value="" disabled>
-                      Select Sort Option
-                    </option>
-                    <option value="low">Low Price</option>
-                    <option value="high">High Price</option>
-                  </select>
-                </div>
-              </div> */}
-
+            <div id="destinations" className="w-full md:mt-10">
               {loading ? (
                 <SkeletonLoader />
-              ) : currentItems.length > 0 ? (
-                currentItems.map((item, index) => (
-                  <div
-                    id="destinations"
-                    key={index}
-                    className="flex flex-col  mt-10 overflow-hidden"
-                  >
+              ) : currentItems?.length > 0 ? (
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 py-4">
+                  {currentItems?.map((item, outerIndex) => (
                     <div
-                      key={index}
-                      className="group flex flex-col lg:flex-row overflow-hidden"
+                      key={outerIndex}
+                      onClick={() => handleCardClick(item.id, item.title)}
+                      className="flex-shrink-0 flex-1  cursor-pointer flex flex-col pb-2 font-jakarta border rounded-2xl border-gray-300"
                     >
-                      <div
-                        onClick={() => handleCardClick(item.id, item.title)}
-                        className="relative overflow-hidden w-full lg:w-1/3 rounded-t-xl lg:rounded-s-xl lg:rounded-r-none"
-                      >
+                      {/* Cover Image */}
+
+                      <div className="h-64 md:h-72 overflow-hidden rounded-xl">
                         <img
                           src={
                             item.cover_img
@@ -485,214 +389,83 @@ function DestinationsDetails() {
                               : defaultimage
                           }
                           alt={item.title}
-                          className="w-full h-44 lg:h-72 xl:h-64 object-cover object-center transform transition-transform duration-500 group-hover:scale-110 cursor-pointer"
-
-                          // className="w-full h-44 sm:h-52 md:h-60 object-cover object-center transition duration-500 transform hover:scale-105 hover:-skew-y-1 cursor-pointer"
+                          className=" object-cover w-full h-full rounded-xl hover:scale-105 transition-all duration-300 ease-in-out"
                         />
                       </div>
 
-                      <div
-                        onClick={() => handleCardClick(item.id, item.title)}
-                        className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0 bg-white border-[#BABABA] py-2 px-2 md:px-3 cursor-pointer"
-                      >
-                        <p className="font-semibold text-[#2D2D2D] flex-wrap text-xl md:text-3xl font-jost">
-                          {/* {item.title.includes("-")
-                            ? item.title.split("-")[0]
-                            : item.title} */}
-                          {item.title}
-                        </p>
+                      {/* Content Section */}
+                      <div className="flex flex-col justify-between flex-1">
+                        <div>
+                          {/* Title + Rating */}
+                          <div className="flex px-3 gap-x-5 justify-between flex-wrap font-PlusJakartaSansMedium font-semibold">
+                            <p className="line-clamp-1">{item.title}</p>
 
-                        {item.current_location &&
-                          item.current_location !== "<p><br></p>" && (
-                            <div className="flex items-center gap-2">
-                              <FaLocationDot className="text-sky-800" />
+                            <div className="flex items-center">
+                              <FaStar className="text-yellow-500" />
+                              <p>
+                                {item.average_rating} ( {item.reviews.length} )
+                              </p>
+                            </div>
+                          </div>
 
+                          {/* Location */}
+                          {item.current_location &&
+                            item.current_location !== "<p><br></p>" && (
                               <p
-                                className="text-sm sm:text-base"
+                                className="text-gray-600 px-3 line-clamp-1"
                                 dangerouslySetInnerHTML={{
                                   __html: item.current_location,
                                 }}
                               />
-                            </div>
-                          )}
-
-                        {/* <p className="flex-wrap text-[#11142D] font-mulish md:text-lg">
-                          {item.title.includes("-")
-                            ? item.title.split("-")[1]
-                            : ""}
-                        </p> */}
-
-                        {/* <div className="flex  items-center justify-between gap-2 flex-wrap">
-                          {item.current_location &&
-                            item.current_location !== "<p><br></p>" && (
-                              <div className="flex items-center gap-2">
-                                <FaLocationDot className="text-sky-800" />
-                            
-
-                                <p
-                                  className="text-sm sm:text-base"
-                                  dangerouslySetInnerHTML={{
-                                    __html: item.current_location,
-                                  }}
-                                />
-                              </div>
                             )}
-
-                          <div className="flex items-center gap-1">
-                            <FaStar className="text-yellow-500" />
-                            <p>
-                              <b className="me-1">{item.average_rating}</b>of 5
-                            </p>
-                          </div>
-                        </div> */}
-
-                        {/* <div className="flex items-center flex-wrap gap-2">
-                          {item.member_capacity && (
-                            <p>Upto {item.member_capacity} guests</p>
-                          )}
-                          {item.bed_room && (
-                            <div className="flex items-center gap-3">
-                              <PiStarFourFill className="text-gray-400" />
-                              <p>{item.bed_room}</p>
-                              {item.bed_room > "1" ? "bed rooms" : "bed room"}
-                            </div>
-                          )}
-
-                          {item.bath_room && (
-                            <div className="flex items-center gap-3">
-                              <PiStarFourFill className="text-gray-400" />
-                              <p>{item.bath_room}</p>
-                              {item.bath_room > "1"
-                                ? "bath rooms"
-                                : "bath room"}
-                            </div>
-                          )}
-                        </div> */}
-
-                        {item.amenities && item.amenities.length > 0 && (
-                          <div>
-                            {/* <div className="border-b border-[#BABABA]"></div> */}
-
-                            <div className="flex  mt-3 gap-2 flex-wrap items-start">
-                              {/* {item.amenities
-                                .slice(0, 2)
-                                .map((amenity, index) => ( */}
-                              {item.amenities
-                                .slice(0, sliceCount)
-                                .map((amenity, index) => (
-                                  <div
-                                    key={index}
-                                    className="flex flex-col gap-1 justify-center items-center w-20 flex-wrap"
-                                  >
-                                    <span className="border-2 p-2 w-8 h-8 md:w-11 md:h-11 border-gray-300 rounded-full">
-                                      <img
-                                        src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
-                                        alt=""
-                                      />
-                                    </span>
-                                    <p className="text-gray-500 text-center flex-wrap text-xs ">
-                                      {amenity.amenity_name}
-                                    </p>
-                                  </div>
-                                ))}
-
-                              {item.amenities.length > 3 && (
-                                //  <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
-
-                                // <p className="text-gray-500 text-xs mx-auto">
-                                //   +{item.amenities.length - 3}
-                                // </p>
-                                // </span>
-                                <div
-                                  key={index}
-                                  className="flex flex-col gap-1 justify-center w-20 items-center flex-wrap"
-                                >
-                                  {/* <span className=" bg-sky-700 p-2 w-11 h-11 flex items-center justify-center rounded-full">
-                                    <p className="text-white text-xs mx-auto h-full">
-                                      +{item.amenities.length - 3}
-                                    </p>
-                                  </span> */}
-
-                                  <span className="bg-sky-700 p-2 w-8 h-8 md:w-11 md:h-11 flex items-center justify-center rounded-full">
-                                    <p className="text-white text-xs">
-                                      +{item.amenities.length - 3}
-                                    </p>
-                                  </span>
-
-                                  <p className="text-sky-700 flex-wrap text-xs w-fit">
-                                    More
-                                  </p>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex flex-wrap bg-white flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]  px-2 md:px-3 py-2 ">
-                        <div className="flex flex-row lg:flex-col gap-1 sm:gap-3 items-center justify-center">
-                          <p className="text-[#001031] text-sm md:text-base text-center mx-auto ">
-                            Starting From{" "}
-                          </p>
-                          <p className="font-bold text-green-700 text-lg sm:text-xl mx-auto">
-                            {/* ₹{item.pricing[0]} */}₹
-                            {Number(item.pricing[0]).toLocaleString("en-IN")}
-                          </p>
                         </div>
 
-                        {/* <div
-                          onClick={() => handleCardClick(item.id, item.title)}
-                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-5 py-1  lg:py-2 rounded-lg "
-                        >
-                          <p className="text-white cursor-pointer  font-medium md:text-xl text-center ">
-                            View Detail
+                        {/* Price — Always at Bottom */}
+                        <div className="flex px-3 gap-3 mt-auto pt-2">
+                          <p>Starting from</p>
+                          <p className="lg:text-xl text-sky-800 font-PlusJakartaSansMedium px-3 font-semibold">
+                            ₹ {Number(item.pricing[0]).toLocaleString("en-IN")}
                           </p>
-                        </div> */}
-
-                        <div
-                          onClick={() => handleCardClick(item.id, item.title)}
-                          className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-2 sm:px-4 lg:px-4.5 py-1 lg:py-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md hover:brightness-110"
-                        >
-                          <p className="text-white md:font-medium md:text-xl text-center">
-                            View Detail
-                          </p>
-                          {/* <FaArrowRight className="text-white h-full" /> */}
                         </div>
                       </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+                </div>
               ) : (
                 <div className="flex my-20  justify-center w-full h-full">
-                  <p className="text-xl md:text-3xl font-jost">
-                    No programs available.
-                  </p>
+                  <p className="text-2xl  font-jost">No programs available.</p>
                 </div>
               )}
 
-              <nav>
-                <div className="flex justify-center items-center mt-5">
-                  <ul className="flex space-x-2">
-                    {Array.from(
-                      { length: Math.ceil(apiData.length / itemsPerPage) },
-                      (_, i) => (
-                        <li key={i + 1} className="relative">
-                          <button
-                            onClick={() => paginate(i + 1)}
-                            className={`px-4 py-2 border-2 rounded text-black ${
-                              currentPage === i + 1
-                                ? "bg-sky-700 border-sky-700 text-white"
-                                : "hover:bg-sky-700 hover:border-sky-700"
-                            }`}
-                          >
-                            {i + 1}
-                          </button>
-                        </li>
-                      )
-                    )}
-                  </ul>
-                </div>
-              </nav>
+              {filteredApiData.length > 8 && (
+                <nav>
+                  <div className="flex justify-center items-center mt-5">
+                    <ul className="flex space-x-2">
+                      {Array.from(
+                        {
+                          length: Math.ceil(
+                            filteredApiData.length / itemsPerPage
+                          ),
+                        },
+                        (_, i) => (
+                          <li key={i + 1} className="relative">
+                            <button
+                              onClick={() => paginate(i + 1)}
+                              className={`px-4 py-2 border-2 rounded-full text-black ${
+                                currentPage === i + 1
+                                  ? "bg-sky-700 border-sky-700 text-white"
+                                  : "hover:bg-sky-700 hover:border-sky-700"
+                              }`}
+                            >
+                              {i + 1}
+                            </button>
+                          </li>
+                        )
+                      )}
+                    </ul>
+                  </div>
+                </nav>
+              )}
             </div>
 
             {/* Main Section > Sidebar */}

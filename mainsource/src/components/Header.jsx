@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import innerpece_logo2 from "../assets/innerpece_logo2.svg";
 import axios from "axios";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { RiArrowRightSLine } from "react-icons/ri";
 
 function Header() {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,24 +91,30 @@ function Header() {
       </div>
 
       <div className="max-lg:hidden">
-        <ul className="flex items-center">
-          <li className="md:pe-5 lg:pe-8 xl:pe-10 font-semibold  ">
-            <Link to="/" className="cursor-pointer hover:text-gray-500">
+      
+        <ul className="flex items-center gap-5">
+          {/* Home */}
+          <li className="font-semibold relative group">
+            <Link
+              to="/"
+              className="cursor-pointer relative inline-block pb-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
+            >
               Home
             </Link>
           </li>
 
-          <li className="md:pe-5 lg:pe-8 xl:pe-10  font-semibold hover:text-gray-500">
+          {/* Filter by Price Dropdown */}
+          <li className="font-semibold relative group">
             <div
-              className="relative"
+              className="relative inline-block pb-1 cursor-pointer after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
               onMouseEnter={() => setFilterByPriceDropdownOpen(true)}
               onMouseLeave={() => setFilterByPriceDropdownOpen(false)}
             >
-              <button className="  rounded-md transition duration-300 ease-in-out cursor-pointer ">
+              <button className="rounded-md transition duration-300 ease-in-out">
                 Filter by Price
               </button>
 
-              <div
+              {/* <div
                 className={`absolute left-0 top-full z-50 bg-white border shadow-lg rounded-md w-48 transition-all duration-200 ${
                   filterByPriceDropdownOpen
                     ? "opacity-100 visible"
@@ -129,9 +136,45 @@ function Header() {
                         setFilterByPriceDropdownOpen(false);
                         onChangeSelect(item.value);
                       }}
-                      className="px-4 py-2 hover:bg-gray-100 text-black hover:text-gray-500 transition-all duration-75 cursor-pointer"
+                      className="px-4 py-2 hover:bg-gray-100 text-black transition-all duration-75 cursor-pointer"
                     >
                       {item.label}
+                    </li>
+                  ))}
+                </ul>
+              </div> */}
+
+              <div
+                className={`absolute left-0 top-full z-50 w-56 rounded-2xl shadow-2xl border border-gray-100 bg-gradient-to-b from-white/95 to-gray-50/90 backdrop-blur-md transition-all duration-300 transform origin-top ${
+                  filterByPriceDropdownOpen
+                    ? "opacity-100 scale-100 visible translate-y-0.5"
+                    : "opacity-0 scale-95 invisible -translate-y-1"
+                }`}
+              >
+                <ul className="py-2">
+                  {[
+                    { label: "Under 5k", value: "under_5k" },
+                    { label: "5k–10k", value: "5k_to_10k" },
+                    { label: "10k–20k", value: "10k_to_20k" },
+                    { label: "20k–30k", value: "20k_to_30k" },
+                    { label: "30k–40k", value: "30k_to_40k" },
+                    { label: "Above 40k", value: "above_40k" },
+                  ].map((item, i) => (
+                    <li
+                      key={item.value}
+                      onClick={() => {
+                        setFilterByPriceDropdownOpen(false);
+                        onChangeSelect(item.value);
+                      }}
+                      className={`relative flex items-center group justify-between px-5 py-2.5 text-gray-700 font-medium cursor-pointer 
+          transition-all duration-200 group hover:text-blue-700 hover:pl-6`}
+                      style={{ transitionDelay: `${i * 30}ms` }} // subtle stagger
+                    >
+                      <span className="flex items-center gap-2">
+                        {item.label}
+                      </span>
+
+                      <RiArrowRightSLine className="text-xl" />
                     </li>
                   ))}
                 </ul>
@@ -139,17 +182,18 @@ function Header() {
             </div>
           </li>
 
-          <li className="md:pe-5 lg:pe-8 xl:pe-10  font-semibold hover:text-gray-500">
+          {/* Destination Dropdown */}
+          <li className="font-semibold relative group">
             <div
-              className="relative"
+              className="relative inline-block pb-1 cursor-pointer after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
               onMouseEnter={() => setDestinationDropdownOpen(true)}
               onMouseLeave={() => setDestinationDropdownOpen(false)}
             >
-              <button className="   rounded-md transition duration-300 ease-in-out cursor-pointer ">
+              <button className="rounded-md transition duration-300 ease-in-out">
                 Destination
               </button>
 
-              <div
+              {/* <div
                 className={`absolute left-0 top-full z-50 bg-white border shadow-lg rounded-md w-48 transition-all duration-200 ${
                   destinationDropdownOpen
                     ? "opacity-100 visible"
@@ -164,62 +208,103 @@ function Header() {
                         setDestinationDropdownOpen(false);
                         handleDestinationClick(item.id, item.city_name);
                       }}
-                      className="px-4 py-2 hover:bg-gray-100 text-black hover:text-gray-500 transition-all duration-75 cursor-pointer"
+                      className="px-4 py-2 hover:bg-gray-100 text-black transition-all duration-75 cursor-pointer"
                     >
                       {item.city_name}
+                    </li>
+                  ))}
+                </ul>
+              </div> */}
+
+              <div
+                className={`absolute left-0 top-full z-50 w-56 rounded-2xl shadow-2xl border border-gray-100 bg-gradient-to-b from-white/95 to-gray-50/90 backdrop-blur-md transition-all duration-300 transform origin-top ${
+                  destinationDropdownOpen
+                    ? "opacity-100 scale-100 visible translate-y-0.5"
+                    : "opacity-0 scale-95 invisible -translate-y-1"
+                }`}
+              >
+                <ul className="py-2">
+                  {destinationData.map((item, i) => (
+                    <li
+                      key={item.city_name}
+                      onClick={() => {
+                        setDestinationDropdownOpen(false);
+                        handleDestinationClick(item.id, item.city_name);
+                      }}
+                      className={`relative flex items-center justify-between px-5 py-2.5 text-gray-700 font-medium cursor-pointer 
+          transition-all duration-200 group hover:text-blue-700 hover:pl-6`}
+                      style={{ transitionDelay: `${i * 30}ms` }} // staggered animation
+                    >
+                      <span className="flex items-center gap-2">
+                        {item.city_name}
+                      </span>
+
+                      {/* Animated arrow icon */}
+                      <RiArrowRightSLine className="text-xl" />
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
           </li>
-{/* 
-          <li className="md:pe-5 lg:pe-8 xl:pe-10 font-semibold  ">
-            <Link
-              to="/eventsHistory"
-              className="cursor-pointer hover:text-gray-500"
-            >
-             Events
-            </Link>
-          </li> */}
 
-          <li className="md:pe-5 lg:pe-8 xl:pe-10 font-semibold  ">
+          {/* Customization Enquiry */}
+          <li className="font-semibold relative group">
             <Link
               to="/sendenquiry"
-              className="cursor-pointer hover:text-gray-500"
+              className="cursor-pointer relative inline-block pb-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
             >
               Customization Enquiry
             </Link>
           </li>
 
-          <li className="md:pe-5 lg:pe-8 xl:pe-10 font-semibold  ">
-            <Link to="/aboutus" className="cursor-pointer hover:text-gray-500">
+          {/* Events */}
+          <li className="font-semibold relative group">
+            <Link
+              to="/eventsHistory"
+              className="cursor-pointer relative inline-block pb-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
+            >
+              Events
+            </Link>
+          </li>
+
+          {/* About Us */}
+          <li className="font-semibold relative group">
+            <Link
+              to="/aboutus"
+              className="cursor-pointer relative inline-block pb-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
+            >
               About Us
             </Link>
           </li>
-          <li className="md:pe-5 lg:pe-8 xl:pe-10 font-semibold  ">
+
+          {/* Contact Us */}
+          <li className="font-semibold relative group">
             <Link
               to="/contactus"
-              className="cursor-pointer hover:text-gray-500"
+              className="cursor-pointer relative inline-block pb-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
             >
               Contact Us
             </Link>
           </li>
+
+          {/* Profile */}
           {userLogedIn && (
-            <li className=" font-semibold   ">
+            <li className="font-semibold relative group">
               <Link
                 to="/profile"
-                className="cursor-pointer hover:text-gray-500"
+                className="cursor-pointer relative inline-block pb-1 after:content-[''] after:absolute after:left-0 after:bottom-0 after:w-0 after:h-[1px] after:bg-white after:transition-all after:duration-700 group-hover:after:w-full"
               >
                 My Profile
               </Link>
             </li>
           )}
 
+          {/* Login Button */}
           {!userLogedIn && (
             <Link
               to="/login"
-              className="cursor-pointer font-semibold   border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 text-center   md:px-3 lg:px-6 py-2"
+              className="cursor-pointer font-semibold border-sky-800 border-2 rounded-2xl text-sky-800 bg-white hover:text-white hover:bg-gray-700 hover:border-gray-700 text-center md:px-3 lg:px-6 py-2 transition-all duration-300"
             >
               Login
             </Link>
@@ -240,17 +325,17 @@ function Header() {
       </div>
 
       <div
-        className={`fixed top-0 right-0 h-full bg-white z-50 p-10 transform transition-transform duration-500 ease-in-out ${
+        className={`fixed top-0 right-0 h-full bg-white z-[5000] p-10 transform transition-transform duration-500 ease-in-out ${
           isOpen ? "translate-x-0" : "translate-x-full"
         } lg:hidden`}
       >
         <button
           onClick={() => setIsOpen(false)}
-          className="absolute top-4 right-4 text-red-600 font-extrabold text-3xl"
+          className="absolute top-1 right-3 text-red-600 font-extrabold text-3xl"
         >
           &times;
         </button>
-        <ul className="flex flex-col gap-5 mt-20">
+        <ul className="flex flex-col gap-5 mt-10">
           <li className="text-black text-xl cursor-pointer font-medium">
             <Link to="/" onClick={() => setIsOpen(false)}>
               Home
@@ -274,7 +359,7 @@ function Header() {
                 )}
               </button>
 
-              <div
+              {/* <div
                 className={`absolute mt-2 bg-white shadow-xl rounded-md border w-52 transform transition-all duration-200 z-20 ${
                   filterByPriceDropdownOpen
                     ? "opacity-100 scale-100"
@@ -302,6 +387,45 @@ function Header() {
                     </li>
                   ))}
                 </ul>
+              </div> */}
+
+              <div
+                className={`absolute left-0 top-full z-50 w-56 rounded-2xl shadow-2xl border border-gray-100 
+  bg-gradient-to-b from-white/95 to-gray-50/90 backdrop-blur-md 
+  transition-all duration-300 transform origin-top ${
+    filterByPriceDropdownOpen
+      ? "opacity-100 scale-100 visible translate-y-0.5"
+      : "opacity-0 scale-95 invisible -translate-y-1"
+  }`}
+              >
+                <ul className="py-2">
+                  {[
+                    { label: "Under 5k", value: "under_5k" },
+                    { label: "5k–10k", value: "5k_to_10k" },
+                    { label: "10k–20k", value: "10k_to_20k" },
+                    { label: "20k–30k", value: "20k_to_30k" },
+                    { label: "30k–40k", value: "30k_to_40k" },
+                    { label: "Above 40k", value: "above_40k" },
+                  ].map((item, i) => (
+                    <li
+                      key={item.value}
+                      onClick={() => {
+                        setFilterByPriceDropdownOpen(false);
+                        onChangeSelect(item.value);
+                      }}
+                      className={`relative flex items-center justify-between px-5 py-1.5 text-gray-700 font-medium cursor-pointer
+          transition-all duration-200 group hover:text-blue-700 hover:pl-6`}
+                      style={{ transitionDelay: `${i * 30}ms` }} // subtle stagger animation
+                    >
+                      <span className="flex items-center gap-2">
+                        {item.label}
+                      </span>
+
+                      {/* Animated arrow icon */}
+                      <RiArrowRightSLine className="text-lg translate-x-1 group-hover:translate-x-2 transition-all duration-300" />
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </li>
@@ -323,7 +447,7 @@ function Header() {
                 )}
               </button>
 
-              <div
+              {/* <div
                 className={`absolute mt-2 bg-white shadow-xl rounded-md border w-52 transform transition-all duration-200 z-20 ${
                   destinationDropdownOpen
                     ? "opacity-100 scale-100"
@@ -344,6 +468,38 @@ function Header() {
                     </li>
                   ))}
                 </ul>
+              </div> */}
+
+              <div
+                className={`absolute left-0 top-full z-50 w-56 rounded-2xl shadow-2xl border border-gray-100 
+  bg-gradient-to-b from-white/95 to-gray-50/90 backdrop-blur-md 
+  transition-all duration-300 transform origin-top ${
+    destinationDropdownOpen
+      ? "opacity-100 scale-100 visible translate-y-0.5"
+      : "opacity-0 scale-95 invisible -translate-y-1 pointer-events-none"
+  }`}
+              >
+                <ul className="py-2">
+                  {destinationData.map((item, i) => (
+                    <li
+                      key={item.city_name}
+                      onClick={() => {
+                        setDestinationDropdownOpen(false);
+                        handleDestinationClick(item.id, item.city_name);
+                      }}
+                      className={`relative flex items-center justify-between px-5 py-1.5 text-gray-700 font-medium cursor-pointer 
+          transition-all duration-200 group hover:text-blue-700 hover:pl-6`}
+                      style={{ transitionDelay: `${i * 30}ms` }} // subtle stagger
+                    >
+                      <span className="flex items-center gap-2">
+                        {item.city_name}
+                      </span>
+
+                      {/* Right arrow animation */}
+                      <RiArrowRightSLine className="text-lg  translate-x-1 group-hover:translate-x-2 transition-all duration-300" />
+                    </li>
+                  ))}
+                </ul>
               </div>
             </div>
           </li>
@@ -354,9 +510,15 @@ function Header() {
             </Link>
           </li>
 
+          <li className="text-xl cursor-pointer font-medium text-black">
+            <Link to="/eventsHistory" onClick={() => setIsOpen(false)}>
+              Events
+            </Link>
+          </li>
+
           <li className="text-black text-xl cursor-pointer font-medium">
             <Link to="/aboutus" onClick={() => setIsOpen(false)}>
-              About
+              About Us
             </Link>
           </li>
           <li className="text-black text-xl cursor-pointer font-medium">
@@ -364,6 +526,7 @@ function Header() {
               Contact Us
             </Link>
           </li>
+
           {userLogedIn && (
             <li className="text-black text-xl cursor-pointer font-medium">
               <Link to="/profile" onClick={() => setIsOpen(false)}>

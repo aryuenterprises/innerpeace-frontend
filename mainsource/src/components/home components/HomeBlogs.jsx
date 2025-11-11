@@ -79,11 +79,11 @@ const HomeBlogs = () => {
   }, []);
 
   const SkeletonCard = ({index}) => (
-    <div key={index} className="max-sm:hidden mx-2 h-[260px] md:h-[280px]  bg-gray-600 flex-grow rounded-2xl animate-pulse"></div>
+    <div key={index} className="max-sm:hidden mx-2 h-[260px] md:h-[280px]  bg-gray-300 flex-grow rounded-2xl animate-pulse"></div>
   );
 
   const SkeletonCarouselCard = ({index}) => (
-    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-[280px] sm:hidden  bg-gray-600   rounded-2xl animate-pulse"></div>
+    <div key={index} className="w-[90vw] sm:w-[70vw] mx-auto h-[280px] sm:hidden  bg-gray-300   rounded-2xl animate-pulse"></div>
   );
 
   // const imageUrl = post?._embedded?.["wp:featuredmedia"]?.[0]?.source_url ?? defaultimg;

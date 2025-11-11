@@ -1,15 +1,22 @@
 import React from "react";
-import { lazy,Suspense } from "react";
-let Header=lazy(()=>import("../components/Header")) 
-let ContactUsHero=lazy(()=>import("../components/ContactUsHero"))
-let ContactUsGetInTouch=lazy(()=>import("../components/ContactUsGetInTouch"))
-let ContactUsVisitOurOffice=lazy(()=>import("../components/ContactUsVisitOurOffice"))
-let ContactUsVisitOurFaq=lazy(()=>import("../components/ContactUsFaq"))
-let Footer=lazy(()=>import("../components/Footer"))
+import { lazy, Suspense } from "react";
+let Header = lazy(() => import("../components/Header"));
+let ContactUsHero = lazy(() => import("../components/ContactUsHero"));
+let ContactUsGetInTouch = lazy(() =>
+  import("../components/ContactUsGetInTouch")
+);
+let ContactUsVisitOurOffice = lazy(() =>
+  import("../components/ContactUsVisitOurOffice")
+);
+let ContactUsVisitOurFaq = lazy(() => import("../components/ContactUsFaq"));
+let Footer = lazy(() => import("../components/Footer"));
 
 import { useEffect, useState } from "react";
 import whatsapp from "../assets/whatsapp.svg";
 import TopHeader from "../components/TopHeader";
+import GoToTop from "../components/GoToTop";
+import { Link } from "react-router-dom";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 
 function ContactUs() {
   // const [isLoading, setIsLoading] = useState(true); // Loading state
@@ -32,7 +39,7 @@ function ContactUs() {
   // }
   return (
     <div>
-      <div
+      {/* <div
         onClick={() => window.open("https://wa.me/6384131642")}
         className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
       >
@@ -40,8 +47,9 @@ function ContactUs() {
           <p>Whatsapp Enquiry</p>
         </div>
         <img src={whatsapp} className="h-10 w-10  transition-all duration-500" />
-      </div>
+      </div> */}
 
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -50,9 +58,21 @@ function ContactUs() {
           </div>
         }
       >
-                {/* <TopHeader/> */}
+        {/* <TopHeader/> */}
+        
 
         <Header />
+
+        <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          
+          <p className="text-blue-500 font-medium sm:font-semibold">
+            Contact Us
+          </p>
+        </div>
         <ContactUsHero />
         <ContactUsGetInTouch />
         <ContactUsVisitOurOffice />

@@ -2,7 +2,7 @@ import React from "react";
 import { lazy, Suspense } from "react";
 let Header = lazy(() => import("../components/Header"));
 let Footer = lazy(() => import("../components/Footer"));
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { FaLocationDot } from "react-icons/fa6";
@@ -18,6 +18,10 @@ import approve from "../assets/approve.svg";
 import insurance from "../assets/insurance.svg";
 import pricetag from "../assets/pricetag.svg";
 import TopHeader from "../components/TopHeader";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import GoToTop from "../components/GoToTop";
+import dummyImage from "../assets/dummy5.jpeg";
+import ParallexImage from "../components/ParallexImage";
 
 function Programs() {
   useEffect(() => {
@@ -32,7 +36,7 @@ function Programs() {
   const [heroName, setHeroName] = useState("");
   const [filterButtonClicked, setFilterButtonClicked] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(8);
+  const [itemsPerPage] = useState(9);
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -86,7 +90,7 @@ function Programs() {
       .replace(/^-+|-+$/g, ""); // Trim hyphens from the start and end
 
     navigate(`/${id}/${formattedTitleName}`, {
-      state: { id, title },
+      state: { id, title, cameFrom: "tripcategories" },
     });
 
     window.scrollTo({
@@ -107,32 +111,32 @@ function Programs() {
 
   const SkeletonLoader = () => {
     return (
-      <div className="animate-pulse flex flex-col  gap-4  w-full m">
-        {[...Array(4)].map((_, index) => (
+      <div className="animate-pulse grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-5 py-4 w-full">
+        {[...Array(8)].map((_, index) => (
           <div
             key={index}
-            className="bg-gray-300  mt-11 justify-between flex flex-col gap-2 lg:flex-row rounded-xl"
+            className="flex flex-col gap-2 pb-2 font-jakarta border rounded-2xl border-gray-300"
           >
-            {/* Left section */}
-            <div className="rounded-t-xl lg:rounded-s-xl lg:rounded-r-none  h-32 lg:h-52 bg-gray-500 w-full lg:w-1/4 "></div>
+            {/* Image skeleton */}
+            <div className="h-64 md:h-72 w-full bg-gray-300 rounded-xl"></div>
 
-            {/* Middle section */}
-            <div className="flex flex-col gap-2 md:gap-4 lg:gap-6 md:py-2 flex-1 border-r border-gray-400  lg:w-3/4">
-              <div className="w-1/2 lg:w-96 h-10 bg-gray-500 rounded-lg"></div>
-              <div className="w-1/4 lg:w-52 h-10 bg-gray-500 rounded-lg"></div>
-
-              <div className="flex gap-8 justify-between md:justify-normal px-5">
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
-                <div className="w-10 h-10 bg-gray-500 rounded-full"></div>
+            {/* Title & rating skeleton */}
+            <div className="flex px-3 gap-x-5 justify-between flex-wrap">
+              <div className="w-1/2 h-5 bg-gray-300 rounded-md"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-5 h-5 bg-gray-300 rounded-full"></div>
+                <div className="w-16 h-4 bg-gray-300 rounded-md"></div>
               </div>
             </div>
 
-            {/* Right section */}
-            <div className="flex lg:flex-col justify-center gap-2 px-5 md:gap-5 pb-2 md:py-2 md:pe-5 rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl  lg:w-1/5">
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
-              <div className="h-8 w-28 bg-gray-500 rounded-lg"></div>
+            {/* Location skeleton */}
+            <div className="px-3">
+              <div className="w-3/4 h-4 bg-gray-300 rounded-md"></div>
+            </div>
+
+            {/* Price skeleton */}
+            <div className="px-3">
+              <div className="w-24 h-5 bg-gray-300 rounded-md"></div>
             </div>
           </div>
         ))}
@@ -140,49 +144,9 @@ function Programs() {
     );
   };
 
-  const [sliceCount, setSliceCount] = useState(2);
-
-  useEffect(() => {
-    const handleResize = () => {
-      if (window.innerWidth >= 1300) {
-        setSliceCount(3); // large screens
-      } else if (window.innerWidth >= 1024) {
-        setSliceCount(3); // large screens
-      } else if (window.innerWidth >= 768) {
-        setSliceCount(3); // large screens
-      } else if (window.innerWidth >= 500) {
-        setSliceCount(3); // small screens
-      } else {
-        setSliceCount(2); // small screens
-      }
-    };
-
-    // Initial check
-    handleResize();
-
-    // Event listener
-    window.addEventListener("resize", handleResize);
-
-    // Cleanup
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
   return (
     <div>
-      {!filterButtonClicked && (
-        <div
-          onClick={() => window.open("https://wa.me/6384131642")}
-          className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
-        >
-          <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
-            <p>Whatsapp Enquiry</p>
-          </div>
-          <img
-            src={whatsapp}
-            className="h-12 w-12  transition-all duration-500"
-          />
-        </div>
-      )}
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -196,10 +160,9 @@ function Programs() {
         <Header />
 
         <div>
-          <div
+          {/* <div
             id="hero"
-            className="h-64 md:h-80 lg:h-[420px]  
- relative bg-[url('././assets/dummy5.jpeg')] bg-cover bg-center bg-no-repeat bg-fixed"
+            className="h-64 md:h-80 lg:h-[420px]  relative bg-[url('././assets/dummy5.jpeg')] bg-cover bg-center bg-no-repeat bg-fixed"
           >
             <div className="absolute flex w-full h-full items-center justify-center">
               <div
@@ -215,30 +178,111 @@ function Programs() {
                 </p>
               </div>
             </div>
+          </div> */}
+
+          {/* <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
+            <Link to="/">
+              <p className="text-xs sm:text-sm">Home</p>
+            </Link>
+            <MdOutlineKeyboardArrowRight className="text-xl" />
+            <p className="text-blue-500 font-medium sm:font-semibold">
+              Trip Categories
+            </p>
+          </div> */}
+          <div className="flex gap-1 sm:gap-2 px-2 py-0.5 items-center">
+            <Link to="/">
+              <p className="text-xs sm:text-sm">Home</p>
+            </Link>
+
+            <MdOutlineKeyboardArrowRight className="text-xl" />
+            <p className="text-blue-500 font-medium sm:font-semibold">
+              Trip Categories
+            </p>
+          </div>
+
+          <div
+            id="hero"
+            className="h-64 md:h-80 lg:h-[480px] relative overflow-hidden"
+          >
+            {loading ? (
+              // 🌟 Skeleton Loader Section
+              <div className="absolute inset-0 animate-pulse">
+                <div className="w-full h-full bg-gray-300" />
+                <div className="absolute flex w-full h-full items-center justify-center">
+                  <div className="h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl bg-gray-400 backdrop-blur-md" />
+                </div>
+              </div>
+            ) : (
+              <>
+                {/* ✅ Actual Image */}
+                <ParallexImage
+                  src={
+                    apiData[0]?.theme[0]?.image
+                      ? `https://backoffice.innerpece.com/${apiData[0]?.theme[0]?.image}`
+                      : dummyImage
+                  }
+                  className="absolute inset-0 w-full h-full object-cover object-bottom"
+                  alt="Hero Background"
+                />
+
+                {/* ✅ Overlay Content */}
+                <div className="absolute flex w-full h-full items-center justify-center">
+                  <div
+                    id="blur"
+                    className="absolute h-[60%] w-[85%] md:w-[65%] lg:w-[60%] rounded-xl flex flex-col justify-center top-11 md:top-10 lg:top-16 px-3 py-1 md:px-8 md:py-3 bg-black/5 backdrop-blur-2xl"
+                  >
+                    <h1 className="text-white text-2xl sm:text-3xl md:text-4xl font-rancho tracking-widest text-center lg:text-5xl font-semibold [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
+                      {`Explore ${
+                        apiData.length > 0 ? heroName : upperCasedLocationName
+                      }`}
+                    </h1>
+                    <p className="text-white text-xs sm:text-sm md:text-base mt-2 text-center font-dmSans [text-shadow:2px_2px_4px_rgba(0,0,0,0.6)]">
+                      Find your perfect trip with personalized themes and
+                      destinations to match your preferences
+                    </p>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
         </div>
+
+        {/* <div className="flex gap-1 sm:gap-2  ps-4 pe-4 md:px-7  lg:px-8 xl:px-10  items-center mt-5">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          <p className="text-[#1e1e1e] font-medium sm:font-semibold">
+            Trip Categories
+          </p>
+        </div> */}
 
         {/* Main Section  */}
         <div className="flex flex-col xl:flex-row gap-2 md:gap-5 lg:gap-7 xl:gap-10  ps-4 pe-4 md:px-7  lg:px-8 xl:px-10 ">
           {/* Main Section > Mainbar */}
-          <div className=" md:mt-10 w-full ">
+          <div id="program" className="  w-full md:mt-10">
             {loading ? (
               <SkeletonLoader />
             ) : currentItems.length > 0 ? (
-              currentItems.map((item, index) => (
-                <div
-                  id="program"
-                  key={index}
-                  className="flex flex-col mt-10  overflow-hidden"
-                >
+              <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-5 py-4">
+                {currentItems.map((item, outerIndex) => (
                   <div
-                    key={index}
-                    className="flex flex-col group lg:flex-row  overflow-hidden   "
+                    key={outerIndex}
+                    onClick={() => handleCardClick(item.id, item.title)}
+                    className="flex-shrink-0 flex-1 cursor-pointer flex flex-col pb-2 font-jakarta border rounded-2xl border-gray-300"
                   >
-                    <div
-                      onClick={() => handleCardClick(item.id, item.title)}
-                      className="relative overflow-hidden   w-full lg:w-1/3 rounded-t-xl lg:rounded-s-xl lg:rounded-r-none"
-                    >
+                    {/* Cover Image */}
+                    {/* <img
+                      src={
+                        item.cover_img
+                          ? `https://backoffice.innerpece.com/${item.cover_img}`
+                          : defaultimage
+                      }
+                      alt={item.title}
+                      className="h-64 md:h-72 object-cover w-full rounded-xl"
+                    /> */}
+
+                    <div className="h-64 md:h-72 overflow-hidden rounded-xl">
                       <img
                         src={
                           item.cover_img
@@ -246,199 +290,84 @@ function Programs() {
                             : defaultimage
                         }
                         alt={item.title}
-                        className="w-full h-44 sm:h-60   object-cover object-center transform transition-transform duration-500 group-hover:scale-110 cursor-pointer"
+                        className=" object-cover w-full h-full rounded-xl hover:scale-105 transition-all duration-300 ease-in-out"
                       />
                     </div>
 
-                    <div
-                      onClick={() => handleCardClick(item.id, item.title)}
-                      className="flex flex-wrap flex-grow overflow-hidden lg:w-3/4  flex-col gap-1 md:gap-2 border lg:border-l-0 cursor-pointer border-[#BABABA]  py-2 px-2 md:px-3 "
-                    >
-                      <p className="font-semibold text-[#2D2D2D] flex-wrap text-xl md:text-3xl font-jost">
-                        {/* {item.title.includes("-") ? item.title : item.title} */}
-                        {item.title}
-                      </p>
+                    {/* Content Section */}
+                    <div className="flex flex-col justify-between flex-1">
+                      <div>
+                        {/* Title + Rating */}
+                        <div className="flex px-3 gap-x-5 justify-between flex-wrap font-PlusJakartaSansMedium font-semibold">
+                          <p className="line-clamp-1">{item.title}</p>
 
-                      {/* <p className="flex-wrap text-[#11142D] font-mulish md:text-lg">
-                        {item.title.includes("-")
-                          ? item.title.split("-")[1]
-                          : ""}
-                      </p> */}
+                          <div className="flex items-center">
+                            <FaStar className="text-yellow-500" />
+                            {/* <p>5.0 (2)</p> */}
+                            <p>
+                              {item.average_rating} ( {item.reviews.length} )
+                            </p>
+                          </div>
+                        </div>
 
-                      {item.current_location &&
-                        item.current_location !== "<p><br></p>" && (
-                          <div className="flex items-center gap-2">
-                            <FaLocationDot className="text-sky-800" />
-
+                        {/* Location */}
+                        {item.current_location &&
+                          item.current_location !== "<p><br></p>" && (
                             <p
-                              className="text-sm sm:text-base"
+                              className="text-[#797979] px-3 line-clamp-1 text-sm"
                               dangerouslySetInnerHTML={{
                                 __html: item.current_location,
                               }}
                             />
-                          </div>
-                        )}
-
-                      {/* <div className="flex items-centeroverflow-hidden justify-between gap-2 flex-wrap font-mulish">
-                        // {item.current_location &&
-                        //   item.current_location !== "<p><br></p>" && (
-                        //     <div className="flex items-center gap-2">
-                        //       <FaLocationDot className="text-sky-800" />
-                             
-                        //       <p
-                        //         className="text-sm sm:text-base"
-                        //         dangerouslySetInnerHTML={{
-                        //           __html: item.current_location,
-                        //         }}
-                        //       />
-                        //     </div>
-                        //   )}
-
-                        <div className="flex items-center gap-1">
-                          <FaStar className="text-yellow-500" />
-                          <p>
-                            <b className="me-1">{item.average_rating}</b>of 5
-                          </p>
-                        </div>
-                      </div> */}
-
-                      {/* <div className="flex items-center flex-wrap gap-2">
-                        {item.member_capacity && (
-                          <p>Upto {item.member_capacity} guests</p>
-                        )}
-
-                        {item.bed_room && (
-                          <div className="flex items-center gap-3">
-                            <PiStarFourFill className="text-gray-400" />
-                            <p>
-                              {item.bed_room}{" "}
-                              {item.bed_room > "1" ? "bed rooms" : "bed room"}
-                            </p>
-                          </div>
-                        )}
-
-                        {item.bath_room && (
-                          <div className="flex items-center gap-3">
-                            <PiStarFourFill className="text-gray-400" />
-                            <p>
-                              {item.bath_room}{" "}
-                              {item.bath_room > "1"
-                                ? "bath rooms"
-                                : "bath room"}
-                            </p>
-                          </div>
-                        )}
-                      </div> */}
-
-                      {item.amenities && item.amenities.length > 0 && (
-                        <div>
-                          {/* <div className="border-b border-[#BABABA] "></div> */}
-
-                          <div className="flex justify-start mt-3 gap-2 flex-wrap items-start">
-                            {item.amenities
-                              .slice(0, sliceCount)
-                              .map((amenity, index) => (
-                                <div
-                                  key={index}
-                                  className="flex flex-col justify-center items-center  gap-1 w-20 flex-wrap"
-                                >
-                                  <span className="border-2 p-2 w-8 h-8 md:w-11 md:h-11 border-gray-300 rounded-full">
-                                    <img
-                                      src={`https://backoffice.innerpece.com/${amenity.amenity_pic}`}
-                                      alt=""
-                                    />
-                                  </span>
-                                  <p className="text-gray-500 flex-wrap text-center text-xs">
-                                    {amenity.amenity_name}
-                                  </p>
-                                </div>
-                              ))}
-
-                            {/* {item.amenities.length > 3 && (
-                              <p className="text-gray-500">
-                                {item.amenities.length - 3}+
-                              </p>
-                            )} */}
-                            {item.amenities.length > 3 && (
-                              //  <span className="border-2 p-2 w-9 h-9 border-gray-300 rounded-full">
-
-                              // <p className="text-gray-500 text-xs mx-auto">
-                              //   +{item.amenities.length - 3}
-                              // </p>
-                              // </span>
-                              <div
-                                key={index}
-                                className="flex flex-col gap-1 w-20 justify-center items-center flex-wrap"
-                              >
-                                 <span className="bg-sky-700 p-2 w-8 h-8 md:w-11 md:h-11 flex items-center justify-center rounded-full">
-                                 <p className="text-white text-xs">
-                                    +{item.amenities.length - 3}
-                                  </p>
-                                </span>
-                                <p className="text-sky-700 flex-wrap text-xs w-fit">
-                                  More
-                                </p>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex flex-wrap  flex-row lg:flex-col lg:w-1/5 items-center justify-between lg:justify-center gap-2  lg:border-s-0 border-t-0 lg:border-t rounded-b-lg lg:rounded-l-none  lg:rounded-e-xl border border-[#BABABA]  px-2 md:px-3 py-2 font-mulish   ">
-                      <div className="flex flex-row lg:flex-col gap-1 lg:gap-3 items-center justify-center">
-                        <p className="text-[#001031] text-sm md:text-base text-center mx-auto ">
-                          Starting From{" "}
-                        </p>
-                        <p className="font-bold text-green-700 text-lg sm:text-xl mx-auto">
-                          ₹{Number(item.pricing[0]).toLocaleString("en-IN")}
-                        </p>
+                          )}
                       </div>
 
-                      <div
-                        onClick={() => handleCardClick(item.id, item.title)}
-                        className="flex cursor-pointer items-center gap-2 bg-gradient-to-r from-sky-700 to-sky-900 px-2 sm:px-4  lg:px-4.5 py-1 lg:py-2 rounded-lg transition-all duration-300 transform hover:-translate-y-1 hover:shadow-md hover:brightness-110"
-                      >
-                        <p className="text-white md:font-medium md:text-xl text-center">
-                          View Detail
+                      <hr className="mt-5 px-3" />
+
+                      {/* Price — Always at Bottom */}
+                      <div className="flex px-3 gap-3 mt-auto pt-2">
+                        {/* <p className="text-[#1e1e1e]">Starting from</p> */}
+                        <p className="lg:text-[20px] font-PlusJakartaSansMedium px-3 font-semibold">
+                          ₹ {Number(item.pricing[0]).toLocaleString("en-IN")}
                         </p>
-                        {/* <FaArrowRight className="text-white h-full" /> */}
                       </div>
                     </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             ) : (
-              <div className="flex my-20 justify-center w-full h-full">
+              <div className="flex my-20  justify-center w-full h-full">
                 <p className="text-xl md:text-3xl font-jost">
                   No programs available.
                 </p>
               </div>
             )}
 
-            <nav>
-              <div className="flex justify-center items-center mt-8">
-                <ul className="flex space-x-2">
-                  {Array.from(
-                    { length: Math.ceil(apiData.length / itemsPerPage) },
-                    (_, i) => (
-                      <li key={i + 1} className="relative">
-                        <button
-                          onClick={() => paginate(i + 1)}
-                          className={`px-5 py-2 border-2 rounded text-black ${
-                            currentPage === i + 1
-                              ? "bg-sky-800 border-sky-800 text-white"
-                              : "hover:bg-sky-700 hover:border-sky-700"
-                          }`}
-                        >
-                          {i + 1}
-                        </button>
-                      </li>
-                    )
-                  )}
-                </ul>
-              </div>
-            </nav>
+            {apiData.length > 8 && (
+              <nav>
+                <div className="flex justify-center items-center mt-5">
+                  <ul className="flex space-x-2">
+                    {Array.from(
+                      { length: Math.ceil(apiData.length / itemsPerPage) },
+                      (_, i) => (
+                        <li key={i + 1} className="relative">
+                          <button
+                            onClick={() => paginate(i + 1)}
+                            className={`px-4 py-2 border-2 rounded-full text-black ${
+                              currentPage === i + 1
+                                ? "bg-sky-700 border-sky-700 text-white"
+                                : "hover:bg-sky-700 hover:border-sky-700"
+                            }`}
+                          >
+                            {i + 1}
+                          </button>
+                        </li>
+                      )
+                    )}
+                  </ul>
+                </div>
+              </nav>
+            )}
           </div>
 
           {/* Main Section > Sidebar */}

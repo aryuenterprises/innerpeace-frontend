@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { lazy, Suspense } from "react";
 let Header = lazy(() => import("../components/Header"));
 let MyProfile_Sidebar = lazy(() => import("../components/MyProfile_Sidebar"));
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaStar } from "react-icons/fa";
 import { FaLocationDot, FaArrowRight } from "react-icons/fa6";
 
@@ -12,6 +12,8 @@ import axios from "axios";
 let Footer = lazy(() => import("../components/Footer"));
 import whatsapp from "../assets/whatsapp.svg";
 import TopHeader from "../components/TopHeader";
+import { MdOutlineKeyboardArrowRight } from "react-icons/md";
+import GoToTop from "../components/GoToTop";
 
 const User_Wishlist = () => {
   const [userLogedIn, setUserLogedIn] = useState("");
@@ -114,7 +116,7 @@ const User_Wishlist = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen flex flex-col">
-      <div
+      {/* <div
         onClick={() => window.open("https://wa.me/6384131642")}
         className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
       >
@@ -125,7 +127,11 @@ const User_Wishlist = () => {
           src={whatsapp}
           className="h-10 w-10  transition-all duration-500"
         />
-      </div>
+      </div> */}
+
+
+<GoToTop/>
+
 
       <Suspense
         fallback={
@@ -134,10 +140,19 @@ const User_Wishlist = () => {
           </div>
         }
       >
-
-{/* <TopHeader/> */}
+        {/* <TopHeader/> */}
 
         <Header />
+
+        <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
+          <Link to="/">
+            <p className="text-xs sm:text-sm">Home</p>
+          </Link>
+
+          <MdOutlineKeyboardArrowRight className="text-xl" />
+          <p className="text-blue-500 font-medium sm:font-semibold">Wishlist</p>
+        </div>
+
         <div className="flex flex-col md:flex-row pt-10 pb-4 px-5 md:px-10 gap-5">
           {/* Sidebar */}
           <div className="basis-1/12">
