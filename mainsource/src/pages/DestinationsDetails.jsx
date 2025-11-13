@@ -95,8 +95,7 @@ function DestinationsDetails() {
         if (metaOgImage) {
           metaOgImage.setAttribute(
             "content",
-            `https://backoffice.innerpece.com/${firstProgram.cover_img}` ||
-              ""
+            `https://backoffice.innerpece.com/${firstProgram.cover_img}` || ""
           );
         }
       } catch (err) {
@@ -347,7 +346,7 @@ function DestinationsDetails() {
                       <img
                         src={
                           item.image_path
-                            ? `https://backoffice.innerpece.com${item.image_path}`
+                            ? `https://backoffice.innerpece.com/${item.image_path}`
                             : defaultimg
                         }
                         alt={item.destination}
