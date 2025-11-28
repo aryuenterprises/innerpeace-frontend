@@ -293,8 +293,8 @@ const StaysDetails = () => {
       const authToken = userId;
       const storedUserId = localStorage.getItem("loginid");
       const response = await axios.post(
-        // "https://backoffice.innerpece.com/api/add_stay_review",
-        "https://backoffice.innerpece.com/api/add_review",
+        "https://backoffice.innerpece.com/api/add_stay_review",
+        // "https://backoffice.innerpece.com/api/add_review",
         // Body data
         {
           user_id: userDetails?.id,
