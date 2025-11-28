@@ -157,7 +157,6 @@ const StaysDetails = () => {
       : null;
     setUserDetails(userDetails);
 
-
     const fetchProgramData = async () => {
       try {
         const response = await axios.get(
@@ -789,6 +788,9 @@ const StaysDetails = () => {
       >
         <div className="flex items-center justify-between">
           <div className="flex gap-5">
+           {apiData?.data?.[0]?.actual_price &&
+           
+            <>
             {apiData?.data?.[0]?.actual_price && (
               <del className=" text-md text-[#7C7C7C]">
                 ₹ {Number(apiData?.data?.[0]?.actual_price).toLocaleString()}
@@ -799,6 +801,9 @@ const StaysDetails = () => {
                 ₹ {Number(apiData?.data?.[0]?.discount_price).toLocaleString()}
               </p>
             )}
+            </>
+}
+
           </div>
 
           <button
@@ -1359,12 +1364,19 @@ const StaysDetails = () => {
           >
             <div className="border border-[#E4E4E4] max-md:hidden shadow-xl mx-6 shadow-black/15 rounded-xl p-8">
               <div className="flex gap-5">
+
+{apiData?.data?.[0]?.actual_price ? 
+       <>
                 <del className="font-mulish text-xl text-gray-500">
                   ₹{Number(apiData?.data?.[0]?.actual_price).toLocaleString()}
                 </del>
                 <p className="font-mulish font-semibold text-xl">
                   ₹{Number(apiData?.data?.[0]?.discount_price).toLocaleString()}
                 </p>
+                </> : <></>
+}
+         
+
               </div>
 
               <div className="border border-[#8C8C8C] rounded-xl mt-5 ">
@@ -2297,6 +2309,7 @@ const StaysDetails = () => {
                         </div>
                       </div>
 
+{apiData?.data?.[0]?.actual_price &&
                       <div className="flex items-center border rounded-md">
                         <span className="p-2">
                           <FaPeopleLine />
@@ -2309,8 +2322,9 @@ const StaysDetails = () => {
                           ).toLocaleString()}
                         </p>
                       </div>
-                    </div>
+                        }
 
+                    </div>
                     {success && (
                       <div className="bg-green-100 text-green-700 p-2 rounded mb-4">
                         {success}

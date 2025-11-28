@@ -104,7 +104,7 @@ const StaysList = () => {
 
   const handleCardClick = (id, stay_title) => {
     navigate(`/staysdetails/${id}`, {
-      state: { id,stayCategories:true },
+      state: { id, stayCategories: true },
     });
 
     window.scrollTo({
@@ -425,7 +425,9 @@ const StaysList = () => {
                               </div>
 
                               {/* Price — Always at Bottom */}
+
                               <div className="flex items-center gap-2 px-3 mt-auto pt-2">
+                         {item.actual_price ?    <>
                                 <del className="font-PlusJakartaSansMedium text-[#7C7C7C] font-medium">
                                   ₹{" "}
                                   {Number(item.actual_price).toLocaleString(
@@ -439,6 +441,13 @@ const StaysList = () => {
                                     "en-IN"
                                   )}
                                 </p>
+                              </> : 
+                              <>
+                              </>
+                              }
+                         
+                           
+
                               </div>
                             </div>
                           </div>
