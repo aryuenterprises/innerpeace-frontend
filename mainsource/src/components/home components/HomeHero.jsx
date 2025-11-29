@@ -27,6 +27,7 @@ import { motion } from "framer-motion";
 function Hero() {
   // let a=useSra
   const [apiImages, setApiImages] = useState([]);
+  const [apiData, setApiData] = useState("");
 
   const placeholders = [
     "Search for Goa...",
@@ -48,11 +49,10 @@ function Hero() {
     async function getApiData() {
       await axios
 
-        .get(
-          `https://backoffice.innerpece.com/api/v1/get-combined-data`
-        )
+        .get(`https://backoffice.innerpece.com/api/v1/get-combined-data`)
         .then((response) => {
           let apiData = response.data.data.sliders;
+          setApiData(apiData);
           let images = apiData.map((item, index) => item.slider_image);
           setApiImages(images);
         })
@@ -87,23 +87,6 @@ function Hero() {
     return () => clearTimeout(timeout);
   }, [charIndex, deleting, index]);
 
-  // const heroImages = [
-  //   home_Hero_image1,
-  //   home_Hero_image2,
-  //   home_Hero_image3,
-  //   // home_Hero_image4,
-  //   home_Hero_image5,
-  //   home_Hero_image6,
-  //   home_Hero_image7,
-  //   home_Hero_image8,
-  //   home_Hero_image9,
-  //   home_Hero_image10,
-  //   home_Hero_image11,
-  //   home_Hero_image12,
-  // ];
-
-
-console.log(apiImages)
   useEffect(() => {
     if (apiImages.length === 0) return; // ✅ wait for images to load
 
@@ -153,12 +136,6 @@ console.log(apiImages)
   return (
     <div className="hero-container relative overflow-hidden h-full">
       <div className="relative w-full h-[75vh] md:h-[105vh]">
-        {/* Background Image */}
-        {/* <ParallaxImage2
-          src={common_rooms_zostel}
-          alt="Hero Background"
-          className="absolute inset-0 w-full h-full object-cover overflow-hidden flex-grow transform transition-transform duration-500 group-hover:scale-110 bg-center"
-        /> */}
         <div className="absolute w-full h-24 top-0 z-10 bg-gradient-to-b from-black/40 from-0% to-transparent"></div>
 
         <HomeHeader />

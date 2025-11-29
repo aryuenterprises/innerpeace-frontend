@@ -4,18 +4,16 @@ import googleLogo from "../assets/googleLogo.svg";
 
 const Reviews = () => {
   const names = [
-  "Aarav Nair", "Diya Menon", "Karthik Reddy", "Ananya Iyer", "Vikram Rajan",
-  "Sneha Pillai", "Arjun Kumar", "Meera Nambiar", "Hari Prasad", "Revathi Suresh",
-  "Rohit Ramesh", "Lakshmi Krishnan", "Vignesh Babu", "Keerthi Nair", "Sandeep Reddy",
-  "Divya Krishnan", "Naveen Kumar", "Aishwarya Raj", "Pradeep Menon", "Nithya Ramesh",
-  "Harish Nambiar", "Shruthi Iyer", "Manoj Reddy", "Deepika Rajan", "Suraj Pillai",
-  "Anjali Prasad", "Kiran Kumar", "Swetha Nair", "Abhishek Reddy", "Vidya Krishnan",
-  "Ravi Chandran", "Gayathri Menon", "Ashwin Raj", "Malavika Nair", "Mohan Reddy",
-  "Keerthana Iyer", "Santosh Kumar", "Shilpa Nair", "Sujith Reddy", "Preethi Rajan",
-  "Varun Nambiar", "Snehalatha Krishnan", "Ajay Reddy", "Ramya Menon", "Bharath Kumar",
-  "Nisha Raj", "Siddharth Nair", "Kavya Reddy", "Ganesh Iyer", "Aparna Menon",
-  "Rakesh Rajan", "Pooja Krishnan", "Vivek Reddy", "Sandhya Nair", "Madhav Pillai",
-  "Divakar Reddy", "Harini Iyer", "Sujay Menon", "Priya Rajan", "Dinesh Kumar"
+  "Aarav Nair", "Karthik Reddy", "Ananya Iyer", "Vikram Rajan",
+   "Arjun Kumar", "Hari Prasad", "Rohit Ramesh", "Vignesh Babu", "Sandeep Reddy",
+   "Naveen Kumar", "Pradeep Menon", "Nithya Ramesh",
+  "Harish Nambiar", "Manoj Reddy",  "Suraj Pillai",
+  " Prasad", "Kiran Kumar", "Nair", "Abhishek Reddy", " Krishnan",
+  "Ravi ", "Menon", "Ashwin Raj", "Mohan Reddy",
+   "Santosh Kumar",
+  "Varun Nambiar", "Bharath Kumar",
+  "Siddharth Nair","Ganesh Iyer",
+
 ];
 
   const locations = [
@@ -75,9 +73,7 @@ const Reviews = () => {
     name: getRandom(names),
     location: getRandom(locations),
     rating: getRandomRating(),
-    image: `https://randomuser.me/api/portraits/${
-      i % 2 === 0 ? "men" : "women"
-    }/${(i % 90) + 1}.jpg`,
+    image: `https://randomuser.me/api/portraits/men/${(i % 90) + 1}.jpg`,
     text: getRandom(texts),
   }));
 
