@@ -58,9 +58,9 @@ const EventsHistory = () => {
   const onClickManageEvent = (id) => {
     navigate(`/manageEvent/${id}`);
     window.scrollTo({
-      top:0,
-      behavior:'instant'
-    })
+      top: 0,
+      behavior: "instant",
+    });
   };
 
   useEffect(() => {
@@ -91,7 +91,10 @@ const EventsHistory = () => {
       {Array(4)
         .fill(0)
         .map((_, i) => (
-          <div key={i} className="flex gap-1 flex-grow sm:gap-5 md:gap-10 animate-pulse">
+          <div
+            key={i}
+            className="flex gap-1 flex-grow sm:gap-5 md:gap-10 animate-pulse"
+          >
             <div className="sm:flex flex-col hidden items-center md:items-end gap-1 min-w-[50px] md:min-w-[90px]">
               <div className="h-4 w-10 bg-gray-300/60 rounded"></div>
               <div className="h-3 w-14 bg-gray-300/60 rounded"></div>
@@ -134,7 +137,7 @@ const EventsHistory = () => {
         </p>
       </div>
 
-      <div className="flex flex-col items-center min-h-screen relative overflow-hidden pb-10">
+      <div className="flex flex-col items-center  relative overflow-hidden pb-10">
         {/* Background animation */}
         <LazyMotion features={domAnimation}>
           <m.div
@@ -161,143 +164,153 @@ const EventsHistory = () => {
 
         {/* Main Content */}
         <div className="max-w-6xl w-full font-PlusJakartaSansMedium mt-10 xl:border xl:bg-white/40 xl:shadow-xl shadow-black/30 p-4 sm:p-6 md:p-8 backdrop-blur-md rounded-xl relative z-10">
-          {/* Header */}
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black tracking-wide">
-              Events
-            </p>
-          </div>
+          {upcomingApiData.length > 0 ? (
+            <>
+              {/* Header */}
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <p className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-black tracking-wide">
+                  Events
+                </p>
+              </div>
 
-          {/* Timeline */}
-          <div className="mt-10 md:mt-16 relative flex flex-col">
-            {loading ? (
-              <SkeletonLoader />
-            ) : (
-              <>
-                {upcomingApiData.map((item, i) => (
-                  <div
-                    key={i}
-                    className="flex  gap-1 sm:gap-5 md:gap-10 relative will-change-transform"
-                  >
-                    {/* Date */}
-                    <div className="sm:flex flex-col hidden items-center md:items-end gap-1 min-w-[50px] md:min-w-[90px]">
-                      <p className="text-xs sm:text-base md:text-lg ">
-                        {dateFormatter(item.start_datetime).split(",")[0]}
-                      </p>
-                      <p className="text-xs sm:text-sm md:text-base text-black/70 font-semibold">
-                        {dateFormatter(item.start_datetime).split(",")[1]}
-                      </p>
-                    </div>
-
-                    {/* Timeline line */}
-                    <div className="flex flex-col items-center ">
-                      <div className="w-5 h-5 md:w-7 md:h-8 rounded-full flex items-center justify-center bg-[#ccdeee]">
-                        <div className="w-2.5 h-2.5 md:w-4 md:h-4 rounded-full bg-[#0088ff] animate-pulse" />
-                      </div>
-                      <div className="bg-black/10 w-[2px] h-full" />
-                    </div>
-
-                    {/* Card */}
-                    <div className="flex flex-col sm:hidden flex-grow">
-                      <div className="flex  flex-col mb-2 ms-3  md:items-end gap-1 min-w-[50px] md:min-w-[90px]">
-                        <p className="text-xs sm:text-base md:text-lg ">
-                          {dateFormatter(item.start_datetime).split(",")[0]}
-                        </p>
-                        <p className="text-xs sm:text-sm md:text-base text-black/70 font-semibold">
-                          {dateFormatter(item.start_datetime).split(",")[1]}
-                        </p>
-                      </div>
-                      <div className="bg-white/60 backdrop-blur-md flex-grow rounded-2xl p-4 sm:p-5 md:p-6 w-full md:w-2/3 shadow-md hover:bg-white/40 transition-all duration-500 mb-8 md:mb-10 relative border border-transparent hover:border-blue-400 ">
-                        <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
-                          {/* Info */}
-                          <div className="flex flex-col gap-2 md:gap-3">
-                            <p className="text-xs md:text-sm text-black/70">
-                              {item.start_datetime.split(" ")[1]}{" "}
-                              {item.start_datetime.split(" ")[2]}
-                            </p>
-
-                            <p className="text-base sm:text-lg md:text-xl font-bold leading-snug text-black">
-                              {item.event_name}
-                            </p>
-
-                            <div className="flex gap-2 items-start text-xs sm:text-sm md:text-base text-black/80">
-                              <IoLocationOutline className="text-lg md:text-2xl flex-shrink-0" />
-                              <p>{item.location_address}</p>
-                            </div>
-                            <div className="flex gap-2 items-center text-xs sm:text-sm md:text-base text-black/80">
-                              <FiUsers className="text-base md:text-xl flex-shrink-0" />
-                              <p>{item.registration_count} Guest</p>
-                            </div>
-                          </div>
-
-                          {/* Image */}
-                          <img
-                            src={`https://backoffice.innerpece.com/${item.cover_img}`}
-                            alt="event"
-                            className="w-full flex-shrink-0 sm:w-64 md:w-44 h-40 md:h-32 rounded-xl object-top object-cover"
-                            loading="lazy"
-                          />
+              {/* Timeline */}
+              <div className="mt-10 md:mt-16 relative flex flex-col">
+                {loading ? (
+                  <SkeletonLoader />
+                ) : (
+                  <>
+                    {upcomingApiData.map((item, i) => (
+                      <div
+                        key={i}
+                        className="flex  gap-1 sm:gap-5 md:gap-10 relative will-change-transform"
+                      >
+                        {/* Date */}
+                        <div className="sm:flex flex-col hidden items-center md:items-end gap-1 min-w-[50px] md:min-w-[90px]">
+                          <p className="text-xs sm:text-base md:text-lg ">
+                            {dateFormatter(item.start_datetime).split(",")[0]}
+                          </p>
+                          <p className="text-xs sm:text-sm md:text-base text-black/70 font-semibold">
+                            {dateFormatter(item.start_datetime).split(",")[1]}
+                          </p>
                         </div>
 
-                        {/* Button */}
-                        <StyledWrapper className="mt-4 md:mt-5">
-                          <button
-                            onClick={() => onClickManageEvent(item.id)}
-                            className="btn-donate text-sm sm:text-base"
-                          >
-                            Event Details
-                          </button>
-                        </StyledWrapper>
-                      </div>
-                    </div>
-
-                    <div className="bg-white/60 max-sm:hidden backdrop-blur-md rounded-2xl p-4 sm:p-5 md:p-6 w-full md:w-2/3 shadow-md hover:bg-white/40 transition-all duration-500 mb-8 md:mb-10 relative border border-transparent hover:border-blue-400 flex-grow">
-                      <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
-                        {/* Info */}
-                        <div className="flex flex-col gap-2 md:gap-3">
-                          <p className="text-xs md:text-sm text-black/70">
-                            {item.start_datetime.split(" ")[1]}{" "}
-                            {item.start_datetime.split(" ")[2]}
-                          </p>
-
-                          <p className="text-base sm:text-lg md:text-xl font-bold leading-snug text-black">
-                            {item.event_name}
-                          </p>
-
-                          <div className="flex gap-2 items-start text-xs sm:text-sm md:text-base text-black/80">
-                            <IoLocationOutline className="text-lg md:text-2xl flex-shrink-0" />
-                            <p>{item.location_address}</p>
+                        {/* Timeline line */}
+                        <div className="flex flex-col items-center ">
+                          <div className="w-5 h-5 md:w-7 md:h-8 rounded-full flex items-center justify-center bg-[#ccdeee]">
+                            <div className="w-2.5 h-2.5 md:w-4 md:h-4 rounded-full bg-[#0088ff] animate-pulse" />
                           </div>
-                          <div className="flex gap-2 items-center text-xs sm:text-sm md:text-base text-black/80">
-                            <FiUsers className="text-base md:text-xl flex-shrink-0" />
-                            <p>{item.registration_count} Guest</p>
+                          <div className="bg-black/10 w-[2px] h-full" />
+                        </div>
+
+                        {/* Card */}
+                        <div className="flex flex-col sm:hidden flex-grow">
+                          <div className="flex  flex-col mb-2 ms-3  md:items-end gap-1 min-w-[50px] md:min-w-[90px]">
+                            <p className="text-xs sm:text-base md:text-lg ">
+                              {dateFormatter(item.start_datetime).split(",")[0]}
+                            </p>
+                            <p className="text-xs sm:text-sm md:text-base text-black/70 font-semibold">
+                              {dateFormatter(item.start_datetime).split(",")[1]}
+                            </p>
+                          </div>
+                          <div className="bg-white/60 backdrop-blur-md flex-grow rounded-2xl p-4 sm:p-5 md:p-6 w-full md:w-2/3 shadow-md hover:bg-white/40 transition-all duration-500 mb-8 md:mb-10 relative border border-transparent hover:border-blue-400 ">
+                            <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
+                              {/* Info */}
+                              <div className="flex flex-col gap-2 md:gap-3">
+                                <p className="text-xs md:text-sm text-black/70">
+                                  {item.start_datetime.split(" ")[1]}{" "}
+                                  {item.start_datetime.split(" ")[2]}
+                                </p>
+
+                                <p className="text-base sm:text-lg md:text-xl font-bold leading-snug text-black">
+                                  {item.event_name}
+                                </p>
+
+                                <div className="flex gap-2 items-start text-xs sm:text-sm md:text-base text-black/80">
+                                  <IoLocationOutline className="text-lg md:text-2xl flex-shrink-0" />
+                                  <p>{item.location_address}</p>
+                                </div>
+                                <div className="flex gap-2 items-center text-xs sm:text-sm md:text-base text-black/80">
+                                  <FiUsers className="text-base md:text-xl flex-shrink-0" />
+                                  <p>{item.registration_count} Guest</p>
+                                </div>
+                              </div>
+
+                              {/* Image */}
+                              <img
+                                src={`https://backoffice.innerpece.com/${item.cover_img}`}
+                                alt="event"
+                                className="w-full flex-shrink-0 sm:w-64 md:w-44 h-40 md:h-32 rounded-xl object-top object-cover"
+                                loading="lazy"
+                              />
+                            </div>
+
+                            {/* Button */}
+                            <StyledWrapper className="mt-4 md:mt-5">
+                              <button
+                                onClick={() => onClickManageEvent(item.id)}
+                                className="btn-donate text-sm sm:text-base"
+                              >
+                                Event Details
+                              </button>
+                            </StyledWrapper>
                           </div>
                         </div>
 
-                        {/* Image */}
-                        <img
-                          src={`https://backoffice.innerpece.com/${item.cover_img}`}
-                          alt="event"
-                          className="w-full flex-shrink-0 sm:w-64 md:w-44 h-40 md:h-32 rounded-xl object-top object-cover"
-                          loading="lazy"
-                        />
-                      </div>
+                        <div className="bg-white/60 max-sm:hidden backdrop-blur-md rounded-2xl p-4 sm:p-5 md:p-6 w-full md:w-2/3 shadow-md hover:bg-white/40 transition-all duration-500 mb-8 md:mb-10 relative border border-transparent hover:border-blue-400 flex-grow">
+                          <div className="flex flex-col md:flex-row gap-4 md:gap-6 justify-between">
+                            {/* Info */}
+                            <div className="flex flex-col gap-2 md:gap-3">
+                              <p className="text-xs md:text-sm text-black/70">
+                                {item.start_datetime.split(" ")[1]}{" "}
+                                {item.start_datetime.split(" ")[2]}
+                              </p>
 
-                      {/* Button */}
-                      <StyledWrapper className="mt-4 md:mt-5">
-                        <button
-                          onClick={() => onClickManageEvent(item.id)}
-                          className="btn-donate text-sm sm:text-base"
-                        >
-                          Event Details
-                        </button>
-                      </StyledWrapper>
-                    </div>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
+                              <p className="text-base sm:text-lg md:text-xl font-bold leading-snug text-black">
+                                {item.event_name}
+                              </p>
+
+                              <div className="flex gap-2 items-start text-xs sm:text-sm md:text-base text-black/80">
+                                <IoLocationOutline className="text-lg md:text-2xl flex-shrink-0" />
+                                <p>{item.location_address}</p>
+                              </div>
+                              <div className="flex gap-2 items-center text-xs sm:text-sm md:text-base text-black/80">
+                                <FiUsers className="text-base md:text-xl flex-shrink-0" />
+                                <p>{item.registration_count} Guest</p>
+                              </div>
+                            </div>
+
+                            {/* Image */}
+                            <img
+                              src={`https://backoffice.innerpece.com/${item.cover_img}`}
+                              alt="event"
+                              className="w-full flex-shrink-0 sm:w-64 md:w-44 h-40 md:h-32 rounded-xl object-top object-cover"
+                              loading="lazy"
+                            />
+                          </div>
+
+                          {/* Button */}
+                          <StyledWrapper className="mt-4 md:mt-5">
+                            <button
+                              onClick={() => onClickManageEvent(item.id)}
+                              className="btn-donate text-sm sm:text-base"
+                            >
+                              Event Details
+                            </button>
+                          </StyledWrapper>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
+              </div>
+            </>
+          ) : (
+            <div>
+              <p className="text-xl md:text-2xl lg:text-3xl xl:text-4xl font-extrabold text-center text-black tracking-wide">
+                Events Coming Soon...
+              </p>{" "}
+            </div>
+          )}
         </div>
       </div>
 

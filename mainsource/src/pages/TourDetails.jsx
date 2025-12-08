@@ -125,13 +125,11 @@ function TourDetails() {
       >
         {!apiError ? (
           <>
-            {/* <TopHeader /> */}
-
             <Header />
             
             {/* breadcrumbs */}
             {cameFrom === "tripcategories" ? (
-              <div className="flex gap-1 sm:gap-2 px-2 py-0.5 items-center">
+              <div className="flex gap-1 sm:gap-2  py-0.5 items-center  mx-3 md:mx-10 xl:mx-20">
                 <Link to="/">
                   <p className="text-xs sm:text-sm">Home</p>
                 </Link>
@@ -151,7 +149,7 @@ function TourDetails() {
                 </p>
               </div>
             ) : (
-              <div className="flex gap-1 sm:gap-2 px-2 py-0.5 items-center">
+              <div className="flex gap-1 sm:gap-2 py-0.5 items-center">
                 <Link to="/">
                   <p className="text-xs sm:text-sm">Home</p>
                 </Link>

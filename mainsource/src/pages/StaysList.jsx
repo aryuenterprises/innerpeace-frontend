@@ -229,8 +229,7 @@ const StaysList = () => {
   //   }
   // }, [apiData]);
 
-  // console.log("api data",apiData)
-  // console.log("filtered district",filteredDistrict)
+ 
 
   return (
     <div>
