@@ -51,9 +51,7 @@ function TourDetails() {
   const slicedPathName = window.location.pathname.split("/")[1];
   const [priceSelected, setPriceSelected] = useState("");
   const [selectedPackage, setSelectedPackage] = useState("");
-
   const [show, setShow] = useState(false);
-
   const [homeImage, setHomeImage] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [apiError, setApiError] = useState(false);

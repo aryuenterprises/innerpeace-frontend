@@ -134,7 +134,7 @@ const HomePopularStaysHimachal = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-
+  console.log(apiData);
   return (
     <>
       {loading ? (
@@ -204,33 +204,23 @@ const HomePopularStaysHimachal = () => {
                           alt={item.stay_title}
                           className="w-full h-[362px] flex-grow transform transition-transform duration-500 group-hover:scale-125 -z-40 object-cover bg-center absolute inset-0"
                         />
-                        {/* <p className="absolute font-jost font-medium  w-full  ps-5 text-3xl  text-white  bottom-5"></p>
-                        <p className="absolute font-jost font-medium  w-full  ps-5 text-3xl  text-white  bottom-2">
-                          {item.stay_title}
-                        </p> */}
+                        
 
                         <div className="absolute font-mulish font-medium  w-full  ps-5 text-2xl  text-white  bottom-2">
-                          <p className="font-semibold">
-                            {" "}
-                            {item?.stay_title
-                              .split(" ")
-                              .slice(0, -1)
-                              .join(" ")
-                              .slice(0, 16)}
-                            ....
+                          <p className="font-semibold line-clamp-1">
+                            {item?.stay_title}
                           </p>
-                          <p className="font-jost text-[18px] font-medium">
+                          <p className="font-jost text-[18px] font-medium line-clamp-1">
                             {" "}
                             {item.stay_title.split(" ").slice(-1)[0]}
                           </p>
                         </div>
                       </div>
 
-                      {/* <p className="font-jost font-medium  w-full text-center text-3xl  text-black  bottom-5">
-                         {item.stay_title}
-                       </p> */}
-                      <div className="border border-[#CCCCCC] border-t-0 p-3 mb-1 rounded-2xl rounded-t-none ">
-                        {item.tag_line && <p>{item.tag_line}</p>}
+                      <div className="border h-20 border-[#CCCCCC] border-t-0 p-3 mb-1 rounded-2xl rounded-t-none ">
+                        {item.tag_line && (
+                          <p className="line-clamp-1">{item.tag_line}</p>
+                        )}
                         <div className="flex gap-5">
                           {item.actual_price && (
                             <del className=" text-xl text-[#7C7C7C]">
@@ -238,8 +228,11 @@ const HomePopularStaysHimachal = () => {
                             </del>
                           )}
                           <p className="font-bold text-xl">
-                            {/* ₹{item.discount_price} */}₹{" "}
-                            {Number(item.discount_price).toLocaleString()}
+                            {item.discount_price && (
+                              <>
+                                ₹ {Number(item.discount_price).toLocaleString()}
+                              </>
+                            )}
                           </p>
                         </div>
                       </div>

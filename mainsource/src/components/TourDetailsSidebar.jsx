@@ -82,6 +82,7 @@ function Sidebar({ LocationShareRef, reviewRef }) {
   const [loadingform, setLoadingform] = useState("");
   const [userDetails, setUserDetails] = useState(false);
   const [userId, setUserId] = useState("");
+  const [localStorageId, setLocalStorageId] = useState("");
   const [reference_id, setReferenceId] = useState("");
   const [childCount, setChildCount] = useState("");
   const [childAge, setChildAge] = useState([]);
