@@ -31,7 +31,7 @@ const User_Profile = () => {
 
   useEffect(() => {
     document.title = "Profile - Innerpece";
-    // const timer = setTimeout(() => {
+    // const timer = setTimeout(() => {+++++++++++++++++++++++++++
     //   setIsLoading(false);
     // }, 200); // Adjust time as needed
 
@@ -165,22 +165,9 @@ const User_Profile = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-      
-      {/* <div
-        onClick={() => window.open("https://wa.me/6384131642")}
-        className="fixed whatsapp z-50 bottom-2 right-2 cursor-pointer flex items-center group"
-      >
-        <div className="text-black opacity-0 scale-90 translate-x-5 group-hover:opacity-100 group-hover:scale-100 group-hover:translate-x-0 bg-white px-2 py-1 rounded-md shadow-md ml-2 transition-all duration-300">
-          <p>Whatsapp Enquiry</p>
-        </div>
-        <img
-          src={whatsapp}
-          className="h-10 w-10  transition-all duration-500"
-        />
-      </div> */}
+     
 
-<GoToTop/>
-
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -190,19 +177,15 @@ const User_Profile = () => {
         }
       >
 
-{/* <TopHeader/> */}
-
         <Header />
 
         <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
           <Link to="/">
             <p className="text-xs sm:text-sm">Home</p>
           </Link>
-          
+
           <MdOutlineKeyboardArrowRight className="text-xl" />
-          <p className="text-blue-500 font-medium sm:font-semibold">
-           Profile
-          </p>
+          <p className="text-blue-500 font-medium sm:font-semibold">Profile</p>
         </div>
 
         <div className="flex flex-col md:flex-row pt-10 pb-4 px-5 md:px-10 gap-5">
@@ -212,200 +195,73 @@ const User_Profile = () => {
           </div>
 
           {/* Profile Form */}
-          {userLogedIn && (
-            <div className="flex flex-col p-6 bg-white rounded-lg shadow-md basis-full ">
-              <h2 className="text-2xl font-semibold text-gray-800 mb-6">
-                My Profile
-              </h2>
-              <hr />
-              <div className="grid grid-cols-1 lg:grid-cols-2 mt-8 gap-6">
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="firstName"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    First Name
-                  </label>
-                  <input
-                    autoComplete="on"
-                    id="firstName"
-                    name="FirstName"
-                    value={firstName}
-                    type="text"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
+   {userLogedIn && (
+  <div className="basis-full">
+    <div className="max-w-6xl mx-auto bg-white/90 backdrop-blur rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-gray-100">
+      
+      {/* Header */}
+      <div className="px-8 py-6 border-b">
+        <h2 className="text-3xl font-semibold text-gray-900">
+          Profile Settings
+        </h2>
+        <p className="text-gray-500 mt-1">
+          Manage your personal details and preferences
+        </p>
+      </div>
 
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="lastName"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    Last Name
-                  </label>
-                  <input
-                    autoComplete="on"
-                    id="lastName"
-                    name="LastName"
-                    type="text"
-                    value={lastName}
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
+      {/* Form */}
+      <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+        {[
+          { label: "First Name", name: "FirstName", value: firstName },
+          { label: "Last Name", name: "LastName", value: lastName },
+          { label: "Email", name: "Email", value: email, readOnly: true },
+          { label: "Phone Number", name: "PhoneNo", value: phoneNo },
+          { label: "Date of Birth", name: "Dob", value: dob, type: "date" },
+          { label: "Street Address", name: "Street", value: street },
+          { label: "City", name: "City", value: city },
+          { label: "State", name: "State", value: state },
+          { label: "ZIP Code", name: "ZipCode", value: zipCode },
+          { label: "Country", name: "Country", value: country },
+        ].map((field, i) => (
+          <div key={i} className="group">
+            <label className="text-sm font-medium text-gray-600 mb-1 block">
+              {field.label}
+            </label>
+            <input
+              type={field.type || "text"}
+              name={field.name}
+              value={field.value}
+              readOnly={field.readOnly}
+              onChange={(e) => onChangeInput(e)}
+              className={`w-full px-5 py-4 rounded-2xl border text-gray-900
+                bg-gray-50/60
+                focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100
+                transition-all
+                ${field.readOnly && "cursor-not-allowed opacity-70"}
+              `}
+            />
+          </div>
+        ))}
+      </div>
 
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="email"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    Email
-                  </label>
-                  <input
-                    readOnly
-                    autoComplete="on"
-                    id="email"
-                    name="Email"
-                    type="email"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={email}
-                    // onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
+      {/* Footer */}
+      {changesHappen && (
+        <div className="px-8 pb-8 flex justify-end">
+          <button
+            onClick={onClickSaveChanges}
+            className="px-10 py-4 rounded-2xl bg-blue-600 text-white font-medium
+              shadow-lg shadow-blue-600/20
+              hover:bg-blue-700 hover:shadow-blue-700/30
+              active:scale-95 transition-all"
+          >
+            Save Changes
+          </button>
+        </div>
+      )}
+    </div>
+  </div>
+)}
 
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="phone"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    Phone No
-                  </label>
-                  <input
-                    autoComplete="on"
-                    id="phone"
-                    name="PhoneNo"
-                    type="number"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={phoneNo}
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="dob"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    DOB
-                  </label>
-                  <input
-                    id="dob"
-                    name="Dob"
-                    type="date"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={dob}
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="street"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    Street
-                  </label>
-                  <input
-                    id="street"
-                    name="Street"
-                    type="text"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={street}
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="city"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    City
-                  </label>
-                  <input
-                    id="city"
-                    name="City"
-                    type="text"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={city}
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="state"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    State
-                  </label>
-                  <input
-                    id="state"
-                    name="State"
-                    type="text"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={state}
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="zipCode"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    Zip/Postal Code
-                  </label>
-                  <input
-                    id="zipCode"
-                    name="ZipCode"
-                    type="number"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={zipCode}
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
-
-                <div className="flex items-center gap-4">
-                  <label
-                    htmlFor="country"
-                    className="text-gray-600 font-medium w-1/3"
-                  >
-                    Country
-                  </label>
-                  <input
-                    id="country"
-                    name="Country"
-                    type="text"
-                    autoComplete="on"
-                    className="p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none w-full"
-                    value={country}
-                    onChange={(e) => onChangeInput(e)}
-                  />
-                </div>
-              </div>
-
-              {changesHappen && (
-                <button
-                  onClick={onClickSaveChanges}
-                  className="mt-6 bg-blue-600 w-fit text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition"
-                >
-                  Save Changes
-                </button>
-              )}
-            </div>
-          )}
 
           {userLogedIn === false && (
             <div className="flex justify-center w-full mt-10 h-screen">

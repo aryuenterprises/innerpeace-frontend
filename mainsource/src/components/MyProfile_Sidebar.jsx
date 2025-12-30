@@ -129,7 +129,6 @@ const MyProfile_Sidebar = () => {
 
       <div className="h-56 flex flex-col items-center w-full rounded-lg relative">
         <img
-          
           src={
             selectedGoogleImage
               ? `https://lh3.googleusercontent.com/a/ACg8ocIhVNzZboB6D8GmE2nCJd5aOAuk6Q5x3pluBLxq45TnCZUoPA=s96-c`

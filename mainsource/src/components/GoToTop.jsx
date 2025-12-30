@@ -26,7 +26,7 @@ const GoToTop = () => {
         <div className="fixed bottom-16 md:bottom-5 right-3 z-[1200] flex flex-col items-center gap-2 md:gap-3">
           {/* WhatsApp Button */}
           <div
-            onClick={() => window.open("https://wa.me/8807343642")}
+            onClick={() => window.open("https://wa.me/6384131642")}
             className="relative group cursor-pointer"
           >
             <div className="absolute right-12 top-1/2 -translate-y-1/2 bg-white text-black text-sm px-2 py-1 rounded-md shadow-md opacity-0 group-hover:opacity-100 scale-90 group-hover:scale-100 transition-all duration-300 whitespace-nowrap">
