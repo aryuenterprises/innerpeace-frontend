@@ -165,8 +165,6 @@ const User_Profile = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen flex flex-col">
-     
-
       <GoToTop />
 
       <Suspense
@@ -176,7 +174,6 @@ const User_Profile = () => {
           </div>
         }
       >
-
         <Header />
 
         <div className="flex gap-1 sm:gap-2  px-2 py-0.5  items-center">
@@ -195,73 +192,99 @@ const User_Profile = () => {
           </div>
 
           {/* Profile Form */}
-   {userLogedIn && (
-  <div className="basis-full">
-    <div className="max-w-6xl mx-auto bg-white/90 backdrop-blur rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-gray-100">
-      
-      {/* Header */}
-      <div className="px-8 py-6 border-b">
-        <h2 className="text-3xl font-semibold text-gray-900">
-          Profile Settings
-        </h2>
-        <p className="text-gray-500 mt-1">
-          Manage your personal details and preferences
-        </p>
-      </div>
+          {userLogedIn && (
+            <div className="basis-full">
+              <div className="max-w-6xl mx-auto bg-white/90 backdrop-blur rounded-3xl shadow-[0_20px_60px_rgba(0,0,0,0.08)] border border-gray-100">
+                {/* Header */}
+                <div className="p-4 md:px-6 lg:px-8 py-6 border-b">
+                  <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold text-gray-900">
+                    Profile Settings
+                  </h2>
+                  <p className="text-gray-500 mt-1">
+                    Manage your personal details and preferences
+                  </p>
+                </div>
 
-      {/* Form */}
-      <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
-        {[
-          { label: "First Name", name: "FirstName", value: firstName },
-          { label: "Last Name", name: "LastName", value: lastName },
-          { label: "Email", name: "Email", value: email, readOnly: true },
-          { label: "Phone Number", name: "PhoneNo", value: phoneNo },
-          { label: "Date of Birth", name: "Dob", value: dob, type: "date" },
-          { label: "Street Address", name: "Street", value: street },
-          { label: "City", name: "City", value: city },
-          { label: "State", name: "State", value: state },
-          { label: "ZIP Code", name: "ZipCode", value: zipCode },
-          { label: "Country", name: "Country", value: country },
-        ].map((field, i) => (
-          <div key={i} className="group">
-            <label className="text-sm font-medium text-gray-600 mb-1 block">
-              {field.label}
-            </label>
-            <input
-              type={field.type || "text"}
-              name={field.name}
-              value={field.value}
-              readOnly={field.readOnly}
-              onChange={(e) => onChangeInput(e)}
-              className={`w-full px-5 py-4 rounded-2xl border text-gray-900
+                {changesHappen && (
+                  <div className="p-4 md:px-6 lg:px-8 pb-8  flex justify-end">
+                    <button
+                      onClick={onClickSaveChanges}
+                      className="px-5 md:px-8 lg:px-10 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl bg-blue-600 text-white font-medium
+              shadow-lg shadow-blue-600/20
+              hover:bg-blue-700 hover:shadow-blue-700/30
+              active:scale-95 transition-all text-sm md:text-base"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                )}
+
+                {/* Form */}
+                <div className="p-4 md:p-6 lg:p-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {[
+                    {
+                      label: "First Name",
+                      name: "FirstName",
+                      value: firstName,
+                    },
+                    { label: "Last Name", name: "LastName", value: lastName },
+                    {
+                      label: "Email",
+                      name: "Email",
+                      value: email,
+                      readOnly: true,
+                    },
+                    { label: "Phone Number", name: "PhoneNo", value: phoneNo },
+                    {
+                      label: "Date of Birth",
+                      name: "Dob",
+                      value: dob,
+                      type: "date",
+                    },
+                    { label: "Street Address", name: "Street", value: street },
+                    { label: "City", name: "City", value: city },
+                    { label: "State", name: "State", value: state },
+                    { label: "ZIP Code", name: "ZipCode", value: zipCode },
+                    { label: "Country", name: "Country", value: country },
+                  ].map((field, i) => (
+                    <div key={i} className="group">
+                      <label className="text-sm font-medium text-gray-600 mb-1 block">
+                        {field.label}
+                      </label>
+                      <input
+                        type={field.type || "text"}
+                        name={field.name}
+                        value={field.value}
+                        readOnly={field.readOnly}
+                        onChange={(e) => onChangeInput(e)}
+                        className={`w-full px-5 py-4 rounded-2xl border text-gray-900
                 bg-gray-50/60
                 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100
                 transition-all
                 ${field.readOnly && "cursor-not-allowed opacity-70"}
               `}
-            />
-          </div>
-        ))}
-      </div>
+                      />
+                    </div>
+                  ))}
+                </div>
 
-      {/* Footer */}
-      {changesHappen && (
-        <div className="px-8 pb-8 flex justify-end">
-          <button
-            onClick={onClickSaveChanges}
-            className="px-10 py-4 rounded-2xl bg-blue-600 text-white font-medium
+                {/* Footer */}
+               {changesHappen && (
+                  <div className="p-4 md:px-6 lg:px-8 pb-8  flex justify-end">
+                    <button
+                      onClick={onClickSaveChanges}
+                      className="px-5 md:px-8 lg:px-10 py-2 md:py-3 lg:py-4 rounded-xl md:rounded-2xl bg-blue-600 text-white font-medium
               shadow-lg shadow-blue-600/20
               hover:bg-blue-700 hover:shadow-blue-700/30
-              active:scale-95 transition-all"
-          >
-            Save Changes
-          </button>
-        </div>
-      )}
-    </div>
-  </div>
-)}
-
+              active:scale-95 transition-all text-sm md:text-base"
+                    >
+                      Save Changes
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {userLogedIn === false && (
             <div className="flex justify-center w-full mt-10 h-screen">

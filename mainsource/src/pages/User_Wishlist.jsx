@@ -129,9 +129,7 @@ const User_Wishlist = () => {
         />
       </div> */}
 
-
-<GoToTop/>
-
+      <GoToTop />
 
       <Suspense
         fallback={
@@ -159,7 +157,7 @@ const User_Wishlist = () => {
             <MyProfile_Sidebar />
           </div>
 
-          {userLogedIn && (
+          {/* {userLogedIn && (
             <div className="flex flex-col shadow-md basis-full md:basis-3/4 py-5 h-fit overflow-x-auto bg-white px-5 gap-5 rounded-md ">
               {loading ? ( // Show loading animation
                 <div className="flex justify-center items-center h-[50vh]">
@@ -182,7 +180,7 @@ const User_Wishlist = () => {
                   <tbody>
                     {apiData
                       .slice()
-                      // .reverse()
+                      
                       .map((item, index) => (
                         <tr key={index} className="hover:bg-gray-100">
                           <td className="border border-gray-300 px-4 py-2 text-sm">
@@ -192,8 +190,6 @@ const User_Wishlist = () => {
                             {item.created_at.split("T")[0]}
                           </td>
                           <td className="border border-gray-300 px-4 py-2 text-sm">
-                            {/* {item.program_dts.title} */}
-                            {/* {item?.stay_dts?.stay_title} */}
                             {item?.stay_dts?.stay_title}
                             {item?.program_dts?.title}
                           </td>
@@ -231,7 +227,91 @@ const User_Wishlist = () => {
                 </div>
               )}
             </div>
-          )}
+          )} */}
+      {userLogedIn && (
+  <div className="flex flex-col shadow-lg border border-gray-100 basis-full md:basis-3/4 py-6 bg-white rounded-2xl overflow-hidden">
+    {/* Header Section */}
+    <div className="px-6 flex justify-between items-center mb-6">
+      <h2 className="text-xl font-bold text-gray-800 tracking-tight">My Wishlist</h2>
+      <span className="bg-blue-600 text-white text-[10px] uppercase font-bold px-3 py-1 rounded-full shadow-sm">
+        {apiData.length} Items
+      </span>
+    </div>
+
+    {loading ? (
+      <div className="flex justify-center items-center h-[40vh]">
+        <div className="animate-spin rounded-full h-10 w-10 border-4 border-blue-50 border-t-blue-600"></div>
+      </div>
+    ) : apiData.length > 0 ? (
+      /* Wrapper for horizontal scroll on mobile */
+      <div className="overflow-x-auto scrollbar-hide">
+        <table className="min-w-[600px] w-full border-separate border-spacing-0">
+          <thead>
+            <tr className="bg-gray-50/50">
+              <th className="sticky left-0 bg-gray-50 z-10 px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                #
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                Date
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                Title & Category
+              </th>
+              <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-100">
+                Action
+              </th>
+            </tr>
+          </thead>
+          <tbody className="divide-y divide-gray-50">
+            {apiData.map((item, index) => {
+              const isProgram = !!item?.program_dts;
+              const data = isProgram ? item.program_dts : item?.stay_dts;
+              
+              return (
+                <tr key={index} className="group hover:bg-blue-50/30 transition-all duration-150">
+                  {/* Sticky ID column for mobile reference */}
+                  <td className="sticky left-0 bg-white group-hover:bg-blue-50/30 z-10 px-6 py-5 text-sm font-medium text-gray-400 border-b border-transparent">
+                    {index + 1}
+                  </td>
+                  <td className="px-6 py-5 text-sm text-gray-600 whitespace-nowrap">
+                    {item.created_at.split("T")[0]}
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="flex flex-col min-w-[200px]">
+                      <span className="text-sm font-bold text-gray-800 line-clamp-1 group-hover:text-blue-600 transition-colors">
+                        {data?.title || data?.stay_title}
+                      </span>
+                      <span className={`text-[10px] font-black uppercase mt-1 ${isProgram ? 'text-purple-500' : 'text-emerald-500'}`}>
+                        {isProgram ? "Program" : "Stay"}
+                      </span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-5 text-right whitespace-nowrap">
+                    <button
+                      onClick={() => onClickView(data?.id, data?.title || data?.stay_title, isProgram ? "program" : "stay")}
+                      className="inline-flex items-center px-4 py-2 bg-gray-900 hover:bg-blue-600 text-white text-xs font-bold rounded-lg transition-all transform active:scale-95 shadow-md hover:shadow-blue-200"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        
+        {/* Mobile-only Hint */}
+        <div className="md:hidden px-6 py-3 bg-gray-50 text-[10px] text-gray-400 text-center italic">
+          ← Swipe horizontally to see more details →
+        </div>
+      </div>
+    ) : (
+      <div className="h-[30vh] flex items-center justify-center">
+        <p className="text-gray-400 font-medium">No items in your wishlist.</p>
+      </div>
+    )}
+  </div>
+)}
           {userLogedIn === false && (
             <div className="flex justify-center w-full mt-10 h-screen">
               <h1 className="text-xl sm:text-2xl font-semibold text-gray-800 mb-6">
