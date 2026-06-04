@@ -9,8 +9,8 @@ import defaultimg from "../../assets/defaultimg.png";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import ParallaxImage from "../parallexImage";
-import ParallaxImage2 from "../ParallexImage2";
+// import ParallaxImage from "../parallexImage";
+// import ParallaxImage2 from "../ParallexImage2";
 
 function HomeTripCategory() {
   const [programsData, setProgramsData] = useState([]);
