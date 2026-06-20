@@ -161,7 +161,7 @@ function Footer({ className }) {
               Sitemap
             </p> */}
               <a
-                href="https://blogs.innerpece.com/"
+                href="https://blog.innerpece.com/"
                 target="_blank"
                 className="font-medium  text-gray-400 cursor-pointer hover:text-white"
               >
