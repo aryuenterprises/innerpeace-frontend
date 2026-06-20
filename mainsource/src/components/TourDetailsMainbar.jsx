@@ -737,10 +737,9 @@ function Mainbar({
                     onClick={() => toggleIndex(index)}
                     className="w-full flex justify-between items-center text-left font-mulish text-[#0E598F] font-semibold focus:outline-none"
                   >
-                    <div className="flex gap-2 ">
+                    <div className="flex gap-2  font-medium md:font-semibold text-[17px]">
                       <span className="shrink-0">{item.title}</span>
-                      {/* <p className="border-black font-semibold border-2 h-4"></p> */}
-                      <p className="text-black font-medium">{item.subtitle}</p>
+                      <p className="text-black ">{item.subtitle}</p>
                     </div>
                     <FaChevronDown
                       className={`transition-transform text-black duration-300 ${

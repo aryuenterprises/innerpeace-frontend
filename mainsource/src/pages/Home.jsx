@@ -50,7 +50,7 @@ function Home() {
         <HomeLetsGetStarted />
         <HomePopularStays />
         <HomePopularStaysHimachal />
-        <HomeBlogs />
+        {/* <HomeBlogs /> */}
         <Reviews />
         <Footer />
       </Suspense>
