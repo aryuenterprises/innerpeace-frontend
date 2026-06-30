@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Favicon will be set dynamically -->
+    <link id="favicon" rel="icon" type="image/svg+xml" href="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Innerpece is the top tour operator or travel agency in India for group and family tours. Book tour packages and find your perfect adventure travel now!
+  "
+    />
+    <meta
+      name="keywords"
+      content="Travel agency in India, Tour operator in India, Group tours, Family tours, Book tour packages, adventure travel"
+    />
+
+    <meta
+      property="og:title"
+      content="Travel agency in India | Book tour packages - Innerpece"
+    />
+    <meta
+      property="og:description"
+      content="Innerpece is the top tour operator or travel agency in India for group and family tours. Book tour packages and find your perfect adventure travel now!"
+    />
+
+    <meta property="og:image" content="/innerpece.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+
+    <title>Innerpece</title>
+    <!-- Google tag (gtag.js) -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-33M2VM8DKF"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-33M2VM8DKF");
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- Fetch dynamic favicon and site logo -->
+
+    <script>
+      // fetch("https://backoffice.innerpece.com/api/header-content")
+      // fetch("https://backoffice.innerpece.com/api/get-header-footer")
+      fetch("https://backoffice.innerpece.com/api/v1/header-content")
+        .then((response) => response.json())
+        .then((data) => {
+          // Dynamically set the favicon
+          const favicon = document.getElementById("favicon");
+          if (data.fav_icon) {
+            favicon.href = `https://backoffice.innerpece.com/${
+              data.fav_icon
+            }?v=${new Date().getTime()}`;
+          }
+
+          // Dynamically set the apple touch icon if available
+          if (data.site_logo) {
+            const appleTouchIcon = document.getElementById("apple-touch-icon");
+            if (!appleTouchIcon) {
+              const link = document.createElement("link");
+              link.id = "apple-touch-icon";
+              link.rel = "apple-touch-icon";
+              link.href = `https://backoffice.innerpece.com/${data.site_logo}`;
+              document.head.appendChild(link);
+            } else {
+              appleTouchIcon.href = `https://backoffice.innerpece.com/${data.site_logo}`;
+            }
+          }
+        })
+        .catch((error) => console.error("Error fetching settings:", error));
+    </script>
+
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

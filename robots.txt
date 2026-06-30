@@ -1,2 +1,4 @@
-User-agent: *
-allow:
+User-agent: SiteAuditBot Allow: /
+
+
+
