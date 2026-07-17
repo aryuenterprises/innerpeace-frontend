@@ -27,6 +27,7 @@ import CreateEvent from "./pages/CreateEvent";
 import EventsHistory from "./pages/EventsHistory";
 import ManageEvent from "./pages/ManageEvent";
 import EventRegisterPage from "./pages/EventRegisterPage";
+import Schema from "./components/Schema";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
             </div>
           }
         >
+          <Schema/>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/createEvent" element={<CreateEvent />} />
