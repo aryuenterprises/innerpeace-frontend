@@ -269,7 +269,7 @@ function Footer({ className }) {
               target="_blank"
               className="text-xs md:text-sm text-white "
             >
-              Powered by Aryu 
+              Powered by Aryu Technologies
             </a>
           </div>
         </div>
