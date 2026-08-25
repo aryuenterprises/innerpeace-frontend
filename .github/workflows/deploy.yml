@@ -1,29 +1,88 @@
-name: 🚀 innerpece Frontend Reactjs Deploy to Hostinger via FTP
+name: 🚀 Innerpece Website Deploy
 
 on:
   push:
     branches:
-      - main  # or your deployment branch
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: innerpece-website-production
+  cancel-in-progress: false
 
 jobs:
-  ftp-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout Code
-        uses: actions/checkout@v3
 
-      - name: 🗂️ Upload innerpece Frontend Files via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      # --------------------------------------------------
+      # 1. Checkout source
+      # --------------------------------------------------
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      # --------------------------------------------------
+      # 2. Setup Node
+      # --------------------------------------------------
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          server: '31.97.225.238'
-          username: 'u925800196.innerpece.com'
-          password: 'innerpeceB@ckend28'
-          port: 21
-          server-dir: '/public_html/innerpece-main/'
+          node-version: 20
+          cache: npm
+          cache-dependency-path: mainsource/package-lock.json
+
+      # --------------------------------------------------
+      # 3. Install dependencies
+      # --------------------------------------------------
+      - name: 📦 Install Dependencies
+        working-directory: mainsource
+        run: npm ci
+
+      # --------------------------------------------------
+      # 4. Build Vite application
+      # --------------------------------------------------
+      - name: 🏗️ Build Vite Application
+        working-directory: mainsource
+        run: npm run build
+
+      # --------------------------------------------------
+      # 5. Verify build
+      # --------------------------------------------------
+      - name: 🔎 Verify Build
+        run: |
+          set -e
+
+          test -d mainsource/dist
+          test -f mainsource/dist/index.html
+
+          echo "✅ Vite build verified"
+          echo "Build size:"
+          du -sh mainsource/dist
+
+      # --------------------------------------------------
+      # 6. Deploy to Hostinger
+      # --------------------------------------------------
+      - name: 🚀 Deploy to Hostinger
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.6
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
           protocol: ftp
+          port: 21
+          local-dir: ./mainsource/dist/
+          server-dir: ./
           dangerous-clean-slate: false
-          local-dir: ./
 
-
-          
+      # --------------------------------------------------
+      # 7. Deployment completed
+      # --------------------------------------------------
+      - name: ✅ Deployment Completed
+        run: |
+          echo "======================================"
+          echo "🚀 INNERPECE WEBSITE DEPLOYMENT DONE"
+          echo "======================================"
+          echo "Branch: main"
+          echo "Website: innerpece.com"
+          echo "======================================"
